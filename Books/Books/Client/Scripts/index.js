@@ -23,30 +23,35 @@ $(registerbtn).click(function () {
     window.location.href = "register.html";
 });
 
-const adminbtn = document.getElementById("adminbtn");
+const adminbtn = document.getElementById("adminBtn");
 
-Adminbtn.addEventListener("click", function () {
+$(adminBtn).click( function () {
     window.location.href = "admin.html";
 });
 
+const myBooks = document.getElementById("myBooksBtn");
+$(myBooks).click(function () {
+    window.location.href = "myBooks.html";
+});
+
 // Check user status and display appropriate buttons
-if (user && !user.isAdmin) {
-    $('#logoutBtn').show();
-    $('#loginBtn').hide();
-    $('#Registerbtn').hide();
-    $('#myCourses').show();
-    $('#Adminbtn').hide();
-} else if (user && user.isAdmin) {
-    $('#logoutBtn').show();
-    $('#loginBtn').hide();
-    $('#Registerbtn').hide();
-    $('#myCourses').show();
-    $('#Adminbtn').show();
-} else {
-    $('#logoutBtn').hide();
-    $('#loginBtn').show();
-    $('#Registerbtn').show();
-    $('#myCourses').hide();
-    $('#Adminbtn').hide();
-}
+//if (user && !user.isAdmin) {
+//    $('#logoutBtn').show();
+//    $('#loginBtn').hide();
+//    $('#Registerbtn').hide();
+//    $('#myCourses').show();
+//    $('#Adminbtn').hide();
+//} else if (user && user.isAdmin) {
+//    $('#logoutBtn').show();
+//    $('#loginBtn').hide();
+//    $('#Registerbtn').hide();
+//    $('#myCourses').show();
+//    $('#Adminbtn').show();
+//} else {
+//    $('#logoutBtn').hide();
+//    $('#loginBtn').show();
+//    $('#Registerbtn').show();
+//    $('#myCourses').hide();
+//    $('#Adminbtn').hide();
+//}
 
