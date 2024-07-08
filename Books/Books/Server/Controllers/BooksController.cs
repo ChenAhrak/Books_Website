@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Books.Server.BL;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,11 +9,20 @@ namespace Books.Server.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
+        Book book = new Book();
         // GET: api/<BooksController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Book> Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                return book.readAllBooks();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+           
         }
 
         // GET api/<BooksController>/5
@@ -24,8 +34,18 @@ namespace Books.Server.Controllers
 
         // POST api/<BooksController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] List<Book> allBooks)
         {
+            try
+            {
+                book.insertAllBooks(allBooks);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         // PUT api/<BooksController>/5
