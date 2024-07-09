@@ -1,37 +1,66 @@
-const authorsBtn = document.getElementById("authorsBtn");
-//jquery click event
-$(authorsBtn).click(function () {
-    window.location.href = "authors.html";
-});
+const allData = [];
+const allBooks = [];
+$(document).ready(function () {
+    //40 ebooks max in one request
+    $.get("https://www.googleapis.com/books/v1/volumes?q=a&filter=ebooks&maxResults=40", function (data) {
+        allData.push(data);
+        console.log(allData);
 
-const loginBtn = document.getElementById("loginBtn");
-$(loginBtn).click(function () {
-    window.location.href = "login.html";
-});
+    });
+    //10 ebooks default in one request
+    $.get("https://www.googleapis.com/books/v1/volumes?q=b&filter=ebooks", function (data) {
+        allData.push(data);
+    });
 
-const logoutbtn = document.getElementById("logoutBtn");
-
-$(logoutbtn).click( function () {
-    localStorage.clear();
-    window.location.reload();
-});
+    console.log(allData);
 
 
-const registerbtn = document.getElementById("registerBtn");
 
-$(registerbtn).click(function () {
-    window.location.href = "register.html";
-});
 
-const adminbtn = document.getElementById("adminBtn");
 
-$(adminBtn).click( function () {
-    window.location.href = "admin.html";
-});
 
-const myBooks = document.getElementById("myBooksBtn");
-$(myBooks).click(function () {
-    window.location.href = "myBooks.html";
+
+
+
+
+
+    const authorsBtn = document.getElementById("authorsBtn");
+    //jquery click event
+    $(authorsBtn).click(function () {
+        window.location.href = "authors.html";
+    });
+
+    const loginBtn = document.getElementById("loginBtn");
+    $(loginBtn).click(function () {
+        window.location.href = "login.html";
+    });
+
+    const logoutbtn = document.getElementById("logoutBtn");
+
+    $(logoutbtn).click( function () {
+        localStorage.clear();
+        window.location.reload();
+    });
+
+
+    const registerbtn = document.getElementById("registerBtn");
+
+    $(registerbtn).click(function () {
+        window.location.href = "register.html";
+    });
+
+    const adminbtn = document.getElementById("adminBtn");
+
+    $(adminBtn).click( function () {
+        window.location.href = "admin.html";
+    });
+
+    const myBooks = document.getElementById("myBooksBtn");
+    $(myBooks).click(function () {
+        window.location.href = "myBooks.html";
+
+    });
+
 });
 
 // Check user status and display appropriate buttons
