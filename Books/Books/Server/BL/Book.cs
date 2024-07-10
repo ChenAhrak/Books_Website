@@ -7,38 +7,112 @@ public class Book
 {
     string kind;
     string id;
-    VolumeInfo volumeInfo;
-    SaleInfo saleInfo;
-    AccessInfo accessInfo;
+    //VolumeInfo volumeInfo;
+    string title;
+    string subtitle;
+    List<string> authors;
+    string publisher;
+    string publishedDate;
+    string description;
+    int pageCount;
+    string printType;
+    List<string> categories;
+    string smallThumbnail;
+    string thumbnail;
+    //SaleInfo saleInfo;
+    string saleCountry;
+    string saleability;
+    bool isEbook;
+    //AccessInfo accessInfo;
+    string accessCountry;
+    string viewability;
+    bool embeddable;
+    bool publicDomain;
+    string textToSpeechPermission;
+    //EPub epub;
+    bool epubIsAvailable;
+    string epubDownloadLink;
+    //Pdf pdf;
+    bool pdfIsAvailable;
+    string pdfDownloadLink;
+
+    string webReaderLink;
+    string accessViewStatus;
+    bool quoteSharingAllowed;
 
     public Book()
     {
     }
-
-    public Book(string kind, string id, VolumeInfo volumeInfo, SaleInfo saleInfo, AccessInfo accessInfo)
+    public Book(string kind, string id, string title, string subtitle, List<string> authors, string publisher, string publishedDate, string description, int pageCount, string printType, List<string> categories, string smallThumbnail, string thumbnail, string saleCountry, string saleability, bool isEbook, string accessCountry, string viewability, bool embeddable, bool publicDomain, string textToSpeechPermission, bool epubIsAvailable, string epubDownloadLink, bool pdfIsAvailable, string pdfDownloadLink;, string webReaderLink, string accessViewStatus, bool quoteSharingAllowed)
     {
         this.kind = kind;
         this.id = id;
-        this.volumeInfo = volumeInfo;
-        this.saleInfo = saleInfo;
-        this.accessInfo = accessInfo;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.authors = authors;
+        this.publisher = publisher;
+        this.publishedDate = publishedDate;
+        this.description = description;
+        this.pageCount = pageCount;
+        this.printType = printType;
+        this.categories = categories;
+        this.smallThumbnail = smallThumbnail;
+        this.thumbnail = thumbnail;
+        this.saleCountry = saleCountry;
+        this.saleability = saleability;
+        this.isEbook = isEbook;
+        this.accessCountry = accessCountry;
+        this.viewability = viewability;
+        this.embeddable = embeddable;
+        this.publicDomain = publicDomain;
+        this.textToSpeechPermission = textToSpeechPermission;
+        this.epubIsAvailable = epubIsAvailable;
+        this.epubDownloadLink = epubDownloadLink;
+        this.pdfIsAvailable = pdfIsAvailable;
+        this.pdfDownloadLink; = pdfDownloadLink; ;
+        this.webReaderLink = webReaderLink;
+        this.accessViewStatus = accessViewStatus;
+        this.quoteSharingAllowed = quoteSharingAllowed;
     }
 
+    //get set methods for all fields
     public string Kind { get => kind; set => kind = value; }
     public string Id { get => id; set => id = value; }
-    public VolumeInfo VolumeInfo { get => volumeInfo; set => volumeInfo = value; }
-    public SaleInfo SaleInfo { get => saleInfo; set => saleInfo = value; }
-    public AccessInfo AccessInfo { get => accessInfo; set => accessInfo = value; }
+    public string Title { get => title; set => title = value; }
+    public string Subtitle { get => subtitle; set => subtitle = value; }
+    public List<string> Authors { get => authors; set => authors = value; }
+    public string Publisher { get => publisher; set => publisher = value; }
+    public string PublishedDate { get => publishedDate; set => publishedDate = value; }
+    public string Description { get => description; set => description = value; }
+    public int PageCount { get => pageCount; set => pageCount = value; }
+    public string PrintType { get => printType; set => printType = value; }
+    public List<string> Categories { get => categories; set => categories = value; }
+    public string SmallThumbnail { get => smallThumbnail; set => smallThumbnail = value; }
+    public string Thumbnail { get => thumbnail; set => thumbnail = value; }
+    public string SaleCountry { get => saleCountry; set => saleCountry = value; }
+    public string Saleability { get => saleability; set => saleability = value; }
+    public bool IsEbook { get => isEbook; set => isEbook = value; }
+    public string AccessCountry { get => accessCountry; set => accessCountry = value; }
+    public string Viewability { get => viewability; set => viewability = value; }
+    public bool Embeddable { get => embeddable; set => embeddable = value; }
+    public bool PublicDomain { get => publicDomain; set => publicDomain = value; }
+    public string TextToSpeechPermission { get => textToSpeechPermission; set => textToSpeechPermission = value; }
+    public bool EpubIsAvailable { get => epubIsAvailable; set => epubIsAvailable = value; }
+    public string EpubDownloadLink { get => epubDownloadLink; set => epubDownloadLink = value; }
+    public bool PdfIsAvailable { get => pdfIsAvailable; set => pdfIsAvailable = value; }
+    public string PdfDownloadLink; { get => pdfDownloadLink;; set => pdfDownloadLink; = value; }
+    public string WebReaderLink { get => webReaderLink; set => webReaderLink = value; }
+    public string AccessViewStatus { get => accessViewStatus; set => accessViewStatus = value; }
+    public bool QuoteSharingAllowed { get => quoteSharingAllowed; set => quoteSharingAllowed = value; }
+}
 
 
-    // just check of the class, need to rewrite this method to return a list of books from database
-    public List<Book> readAllBooks() { 
+
+
+
+// just check of the class, need to rewrite this method to return a list of books from database
+public List<Book> readAllBooks() { 
         List<Book> books = new List<Book>();
-
-        VolumeInfo volumeInfo = new VolumeInfo("title","subTitle", new List<string>(),"publisher","publishedDate","description",544,"Book",new List<string>(),"imageLinks" );
-        SaleInfo saleInfo = new SaleInfo("country", "saleability", false);
-        AccessInfo accessInfo = new AccessInfo("string country", "string viewability", true, true, "string textToSpeechPermission", new EPub(false,"fgdg"), new Pdf(true, "string acsTokenLin"), "string webReaderLink", "string accessViewStatus", false);
-        Book book = new Book("books#volume", "123", volumeInfo,saleInfo, accessInfo);
 
         books.Add(book);
         return books;
