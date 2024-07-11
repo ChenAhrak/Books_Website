@@ -14,38 +14,37 @@ $(document).ready(function () {
     
     function insertBooks() {
         allData.forEach(function (data) {
-            console.log("here");
+            console.log(data);
 
-            data.forEach(function (item) {
-                console.log("here");
+            data.items.forEach(function (item) {
                 const book = {
                     kind: item.kind,
                     id: item.id,
-                    title: item.items.volumeInfo.title,
-                    subtitle: item.items.volumeInfo.subtitle,
-                    authors: item.items.volumeInfo.authors,
-                    publisher: item.items.volumeInfo.publisher,
-                    publishedDate: item.items.volumeInfo.publishedDate,
-                    description: item.items.volumeInfo.description,
-                    pageCount: item.items.volumeInfo.pageCount,
-                    printType: item.items.volumeInfo.printType,
-                    categories: item.items.volumeInfo.categories,
-                    smallThumbnail: item.items.volumeInfo.smallThumbnail,
-                    thumbnail: item.items.volumeInfo.thumbnail,
-                    saleCountry: item.items.saleInfo.saleCountry,
-                    saleability: item.items.saleInfo.saleability,
-                    isEbook: item.items.saleInfo.isEbook,
-                    accessCountry: item.items.accessInfo.accessCountry,
-                    viewability: item.items.accessInfo.viewability,
-                    embeddable: item.items.accessInfo.embeddable,
-                    publicDomain: item.items.accessInfo.publicDomain,
-                    textToSpeechPermission: item.items.accessInfo.textToSpeechPermission,
-                    epubIsAvailable: item.items.accessInfo.epub.isAvailable,
-                    epubAcsTokenLink: item.items.accessInfo.epub.downloadLink,
-                    pdfIsAvailable: item.items.accessInfo.pdf.isAvailable,
-                    pdfAcsTokenLink: item.items.accessInfo.pdf.downloadLink,
+                    title: item.volumeInfo.title,
+                    subtitle: item.volumeInfo.subtitle,
+                    authors: item.volumeInfo.authors,
+                    publisher: item.volumeInfo.publisher,
+                    publishedDate: item.volumeInfo.publishedDate,
+                    description: item.volumeInfo.description,
+                    pageCount: item.volumeInfo.pageCount,
+                    printType: item.volumeInfo.printType,
+                    categories: item.volumeInfo.categories,
+                    smallThumbnail: item.volumeInfo.imageLinks.smallThumbnail,
+                    thumbnail: item.volumeInfo.imageLinks.thumbnail,
+                    saleCountry: item.saleInfo.country,
+                    saleability: item.saleInfo.saleability,
+                    isEbook: item.saleInfo.isEbook,
+                    accessCountry: item.accessInfo.country,
+                    viewability: item.accessInfo.viewability,
+                    embeddable: item.accessInfo.embeddable,
+                    publicDomain: item.accessInfo.publicDomain,
+                    textToSpeechPermission: item.accessInfo.textToSpeechPermission,
+                    epubIsAvailable: item.accessInfo.epub.isAvailable,
+                    epubAcsTokenLink: item.accessInfo.epub.downloadLink,
+                    pdfIsAvailable: item.accessInfo.pdf.isAvailable,
+                    pdfAcsTokenLink: item.accessInfo.pdf.downloadLink,
                     webReaderLink: item.webReaderLink,
-                    accessViewStatus: item.accessViewStatus,
+                    accessViewStatus: item.accessInfo.accessViewStatus,
                     quoteSharingAllowed: item.quoteSharingAllowed
 
                 }
