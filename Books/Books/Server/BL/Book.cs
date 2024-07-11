@@ -5,11 +5,12 @@ namespace Books.Server.BL;
 
 public class Book
 {
-    string kind;
-    string id;
+    string kind; // need to delete this field
+    string id; 
     //VolumeInfo volumeInfo;
     string title;
     string subtitle;
+    //string language
     List<string> authors;
     string publisher;
     string publishedDate;
@@ -17,8 +18,9 @@ public class Book
     int pageCount;
     string printType;
     List<string> categories;
-    string smallThumbnail;
+    string smallThumbnail; // need to delete this field
     string thumbnail;
+
     //SaleInfo saleInfo;
     string saleCountry;
     string saleability;
@@ -26,19 +28,24 @@ public class Book
     //AccessInfo accessInfo;
     string accessCountry;
     string viewability;
-    bool embeddable;
+    bool embeddable; // need to delete this field
     bool publicDomain;
     string textToSpeechPermission;
     //EPub epub;
     bool epubIsAvailable;
     string epubDownloadLink;
+    // add acsTokenLink
+
     //Pdf pdf;
     bool pdfIsAvailable;
     string pdfDownloadLink;
-
+    // add acsTokenLink
     string webReaderLink;
     string accessViewStatus;
     bool quoteSharingAllowed;
+    //searchInfo
+    //string textSnippet;
+
 
     public Book()
     {
