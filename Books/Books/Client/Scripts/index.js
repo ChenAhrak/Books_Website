@@ -98,34 +98,36 @@ $(document).ready(function () {
             console.log(item.saleInfo.isEbook);
 
                 const book = {
-                    kind: item.kind,
                     id: item.id,
                     title: item.volumeInfo.title,
-                    subtitle: item.volumeInfo.subtitle || "",
-                    authors: item.volumeInfo.authors || "",
+                    subtitle: item.volumeInfo.subtitle ?item.volumeInfo.subtitle: "",
+                    language: item.volumeInfo.language,
+                    authors: item.volumeInfo.authors || [],
                     publisher: item.volumeInfo.publisher || "",
                     publishedDate: item.volumeInfo.publishedDate,
                     description: item.volumeInfo.description || "",
                     pageCount: item.volumeInfo.pageCount,
                     printType: item.volumeInfo.printType,
-                    categories: item.volumeInfo.categories,
-                    smallThumbnail: item.volumeInfo.imageLinks.smallThumbnail || "",
-                    thumbnail: item.volumeInfo.imageLinks.thumbnail || "",
+                    categories: item.volumeInfo.categories || []  ,
+                    smallThumbnail: item.volumeInfo.imageLinks.smallThumbnail ? item.volumeInfo.imageLinks.smallThumbnail : "",
+                    thumbnail: item.volumeInfo.imageLinks.thumbnail ? item.volumeInfo.imageLinks.thumbnail: "",
                     saleCountry: item.saleInfo.country,
                     saleability: item.saleInfo.saleability,
                     isEbook: item.saleInfo.isEbook,
                     accessCountry: item.accessInfo.country,
                     viewability: item.accessInfo.viewability,
-                    embeddable: item.accessInfo.embeddable || "",
                     publicDomain: item.accessInfo.publicDomain,
                     textToSpeechPermission: item.accessInfo.textToSpeechPermission,
                     epubIsAvailable: item.accessInfo.epub.isAvailable,
                     epubAcsTokenLink: item.accessInfo.epub.downloadLink || "",
+                    epubAcsTokenLink : item.accessInfo.epub.acsTokenLink || "",
                     pdfIsAvailable: item.accessInfo.pdf.isAvailable,
                     pdfAcsTokenLink: item.accessInfo.pdf.downloadLink || "",
+                    pdfAcsTokenLink: item.accessInfo.pdf.acsTokenLink || "",
                     webReaderLink: item.webReaderLink,
                     accessViewStatus: item.accessInfo.accessViewStatus,
-                    quoteSharingAllowed: item.quoteSharingAllowed || ""
+                    quoteSharingAllowed: item.quoteSharingAllowed || "",
+                    textSnippet: item.searchInfo.textSnippet ? item.searchInfo.textSnippet:  ""
 
             }
 
