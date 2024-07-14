@@ -2,7 +2,7 @@ const allData = [];
 const allBooks = [];
 const maxBooks = 50;
 const maxEbooks = 50;
-
+const apiURL = "https://localhost:44308/api/Books";
 $(document).ready(function () {
 
     function getRandomQuery(queries) {
@@ -95,7 +95,7 @@ $(document).ready(function () {
         console.log(allData);
         //run all over the array forEach
         allData[0].forEach(function (item) {
-            console.log(item.saleInfo.isEbook);
+      
 
                 const book = {
                     id: item.id,
@@ -108,9 +108,9 @@ $(document).ready(function () {
                     description: item.volumeInfo.description || "",
                     pageCount: item.volumeInfo.pageCount,
                     printType: item.volumeInfo.printType,
-                    categories: item.volumeInfo.categories || []  ,
-                    smallThumbnail: item.volumeInfo.imageLinks.smallThumbnail ? item.volumeInfo.imageLinks.smallThumbnail : "",
-                    thumbnail: item.volumeInfo.imageLinks.thumbnail ? item.volumeInfo.imageLinks.thumbnail: "",
+                    categories: item.volumeInfo.categories || [],
+                    smallThumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail ? item.volumeInfo.imageLinks.smallThumbnail : "",
+                    thumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail ? item.volumeInfo.imageLinks.thumbnail: "",
                     saleCountry: item.saleInfo.country,
                     saleability: item.saleInfo.saleability,
                     isEbook: item.saleInfo.isEbook,
@@ -127,20 +127,26 @@ $(document).ready(function () {
                     webReaderLink: item.webReaderLink,
                     accessViewStatus: item.accessInfo.accessViewStatus,
                     quoteSharingAllowed: item.quoteSharingAllowed || "",
-                    textSnippet: item.searchInfo.textSnippet ? item.searchInfo.textSnippet:  ""
+                    textSnippet: item.searchInfo ? item.searchInfo.textSnippet : ""
 
             }
 
             allBooks.push(book);
                
         });
-            console.log(allBooks);
+        ajaxCall("POST", apiURL, allBooks, postBooksSCB, postBooksECB);
  
     }
 
     insertBooksToDB();
 
+    function postBooksSCB(result) {
+        console.log(result);
+    }
 
+    function postBooksECB(err) {
+        console.log(err);
+    }
 
 
 

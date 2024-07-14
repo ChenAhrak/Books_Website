@@ -45,7 +45,7 @@ public class Book
     bool quoteSharingAllowed;
     //searchInfo
     string textSnippet;
-
+    static List<Book> books = new List<Book>();
 
     public Book()
     {
@@ -127,15 +127,14 @@ public class Book
 public List<Book> readAllBooks() { 
         List<Book> books = new List<Book>();
 
-        books.Add(book);
         return books;
 
     }
 
 
     // need to rewrite this method to insert a list of books into the database
-    public bool insertAllBooks(List<Book> books)
+    public bool insertAllBooks(List<Book> allBooks)
     {
-        return true;
+        books.Add(allBooks);
     }
 }
