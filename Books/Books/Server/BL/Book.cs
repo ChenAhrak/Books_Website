@@ -116,7 +116,7 @@ public class Book
     public string AccessViewStatus { get => accessViewStatus; set => accessViewStatus = value; }
     public bool QuoteSharingAllowed { get => quoteSharingAllowed; set => quoteSharingAllowed = value; }
     public string TextSnippet { get => textSnippet; set => textSnippet = value; }
-}
+
 
 
 
@@ -135,6 +135,14 @@ public List<Book> readAllBooks() {
     // need to rewrite this method to insert a list of books into the database
     public bool insertAllBooks(List<Book> allBooks)
     {
-        books.Add(allBooks);
+        try
+        {
+            books=allBooks;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 }

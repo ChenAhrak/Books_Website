@@ -2,7 +2,7 @@ const allData = [];
 const allBooks = [];
 const maxBooks = 50;
 const maxEbooks = 50;
-const apiURL = "https://localhost:44308/api/Books";
+const apiURL = "https://localhost:7195/api/Books";
 $(document).ready(function () {
 
     function getRandomQuery(queries) {
