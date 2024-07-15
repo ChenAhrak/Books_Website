@@ -36,6 +36,10 @@ namespace Books.Server.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] List<Book> allBooks)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 book.insertAllBooks(allBooks);
@@ -43,7 +47,7 @@ namespace Books.Server.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
 
         }

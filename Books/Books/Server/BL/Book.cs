@@ -45,7 +45,7 @@ public class Book
     bool quoteSharingAllowed;
     //searchInfo
     string textSnippet;
-    static List<Book> books = new List<Book>();
+    static public List<Book> books = new List<Book>();
 
     public Book()
     {
@@ -124,8 +124,7 @@ public class Book
 
 
 // just check of the class, need to rewrite this method to return a list of books from database
-public List<Book> readAllBooks() { 
-        List<Book> books = new List<Book>();
+public List<Book> readAllBooks() {  
 
         return books;
 

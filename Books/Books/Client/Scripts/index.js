@@ -92,8 +92,8 @@ $(document).ready(function () {
         
     async function insertBooksToDB() {
         await fetchBooksAndEbooks(maxBooks, maxEbooks);
-        console.log(allData);
         //run all over the array forEach
+        console.log(allData[0]);
         allData[0].forEach(function (item) {
       
 
@@ -101,32 +101,32 @@ $(document).ready(function () {
                     id: item.id,
                     title: item.volumeInfo.title,
                     subtitle: item.volumeInfo.subtitle ?item.volumeInfo.subtitle: "",
-                    language: item.volumeInfo.language,
-                    authors: item.volumeInfo.authors || [],
-                    publisher: item.volumeInfo.publisher || "",
-                    publishedDate: item.volumeInfo.publishedDate,
-                    description: item.volumeInfo.description || "",
-                    pageCount: item.volumeInfo.pageCount,
-                    printType: item.volumeInfo.printType,
-                    categories: item.volumeInfo.categories || [],
+                    language: item.volumeInfo.language ? item.volumeInfo.language : "",
+                    authors: item.volumeInfo.authors ? item.volumeInfo.authors: [],
+                    publisher: item.volumeInfo.publisher ?item.volumeInfo.publisher :"",
+                    publishedDate: item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate:"",
+                    description: item.volumeInfo.description ? item.volumeInfo.description:"",
+                    pageCount: item.volumeInfo.pageCount ? item.volumeInfo.pageCount:0,
+                    printType: item.volumeInfo.printType ? item.volumeInfo.printType:"",
+                    categories: item.volumeInfo.categories ? item.volumeInfo.categories: [],
                     smallThumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail ? item.volumeInfo.imageLinks.smallThumbnail : "",
                     thumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail ? item.volumeInfo.imageLinks.thumbnail: "",
-                    saleCountry: item.saleInfo.country,
-                    saleability: item.saleInfo.saleability,
-                    isEbook: item.saleInfo.isEbook,
-                    accessCountry: item.accessInfo.country,
-                    viewability: item.accessInfo.viewability,
-                    publicDomain: item.accessInfo.publicDomain,
-                    textToSpeechPermission: item.accessInfo.textToSpeechPermission,
-                    epubIsAvailable: item.accessInfo.epub.isAvailable,
-                    epubAcsTokenLink: item.accessInfo.epub.downloadLink || "",
-                    epubAcsTokenLink : item.accessInfo.epub.acsTokenLink || "",
-                    pdfIsAvailable: item.accessInfo.pdf.isAvailable,
-                    pdfAcsTokenLink: item.accessInfo.pdf.downloadLink || "",
-                    pdfAcsTokenLink: item.accessInfo.pdf.acsTokenLink || "",
-                    webReaderLink: item.webReaderLink,
-                    accessViewStatus: item.accessInfo.accessViewStatus,
-                    quoteSharingAllowed: item.quoteSharingAllowed || "",
+                    saleCountry: item.saleInfo.country ? item.saleInfo.country:"" ,
+                    saleability: item.saleInfo.saleability ? item.saleInfo.country : "",
+                    isEbook: item.saleInfo.isEbook ? item.saleInfo.isEbook:false,
+                    accessCountry: item.accessInfo.country ? item.accessInfo.country : "",
+                    viewability: item.accessInfo.viewability ? item.accessInfo.viewability : "",
+                    publicDomain: item.accessInfo.publicDomain ? item.accessInfo.publicDomain:false,
+                    textToSpeechPermission: item.accessInfo.textToSpeechPermission ? item.accessInfo.textToSpeechPermission:"",
+                    epubIsAvailable: item.accessInfo.epub.isAvailable ? item.accessInfo.epub.isAvailable:false,
+                    epubDownloadLink: item.accessInfo.epub && item.accessInfo.epub.downloadLink ? item.accessInfo.epub.downloadLink: "",
+                    epubAcsTokenLink: item.accessInfo.epub.acsTokenLink ? item.accessInfo.epub.acsTokenLink: "",
+                    pdfIsAvailable: item.accessInfo.pdf.isAvailable ? item.accessInfo.pdf.isAvailable :false,
+                    pdfDownloadLink: item.accessInfo.pdf && item.accessInfo.pdf.downloadLink ? item.accessInfo.pdf.downloadLink: "",
+                    pdfAcsTokenLink: item.accessInfo.pdf.acsTokenLink ? item.accessInfo.pdf.acsTokenLink:"",
+                    webReaderLink: item.webReaderLink ? item.webReaderLink:"",
+                    accessViewStatus: item.accessInfo.accessViewStatus ? item.accessInfo.accessViewStatus:"",
+                    quoteSharingAllowed: item.quoteSharingAllowed ? item.quoteSharingAllowed: false,
                     textSnippet: item.searchInfo ? item.searchInfo.textSnippet : ""
 
             }
@@ -134,7 +134,8 @@ $(document).ready(function () {
             allBooks.push(book);
                
         });
-        ajaxCall("POST", apiURL, allBooks, postBooksSCB, postBooksECB);
+        console.log(allBooks);
+        ajaxCall("POST", apiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
  
     }
 
