@@ -100,19 +100,22 @@ $(document).ready(function () {
         const AllCategoriesSet = new Set();
        
         allData[0].forEach(function (item) {
+            const authors = item.volumeInfo.authors ? item.volumeInfo.authors : [];
+            const categories = item.volumeInfo.categories ? item.volumeInfo.categories : [];
+
             
                 const book = {
                     id: item.id,
                     title: item.volumeInfo.title,
                     subtitle: item.volumeInfo.subtitle ?item.volumeInfo.subtitle: "",
                     language: item.volumeInfo.language ? item.volumeInfo.language : "",
-                    authors: item.volumeInfo.authors ? item.volumeInfo.authors: [],
+                    /*authors: item.volumeInfo.authors ? item.volumeInfo.authors: [],*/
                     publisher: item.volumeInfo.publisher ?item.volumeInfo.publisher :"",
                     publishedDate: item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate:"",
                     description: item.volumeInfo.description ? item.volumeInfo.description:"",
                     pageCount: item.volumeInfo.pageCount ? item.volumeInfo.pageCount:0,
                     printType: item.volumeInfo.printType ? item.volumeInfo.printType:"",
-                    categories: item.volumeInfo.categories ? item.volumeInfo.categories: [],
+                    /*categories: item.volumeInfo.categories ? item.volumeInfo.categories: [],*/
                     smallThumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail ? item.volumeInfo.imageLinks.smallThumbnail : "",
                     thumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail ? item.volumeInfo.imageLinks.thumbnail: "",
                     saleCountry: item.saleInfo.country ? item.saleInfo.country:"" ,
@@ -137,7 +140,7 @@ $(document).ready(function () {
             
 
             allBooks.push(book);
-            book.authors.forEach(function (authorsName) {
+            authors.forEach(function (authorsName) {
                 // Check if the author is already in allAuthorsSet
                 if (!allAuthorsSet.has(authorsName)) {
                     allAuthorsSet.add(authorsName);
@@ -145,12 +148,16 @@ $(document).ready(function () {
                 }
             });
 
-            book.categories.forEach(function (categoryName) {
+            categories.forEach(function (categoryName) {
                 if (!AllCategoriesSet.has(categoryName)) {
                     AllCategoriesSet.add(categoryName);
                     allCategories.push({ name: categoryName });
                 }
             });
+            //need to add authorsBooks and categoriesBooks objects to the database
+
+
+
         });
 
       

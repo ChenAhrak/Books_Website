@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Metrics;
+﻿using Books.Server.DAL;
+using System.Diagnostics.Metrics;
 
 namespace Books.Server.BL;
 
@@ -11,13 +12,11 @@ public class Book
     string title;
     string subtitle;
     string language;
-    List<string> authors;
     string publisher;
     string publishedDate;
     string description;
     int pageCount;
     string printType;
-    List<string> categories;
     string smallThumbnail; 
     string thumbnail;
 
@@ -45,25 +44,22 @@ public class Book
     bool quoteSharingAllowed;
     //searchInfo
     string textSnippet;
-    static public List<Book> books = new List<Book>();
 
     public Book()
     {
     }
     
-    public Book(string id, string title, string subtitle, string language, List<string> authors, string publisher, string publishedDate, string description, int pageCount, string printType, List<string> categories, string smallThumbnail, string thumbnail, string saleCountry, string saleability, bool isEbook, string accessCountry, string viewability, bool publicDomain, string textToSpeechPermission, bool epubIsAvailable, string epubDownloadLink, string epubAcsTokenLink, bool pdfIsAvailable, string pdfDownloadLink, string pdfAcsTokenLink, string webReaderLink, string accessViewStatus, bool quoteSharingAllowed, string textSnippet)
+    public Book(string id, string title, string subtitle, string language, string publisher, string publishedDate, string description, int pageCount, string printType, string smallThumbnail, string thumbnail, string saleCountry, string saleability, bool isEbook, string accessCountry, string viewability, bool publicDomain, string textToSpeechPermission, bool epubIsAvailable, string epubDownloadLink, string epubAcsTokenLink, bool pdfIsAvailable, string pdfDownloadLink, string pdfAcsTokenLink, string webReaderLink, string accessViewStatus, bool quoteSharingAllowed, string textSnippet)
     {
         this.id = id;
         this.title = title;
         this.subtitle = subtitle;
         this.language = language;
-        this.authors = authors;
         this.publisher = publisher;
         this.publishedDate = publishedDate;
         this.description = description;
         this.pageCount = pageCount;
         this.printType = printType;
-        this.categories = categories;
         this.smallThumbnail = smallThumbnail;
         this.thumbnail = thumbnail;
         this.saleCountry = saleCountry;
@@ -90,13 +86,11 @@ public class Book
     public string Title { get => title; set => title = value; }
     public string Subtitle { get => subtitle; set => subtitle = value; }
     public string Language { get => language; set => language = value; }
-    public List<string> Authors { get => authors; set => authors = value; }
     public string Publisher { get => publisher; set => publisher = value; }
     public string PublishedDate { get => publishedDate; set => publishedDate = value; }
     public string Description { get => description; set => description = value; }
     public int PageCount { get => pageCount; set => pageCount = value; }
     public string PrintType { get => printType; set => printType = value; }
-    public List<string> Categories { get => categories; set => categories = value; }
     public string SmallThumbnail { get => smallThumbnail; set => smallThumbnail = value; }
     public string Thumbnail { get => thumbnail; set => thumbnail = value; }
     public string SaleCountry { get => saleCountry; set => saleCountry = value; }
@@ -126,7 +120,7 @@ public class Book
 // just check of the class, need to rewrite this method to return a list of books from database
 public List<Book> readAllBooks() {  
 
-        return books;
+        return null;
 
     }
 
@@ -134,9 +128,10 @@ public List<Book> readAllBooks() {
     // need to rewrite this method to insert a list of books into the database
     public bool insertAllBooks(List<Book> allBooks)
     {
+        DBservices db = new DBservices();
         try
         {
-            books=allBooks;
+            db.insertAllBooks(allBooks);
             return true;
         }
         catch
