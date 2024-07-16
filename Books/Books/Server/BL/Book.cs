@@ -139,9 +139,9 @@ public List<Book> readAllBooks() {
             books=allBooks;
             return true;
         }
-        catch (Exception ex)
+        catch
         {
-            throw ex;
+            return false;
         }
     }
 }

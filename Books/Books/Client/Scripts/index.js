@@ -1,8 +1,12 @@
 const allData = [];
 const allBooks = [];
+const allAuthors = [];
+const allCategories = [];
 const maxBooks = 50;
 const maxEbooks = 50;
-const apiURL = "https://localhost:7195/api/Books";
+const booksApiURL = "https://localhost:7195/api/Books";
+const authorsApiUrl = "https://localhost:7195/api/Authors";
+const categoriesApiUrl = "https://localhost:7195/api/Categories";
 $(document).ready(function () {
 
     function getRandomQuery(queries) {
@@ -92,11 +96,11 @@ $(document).ready(function () {
         
     async function insertBooksToDB() {
         await fetchBooksAndEbooks(maxBooks, maxEbooks);
-        //run all over the array forEach
-        console.log(allData[0]);
+        const allAuthorsSet = new Set();
+        const AllCategoriesSet = new Set();
+       
         allData[0].forEach(function (item) {
-      
-
+            
                 const book = {
                     id: item.id,
                     title: item.volumeInfo.title,
@@ -130,12 +134,37 @@ $(document).ready(function () {
                     textSnippet: item.searchInfo ? item.searchInfo.textSnippet : ""
 
             }
+            
 
             allBooks.push(book);
-               
+            book.authors.forEach(function (authorsName) {
+                // Check if the author is already in allAuthorsSet
+                if (!allAuthorsSet.has(authorsName)) {
+                    allAuthorsSet.add(authorsName);
+                    allAuthors.push({ name: authorsName });
+                }
+            });
+
+            book.categories.forEach(function (categoryName) {
+                if (!AllCategoriesSet.has(categoryName)) {
+                    AllCategoriesSet.add(categoryName);
+                    allCategories.push({ name: categoryName });
+                }
+            });
         });
+
+      
+        
+       
+
+        console.log(allAuthors);
+        console.log(allCategories);
         console.log(allBooks);
-        ajaxCall("POST", apiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
+        
+
+        await ajaxCall("POST", booksApiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
+        await ajaxCall("POST", authorsApiUrl, JSON.stringify(allAuthors), postAuthorsSCB, postAuthorsECB);
+        await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
  
     }
 
@@ -146,6 +175,22 @@ $(document).ready(function () {
     }
 
     function postBooksECB(err) {
+        console.log(err);
+    }
+
+    function postAuthorsSCB(result) {
+        console.log(result);
+    }
+
+    function postAuthorsECB(err) {
+        console.log(err);
+    }
+
+    function postCategoriesSCB(result) {
+        console.log(result);
+    }
+
+    function postCategoriesECB(err) {
         console.log(err);
     }
 
