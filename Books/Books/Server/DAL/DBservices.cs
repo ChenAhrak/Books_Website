@@ -79,7 +79,7 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-           
+            // to many parameters to add to the command
             foreach (Book book in books)
             {
                 cmd.Parameters.AddWithValue("@Id", book.Id);
