@@ -98,6 +98,8 @@ $(document).ready(function () {
         await fetchBooksAndEbooks(maxBooks, maxEbooks);
         const allAuthorsSet = new Set();
         const AllCategoriesSet = new Set();
+        let authorID = 100;
+        let categoryID = 1;
        
         allData[0].forEach(function (item) {
             const authors = item.volumeInfo.authors ? item.volumeInfo.authors : [];
@@ -140,19 +142,22 @@ $(document).ready(function () {
             
 
             allBooks.push(book);
+           
             authors.forEach(function (authorsName) {
                 // Check if the author is already in allAuthorsSet
                 if (!allAuthorsSet.has(authorsName)) {
                     allAuthorsSet.add(authorsName);
-                    allAuthors.push({ name: authorsName });
+                    allAuthors.push({ id: authorID ,name: authorsName });      
                 }
+                authorID++;
             });
 
             categories.forEach(function (categoryName) {
                 if (!AllCategoriesSet.has(categoryName)) {
                     AllCategoriesSet.add(categoryName);
-                    allCategories.push({ name: categoryName });
+                    allCategories.push({ id: categoryID, name: categoryName });
                 }
+               categoryID ++;
             });
             //need to add authorsBooks and categoriesBooks objects to the database
 

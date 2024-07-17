@@ -80,36 +80,37 @@ namespace Books.Server.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
             // to many parameters to add to the command
-            foreach (Book book in books)
+           for(int i =0;i<3;i++)
             {
-                cmd.Parameters.AddWithValue("@Id", book.Id);
-                cmd.Parameters.AddWithValue("@Title", book.Title);
-                cmd.Parameters.AddWithValue("@Subtitle", book.Subtitle);
-                cmd.Parameters.AddWithValue("@Language", book.Language);
-                cmd.Parameters.AddWithValue("@Publisher", book.Publisher);
-                cmd.Parameters.AddWithValue("@PublishedDate", book.PublishedDate);
-                cmd.Parameters.AddWithValue("@Description", book.Description);
-                cmd.Parameters.AddWithValue("@PageCount", book.PageCount);
-                cmd.Parameters.AddWithValue("@PrintType", book.PrintType);
-                cmd.Parameters.AddWithValue("@SmallThumbnail", book.SmallThumbnail);
-                cmd.Parameters.AddWithValue("@Thumbnail", book.Thumbnail);
-                cmd.Parameters.AddWithValue("@SaleCountry", book.SaleCountry);
-                cmd.Parameters.AddWithValue("@Saleability", book.Saleability);
-                cmd.Parameters.AddWithValue("@IsEbook", book.IsEbook);
-                cmd.Parameters.AddWithValue("@AccessCountry", book.AccessCountry);
-                cmd.Parameters.AddWithValue("@Viewability", book.Viewability);
-                cmd.Parameters.AddWithValue("@PublicDomain", book.PublicDomain);
-                cmd.Parameters.AddWithValue("@TextToSpeechPermission", book.TextToSpeechPermission);
-                cmd.Parameters.AddWithValue("@EpubIsAvailable", book.EpubIsAvailable);
-                cmd.Parameters.AddWithValue("@EpubDownloadLink", book.EpubDownloadLink);
-                cmd.Parameters.AddWithValue("@EpubAcsTokenLink", book.EpubAcsTokenLink);
-                cmd.Parameters.AddWithValue("@PdfIsAvailable", book.PdfIsAvailable);
-                cmd.Parameters.AddWithValue("@PdfDownloadLink", book.PdfDownloadLink);
-                cmd.Parameters.AddWithValue("@PdfAcsTokenLink", book.PdfAcsTokenLink);
-                cmd.Parameters.AddWithValue("@WebReaderLink", book.WebReaderLink);
-                cmd.Parameters.AddWithValue("@AccessViewStatus", book.AccessViewStatus);
-                cmd.Parameters.AddWithValue("@QuoteSharingAllowed", book.QuoteSharingAllowed);
-                cmd.Parameters.AddWithValue("@TextSnippet", book.TextSnippet);
+
+                cmd.Parameters.AddWithValue("@Id", books[i].Id);
+                cmd.Parameters.AddWithValue("@Title", books[i].Title);
+                cmd.Parameters.AddWithValue("@Subtitle", books[i].Subtitle);
+                cmd.Parameters.AddWithValue("@Language", books[i].Language);
+                cmd.Parameters.AddWithValue("@Publisher", books[i].Publisher);
+                cmd.Parameters.AddWithValue("@PublishedDate", books[i].PublishedDate);
+                cmd.Parameters.AddWithValue("@Description", books[i].Description);
+                cmd.Parameters.AddWithValue("@PageCount", books[i].PageCount);
+                cmd.Parameters.AddWithValue("@PrintType", books[i].PrintType);
+                cmd.Parameters.AddWithValue("@SmallThumbnail", books[i].SmallThumbnail);
+                cmd.Parameters.AddWithValue("@Thumbnail", books[i].Thumbnail);
+                cmd.Parameters.AddWithValue("@SaleCountry", books[i].SaleCountry);
+                cmd.Parameters.AddWithValue("@Saleability", books[i].Saleability);
+                cmd.Parameters.AddWithValue("@IsEbook", books[i].IsEbook);
+                cmd.Parameters.AddWithValue("@AccessCountry", books[i].AccessCountry);
+                cmd.Parameters.AddWithValue("@Viewability", books[i].Viewability);
+                cmd.Parameters.AddWithValue("@PublicDomain", books[i].PublicDomain);
+                cmd.Parameters.AddWithValue("@TextToSpeechPermission", books[i].TextToSpeechPermission);
+                cmd.Parameters.AddWithValue("@EpubIsAvailable", books[i].EpubIsAvailable);
+                cmd.Parameters.AddWithValue("@EpubDownloadLink", books[i].EpubDownloadLink);
+                cmd.Parameters.AddWithValue("@EpubAcsTokenLink", books[i].EpubAcsTokenLink);
+                cmd.Parameters.AddWithValue("@PdfIsAvailable", books[i].PdfIsAvailable);
+                cmd.Parameters.AddWithValue("@PdfDownloadLink", books[i].PdfDownloadLink);
+                cmd.Parameters.AddWithValue("@PdfAcsTokenLink", books[i].PdfAcsTokenLink);
+                cmd.Parameters.AddWithValue("@WebReaderLink", books[i].WebReaderLink);
+                cmd.Parameters.AddWithValue("@AccessViewStatus", books[i].AccessViewStatus);
+                cmd.Parameters.AddWithValue("@QuoteSharingAllowed", books[i].QuoteSharingAllowed);
+                cmd.Parameters.AddWithValue("@TextSnippet", books[i].TextSnippet);
             }   
             return cmd;
 
