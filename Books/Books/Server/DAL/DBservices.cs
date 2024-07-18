@@ -80,7 +80,7 @@ namespace Books.Server.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
             // to many parameters to add to the command
-           for(int i =0;i<3;i++)
+           for(int i =0;i<1;i++)
             {
 
                 cmd.Parameters.AddWithValue("@Id", books[i].Id);
@@ -102,16 +102,19 @@ namespace Books.Server.DAL
                 cmd.Parameters.AddWithValue("@PublicDomain", books[i].PublicDomain);
                 cmd.Parameters.AddWithValue("@TextToSpeechPermission", books[i].TextToSpeechPermission);
                 cmd.Parameters.AddWithValue("@EpubIsAvailable", books[i].EpubIsAvailable);
-                cmd.Parameters.AddWithValue("@EpubDownloadLink", books[i].EpubDownloadLink);
                 cmd.Parameters.AddWithValue("@EpubAcsTokenLink", books[i].EpubAcsTokenLink);
                 cmd.Parameters.AddWithValue("@PdfIsAvailable", books[i].PdfIsAvailable);
-                cmd.Parameters.AddWithValue("@PdfDownloadLink", books[i].PdfDownloadLink);
                 cmd.Parameters.AddWithValue("@PdfAcsTokenLink", books[i].PdfAcsTokenLink);
                 cmd.Parameters.AddWithValue("@WebReaderLink", books[i].WebReaderLink);
                 cmd.Parameters.AddWithValue("@AccessViewStatus", books[i].AccessViewStatus);
                 cmd.Parameters.AddWithValue("@QuoteSharingAllowed", books[i].QuoteSharingAllowed);
                 cmd.Parameters.AddWithValue("@TextSnippet", books[i].TextSnippet);
-            }   
+                cmd.Parameters.AddWithValue("@EpubDownloadLink", books[i].EpubDownloadLink);
+                cmd.Parameters.AddWithValue("@PdfDownloadLink", books[i].PdfDownloadLink);
+                cmd.Parameters.AddWithValue("@Price", books[i].Price);
+
+
+            }
             return cmd;
 
         }

@@ -69,7 +69,7 @@ $(document).ready(function () {
             }
 
             startIndex += maxResultsPerRequest;
-     
+
         }
 
         // Fetching ebooks
@@ -86,68 +86,69 @@ $(document).ready(function () {
             }
 
             startIndex += maxResultsPerRequest;
-  
+
         }
 
         const combinedArray = [...books.slice(0, totalBooks), ...ebooks.slice(0, totalEbooks)];
-        allData.push(combinedArray);    
+        allData.push(combinedArray);
 
     }
-        
-    async function insertBooksToDB() {
+
+    async function insertAllDataToDB() {
         await fetchBooksAndEbooks(maxBooks, maxEbooks);
         const allAuthorsSet = new Set();
         const AllCategoriesSet = new Set();
         let authorID = 100;
         let categoryID = 1;
-       
+
         allData[0].forEach(function (item) {
             const authors = item.volumeInfo.authors ? item.volumeInfo.authors : [];
             const categories = item.volumeInfo.categories ? item.volumeInfo.categories : [];
 
-            
-                const book = {
-                    id: item.id,
-                    title: item.volumeInfo.title,
-                    subtitle: item.volumeInfo.subtitle ?item.volumeInfo.subtitle: "",
-                    language: item.volumeInfo.language ? item.volumeInfo.language : "",
-                    /*authors: item.volumeInfo.authors ? item.volumeInfo.authors: [],*/
-                    publisher: item.volumeInfo.publisher ?item.volumeInfo.publisher :"",
-                    publishedDate: item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate:"",
-                    description: item.volumeInfo.description ? item.volumeInfo.description:"",
-                    pageCount: item.volumeInfo.pageCount ? item.volumeInfo.pageCount:0,
-                    printType: item.volumeInfo.printType ? item.volumeInfo.printType:"",
-                    /*categories: item.volumeInfo.categories ? item.volumeInfo.categories: [],*/
-                    smallThumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail ? item.volumeInfo.imageLinks.smallThumbnail : "",
-                    thumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail ? item.volumeInfo.imageLinks.thumbnail: "",
-                    saleCountry: item.saleInfo.country ? item.saleInfo.country:"" ,
-                    saleability: item.saleInfo.saleability ? item.saleInfo.country : "",
-                    isEbook: item.saleInfo.isEbook ? item.saleInfo.isEbook:false,
-                    accessCountry: item.accessInfo.country ? item.accessInfo.country : "",
-                    viewability: item.accessInfo.viewability ? item.accessInfo.viewability : "",
-                    publicDomain: item.accessInfo.publicDomain ? item.accessInfo.publicDomain:false,
-                    textToSpeechPermission: item.accessInfo.textToSpeechPermission ? item.accessInfo.textToSpeechPermission:"",
-                    epubIsAvailable: item.accessInfo.epub.isAvailable ? item.accessInfo.epub.isAvailable:false,
-                    epubDownloadLink: item.accessInfo.epub && item.accessInfo.epub.downloadLink ? item.accessInfo.epub.downloadLink: "",
-                    epubAcsTokenLink: item.accessInfo.epub.acsTokenLink ? item.accessInfo.epub.acsTokenLink: "",
-                    pdfIsAvailable: item.accessInfo.pdf.isAvailable ? item.accessInfo.pdf.isAvailable :false,
-                    pdfDownloadLink: item.accessInfo.pdf && item.accessInfo.pdf.downloadLink ? item.accessInfo.pdf.downloadLink: "",
-                    pdfAcsTokenLink: item.accessInfo.pdf.acsTokenLink ? item.accessInfo.pdf.acsTokenLink:"",
-                    webReaderLink: item.webReaderLink ? item.webReaderLink:"",
-                    accessViewStatus: item.accessInfo.accessViewStatus ? item.accessInfo.accessViewStatus:"",
-                    quoteSharingAllowed: item.quoteSharingAllowed ? item.quoteSharingAllowed: false,
-                    textSnippet: item.searchInfo ? item.searchInfo.textSnippet : ""
+
+            const book = {
+                id: item.id,
+                title: item.volumeInfo.title,
+                subtitle: item.volumeInfo.subtitle ? item.volumeInfo.subtitle : "",
+                language: item.volumeInfo.language ? item.volumeInfo.language : "",
+                /*authors: item.volumeInfo.authors ? item.volumeInfo.authors: [],*/
+                publisher: item.volumeInfo.publisher ? item.volumeInfo.publisher : "",
+                publishedDate: item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate : "",
+                description: item.volumeInfo.description ? item.volumeInfo.description : "",
+                pageCount: item.volumeInfo.pageCount ? item.volumeInfo.pageCount : 0,
+                printType: item.volumeInfo.printType ? item.volumeInfo.printType : "",
+                /*categories: item.volumeInfo.categories ? item.volumeInfo.categories: [],*/
+                smallThumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail ? item.volumeInfo.imageLinks.smallThumbnail : "",
+                thumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail ? item.volumeInfo.imageLinks.thumbnail : "",
+                saleCountry: item.saleInfo.country ? item.saleInfo.country : "",
+                saleability: item.saleInfo.saleability ? item.saleInfo.country : "",
+                isEbook: item.saleInfo.isEbook ? item.saleInfo.isEbook : false,
+                accessCountry: item.accessInfo.country ? item.accessInfo.country : "",
+                viewability: item.accessInfo.viewability ? item.accessInfo.viewability : "",
+                publicDomain: item.accessInfo.publicDomain ? item.accessInfo.publicDomain : false,
+                textToSpeechPermission: item.accessInfo.textToSpeechPermission ? item.accessInfo.textToSpeechPermission : "",
+                epubIsAvailable: item.accessInfo.epub.isAvailable ? item.accessInfo.epub.isAvailable : false,
+                epubDownloadLink: item.accessInfo.epub && item.accessInfo.epub.downloadLink ? item.accessInfo.epub.downloadLink : "",
+                epubAcsTokenLink: item.accessInfo.epub.acsTokenLink ? item.accessInfo.epub.acsTokenLink : "",
+                pdfIsAvailable: item.accessInfo.pdf.isAvailable ? item.accessInfo.pdf.isAvailable : false,
+                pdfDownloadLink: item.accessInfo.pdf && item.accessInfo.pdf.downloadLink ? item.accessInfo.pdf.downloadLink : "",
+                pdfAcsTokenLink: item.accessInfo.pdf.acsTokenLink ? item.accessInfo.pdf.acsTokenLink : "",
+                webReaderLink: item.webReaderLink ? item.webReaderLink : "",
+                accessViewStatus: item.accessInfo.accessViewStatus ? item.accessInfo.accessViewStatus : "",
+                quoteSharingAllowed: item.quoteSharingAllowed ? item.quoteSharingAllowed : false,
+                textSnippet: item.searchInfo ? item.searchInfo.textSnippet : "",
+                price: item.volumeInfo.pageCount/10 //need to check it
 
             }
-            
+
 
             allBooks.push(book);
-           
+
             authors.forEach(function (authorsName) {
                 // Check if the author is already in allAuthorsSet
                 if (!allAuthorsSet.has(authorsName)) {
                     allAuthorsSet.add(authorsName);
-                    allAuthors.push({ id: authorID ,name: authorsName });      
+                    allAuthors.push({ id: authorID, name: authorsName });
                 }
                 authorID++;
             });
@@ -157,7 +158,7 @@ $(document).ready(function () {
                     AllCategoriesSet.add(categoryName);
                     allCategories.push({ id: categoryID, name: categoryName });
                 }
-               categoryID ++;
+                categoryID++;
             });
             //need to add authorsBooks and categoriesBooks objects to the database
 
@@ -165,22 +166,20 @@ $(document).ready(function () {
 
         });
 
-      
-        
-       
+
+
+
 
         console.log(allAuthors);
         console.log(allCategories);
         console.log(allBooks);
-        
+
 
         await ajaxCall("POST", booksApiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
         await ajaxCall("POST", authorsApiUrl, JSON.stringify(allAuthors), postAuthorsSCB, postAuthorsECB);
         await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
- 
-    }
 
-    insertBooksToDB();
+    }
 
     function postBooksSCB(result) {
         console.log(result);
@@ -207,9 +206,11 @@ $(document).ready(function () {
     }
 
 
-
-
-
+    const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
+    $(insertDataToDbBtn).click(function () {
+        insertAllDataToDB();
+        insertDataToDbBtn.disabled = true;
+});
 
 
     const authorsBtn = document.getElementById("authorsBtn");

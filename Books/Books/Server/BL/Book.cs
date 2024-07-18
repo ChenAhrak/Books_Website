@@ -44,12 +44,13 @@ public class Book
     bool quoteSharingAllowed;
     //searchInfo
     string textSnippet;
+    double price;
 
     public Book()
     {
     }
     
-    public Book(string id, string title, string subtitle, string language, string publisher, string publishedDate, string description, int pageCount, string printType, string smallThumbnail, string thumbnail, string saleCountry, string saleability, bool isEbook, string accessCountry, string viewability, bool publicDomain, string textToSpeechPermission, bool epubIsAvailable, string epubDownloadLink, string epubAcsTokenLink, bool pdfIsAvailable, string pdfDownloadLink, string pdfAcsTokenLink, string webReaderLink, string accessViewStatus, bool quoteSharingAllowed, string textSnippet)
+    public Book(string id, string title, string subtitle, string language, string publisher, string publishedDate, string description, int pageCount, string printType, string smallThumbnail, string thumbnail, string saleCountry, string saleability, bool isEbook, string accessCountry, string viewability, bool publicDomain, string textToSpeechPermission, bool epubIsAvailable, string epubDownloadLink, string epubAcsTokenLink, bool pdfIsAvailable, string pdfDownloadLink, string pdfAcsTokenLink, string webReaderLink, string accessViewStatus, bool quoteSharingAllowed, string textSnippet,double price)
     {
         this.id = id;
         this.title = title;
@@ -79,6 +80,7 @@ public class Book
         this.accessViewStatus = accessViewStatus;
         this.quoteSharingAllowed = quoteSharingAllowed;
         this.textSnippet = textSnippet;
+        this.price = price;
     }
 
     //getters and setters for all the fields
@@ -111,14 +113,16 @@ public class Book
     public bool QuoteSharingAllowed { get => quoteSharingAllowed; set => quoteSharingAllowed = value; }
     public string TextSnippet { get => textSnippet; set => textSnippet = value; }
 
+    public double Price { get => price; set => price = value; }
 
 
 
 
 
 
-// just check of the class, need to rewrite this method to return a list of books from database
-public List<Book> readAllBooks() {  
+
+    // just check of the class, need to rewrite this method to return a list of books from database
+    public List<Book> readAllBooks() {  
 
         return null;
 
