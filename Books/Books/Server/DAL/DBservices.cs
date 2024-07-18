@@ -80,7 +80,7 @@ namespace Books.Server.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
             // to many parameters to add to the command
-           for(int i =0;i<1;i++)
+            for (int i = 0; i < 1; i++)
             {
 
                 cmd.Parameters.AddWithValue("@Id", books[i].Id);
@@ -118,5 +118,132 @@ namespace Books.Server.DAL
             return cmd;
 
         }
+
+        public int insertAllAuthors(List<Author> authors)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            cmd = CreateCommandWithStoredProcedureInsertAllAuthors("SP_InsertAllAuthors", con, authors);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        public SqlCommand CreateCommandWithStoredProcedureInsertAllAuthors(String spName, SqlConnection con, List<Author> authors)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            for (int i = 0; i < 1; i++)
+            {
+
+                cmd.Parameters.AddWithValue("@Id", authors[i].Id);
+                cmd.Parameters.AddWithValue("@Name", authors[i].Name);
+            }
+            return cmd;
+
+        }
+
+        public int insertAllCategories(List<Category> categories)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            cmd = CreateCommandWithStoredProcedureInsertAllCategories("SP_InsertAllCategories", con, categories);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        public SqlCommand CreateCommandWithStoredProcedureInsertAllCategories(String spName, SqlConnection con, List<Category> categories)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            for (int i = 0; i < 1; i++)
+            {
+
+                cmd.Parameters.AddWithValue("@Id", categories[i].Id);
+                cmd.Parameters.AddWithValue("@Name", categories[i].Name);
+            }
+            return cmd;
+
+        }
+
+
     }
 }
+  
+
+   

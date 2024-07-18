@@ -1,10 +1,11 @@
-﻿namespace Books.Server.BL
+﻿using Books.Server.DAL;
+
+namespace Books.Server.BL
 {
     public class Category
     {
         int id;
         string name;
-        static public List<Category> categories = new List<Category>();
         public Category()
         {
         }
@@ -19,9 +20,10 @@
 
         public bool insertAllCategories(List<Category> allCategories)
         {
+            DBservices db = new DBservices();
             try
             {
-                categories = allCategories;
+                db.insertAllCategories(allCategories);
                 return true;
             }
             catch

@@ -2,6 +2,8 @@ const allData = [];
 const allBooks = [];
 const allAuthors = [];
 const allCategories = [];
+const allBooksAuthors = [];
+const allBooksCategories = [];
 const maxBooks = 50;
 const maxEbooks = 50;
 const booksApiURL = "https://localhost:7195/api/Books";
@@ -105,7 +107,7 @@ $(document).ready(function () {
             const authors = item.volumeInfo.authors ? item.volumeInfo.authors : [];
             const categories = item.volumeInfo.categories ? item.volumeInfo.categories : [];
 
-
+            //Create all Books Objects
             const book = {
                 id: item.id,
                 title: item.volumeInfo.title,
@@ -137,30 +139,49 @@ $(document).ready(function () {
                 accessViewStatus: item.accessInfo.accessViewStatus ? item.accessInfo.accessViewStatus : "",
                 quoteSharingAllowed: item.quoteSharingAllowed ? item.quoteSharingAllowed : false,
                 textSnippet: item.searchInfo ? item.searchInfo.textSnippet : "",
-                price: item.volumeInfo.pageCount/10 //need to check it
+                price: item.volumeInfo.pageCount?item.volumeInfo.pageCount/10:0.0 //need to check it
 
             }
 
 
             allBooks.push(book);
 
+            //Create all Authors Objects
             authors.forEach(function (authorsName) {
                 // Check if the author is already in allAuthorsSet
                 if (!allAuthorsSet.has(authorsName)) {
                     allAuthorsSet.add(authorsName);
                     allAuthors.push({ id: authorID, name: authorsName });
+                    authorID++;    
                 }
-                authorID++;
+
+                
             });
 
+            //Create all BooksAuthors Objects
+            authors.forEach(function (authorsName) {
+                let author = allAuthors.find(author => author.name === authorsName);
+                allBooksAuthors.push({ bookId: book.id, authorId: author.id });
+
+            });
+           
+            
+
+            //Create all Categories Objects
             categories.forEach(function (categoryName) {
                 if (!AllCategoriesSet.has(categoryName)) {
                     AllCategoriesSet.add(categoryName);
                     allCategories.push({ id: categoryID, name: categoryName });
+                    categoryID++;
                 }
-                categoryID++;
             });
-            //need to add authorsBooks and categoriesBooks objects to the database
+
+            //Create all BooksCategories Objects
+            categories.forEach(function (categoryName) {
+                let category = allCategories.find(category => category.name === categoryName);
+                allBooksCategories.push({ bookId: book.id, categoryId: category.id });
+            });
+            
 
 
 
@@ -169,10 +190,12 @@ $(document).ready(function () {
 
 
 
-
+       
         console.log(allAuthors);
         console.log(allCategories);
-        console.log(allBooks);
+        console.log(allBooksAuthors);
+        console.log(allBooksCategories);
+        //console.log(allBooks);
 
 
         await ajaxCall("POST", booksApiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);

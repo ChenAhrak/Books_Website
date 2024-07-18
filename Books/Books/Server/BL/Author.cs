@@ -1,4 +1,5 @@
 ﻿using static System.Reflection.Metadata.BlobBuilder;
+using Books.Server.DAL;
 
 namespace Books.Server.BL
 {
@@ -6,8 +7,7 @@ namespace Books.Server.BL
     {
         int id;
         string name;
-        static public List<Author> authors = new List<Author>();
-        public Author()
+       public Author()
         {
         }
 
@@ -21,9 +21,10 @@ namespace Books.Server.BL
 
         public bool insertAllAuthors(List<Author> allAuthors)
         {
+            DBservices db = new DBservices();
             try
             {
-                authors = allAuthors;
+                db.insertAllAuthors(allAuthors);
                 return true;
             }
             catch
@@ -35,7 +36,7 @@ namespace Books.Server.BL
         public List<Author> ReadAllAuthors()
         {
 
-            return authors;
+            return null;
         }
     }
 }
