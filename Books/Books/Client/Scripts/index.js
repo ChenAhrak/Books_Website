@@ -63,7 +63,7 @@ $(document).ready(function () {
         while (books.length < totalBooks) {
             const randomQuery = await getRandomQuery(queries);
             const booksBatch = await fetchBooks(randomQuery, startIndex, maxResultsPerRequest);
-
+            console.log(booksBatch);
             for (const book of booksBatch) {
                 if (books.length < totalBooks && !book.saleInfo.isEbook) {
                     books.push(book);
@@ -96,6 +96,19 @@ $(document).ready(function () {
 
     }
 
+    async function fetchAuthors(query) {
+        const url = `https://openlibrary.org/search/authors.json?q=${query}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.docs || [];
+        } catch (error) {
+            console.error('Error fetching data from Google Books API:', error);
+            return [];
+        }
+
+    }
+
     async function insertAllDataToDB() {
         await fetchBooksAndEbooks(maxBooks, maxEbooks);
         const allAuthorsSet = new Set();
@@ -113,13 +126,11 @@ $(document).ready(function () {
                 title: item.volumeInfo.title,
                 subtitle: item.volumeInfo.subtitle ? item.volumeInfo.subtitle : "",
                 language: item.volumeInfo.language ? item.volumeInfo.language : "",
-                /*authors: item.volumeInfo.authors ? item.volumeInfo.authors: [],*/
                 publisher: item.volumeInfo.publisher ? item.volumeInfo.publisher : "",
                 publishedDate: item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate : "",
                 description: item.volumeInfo.description ? item.volumeInfo.description : "",
                 pageCount: item.volumeInfo.pageCount ? item.volumeInfo.pageCount : 0,
                 printType: item.volumeInfo.printType ? item.volumeInfo.printType : "",
-                /*categories: item.volumeInfo.categories ? item.volumeInfo.categories: [],*/
                 smallThumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail ? item.volumeInfo.imageLinks.smallThumbnail : "",
                 thumbnail: item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail ? item.volumeInfo.imageLinks.thumbnail : "",
                 saleCountry: item.saleInfo.country ? item.saleInfo.country : "",
@@ -147,11 +158,14 @@ $(document).ready(function () {
             allBooks.push(book);
 
             //Create all Authors Objects
-            authors.forEach(function (authorsName) {
+            authors.forEach( async function (authorsName) {
+                
                 // Check if the author is already in allAuthorsSet
                 if (!allAuthorsSet.has(authorsName)) {
+                    const authorsData = await fetchAuthors(authorsName);
+                    console.log(authorsData);
                     allAuthorsSet.add(authorsName);
-                    allAuthors.push({ id: authorID, name: authorsName });
+                    allAuthors.push({ id: authorID, name: authorsName, birthDate: authorsData.birth_date, topSubjects: authorsData.top_subjects, topWork: authorsData.top_work });
                     authorID++;    
                 }
 
@@ -192,15 +206,15 @@ $(document).ready(function () {
 
        
         console.log(allAuthors);
-        console.log(allCategories);
-        console.log(allBooksAuthors);
-        console.log(allBooksCategories);
+        //console.log(allCategories);
+        //console.log(allBooksAuthors);
+        //console.log(allBooksCategories);
         //console.log(allBooks);
 
 
-        await ajaxCall("POST", booksApiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
-        await ajaxCall("POST", authorsApiUrl, JSON.stringify(allAuthors), postAuthorsSCB, postAuthorsECB);
-        await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
+        //await ajaxCall("POST", booksApiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
+        //await ajaxCall("POST", authorsApiUrl, JSON.stringify(allAuthors), postAuthorsSCB, postAuthorsECB);
+        //await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
 
     }
 

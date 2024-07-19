@@ -35,7 +35,7 @@ namespace Books.Server.BL
         public List<Category> ReadAllCategories()
         {
 
-            return categories;
+            return null;
         }
     }
 }
