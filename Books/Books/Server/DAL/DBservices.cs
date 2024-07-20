@@ -175,6 +175,11 @@ namespace Books.Server.DAL
 
                 cmd.Parameters.AddWithValue("@Id", authors[i].Id);
                 cmd.Parameters.AddWithValue("@Name", authors[i].Name);
+                cmd.Parameters.AddWithValue("@BirthDate", authors[i].BirthDate);
+                cmd.Parameters.AddWithValue("@DeathDate", authors[i].DeathDate);
+                cmd.Parameters.AddWithValue("@TopWork", authors[i].TopWork);
+                //Add image field
+
             }
             return cmd;
 

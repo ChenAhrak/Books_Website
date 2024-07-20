@@ -63,7 +63,6 @@ $(document).ready(function () {
         while (books.length < totalBooks) {
             const randomQuery = await getRandomQuery(queries);
             const booksBatch = await fetchBooks(randomQuery, startIndex, maxResultsPerRequest);
-            console.log(booksBatch);
             for (const book of booksBatch) {
                 if (books.length < totalBooks && !book.saleInfo.isEbook) {
                     books.push(book);
@@ -80,7 +79,6 @@ $(document).ready(function () {
         while (ebooks.length < totalEbooks) {
             const randomQuery = await getRandomQuery(queries);
             const ebooksBatch = await fetchEBooks(randomQuery, startIndex, maxResultsPerRequest);
-
             for (const ebook of ebooksBatch) {
                 if (ebooks.length < totalEbooks && ebook.saleInfo.isEbook) {
                     ebooks.push(ebook);
@@ -96,31 +94,20 @@ $(document).ready(function () {
 
     }
 
-    async function fetchAuthors(query) {
-        const url = `https://openlibrary.org/search/authors.json?q=${query}`;
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data.docs || [];
-        } catch (error) {
-            console.error('Error fetching data from Google Books API:', error);
-            return [];
-        }
 
-    }
 
     async function insertAllDataToDB() {
         await fetchBooksAndEbooks(maxBooks, maxEbooks);
         const allAuthorsSet = new Set();
-        const AllCategoriesSet = new Set();
+        const allCategoriesSet = new Set();
         let authorID = 100;
         let categoryID = 1;
 
-        allData[0].forEach(function (item) {
+        for (const item of allData[0]) {
             const authors = item.volumeInfo.authors ? item.volumeInfo.authors : [];
             const categories = item.volumeInfo.categories ? item.volumeInfo.categories : [];
 
-            //Create all Books Objects
+            // Create the book object
             const book = {
                 id: item.id,
                 title: item.volumeInfo.title,
@@ -150,71 +137,80 @@ $(document).ready(function () {
                 accessViewStatus: item.accessInfo.accessViewStatus ? item.accessInfo.accessViewStatus : "",
                 quoteSharingAllowed: item.quoteSharingAllowed ? item.quoteSharingAllowed : false,
                 textSnippet: item.searchInfo ? item.searchInfo.textSnippet : "",
-                price: item.volumeInfo.pageCount?item.volumeInfo.pageCount/10:0.0 //need to check it
-
-            }
+                price: item.volumeInfo.pageCount ? item.volumeInfo.pageCount / 10 : 0.0 // Need to check it
+            };
 
 
             allBooks.push(book);
-
-            //Create all Authors Objects
-            authors.forEach( async function (authorsName) {
-                
-                // Check if the author is already in allAuthorsSet
+            // Create all Authors Objects
+            for (const authorsName of authors) {
                 if (!allAuthorsSet.has(authorsName)) {
                     const authorsData = await fetchAuthors(authorsName);
-                    console.log(authorsData);
-                    allAuthorsSet.add(authorsName);
-                    allAuthors.push({ id: authorID, name: authorsName, birthDate: authorsData.birth_date, topSubjects: authorsData.top_subjects, topWork: authorsData.top_work });
-                    authorID++;    
+                    if (authorsData) {
+                        allAuthorsSet.add(authorsName);
+                        allAuthors.push({
+                            id: authorID,
+                            name: authorsName,
+                            birthDate: authorsData.birth_date ? authorsData.birth_date : "",
+                            deathDate: authorsData.death_date ? authorsData.death_date : "",
+                            topWork: authorsData.top_work ? authorsData.top_work : ""
+                            //Add image link somehow
+                        });
+                        authorID++;
+                    }
                 }
+            }
 
-                
-            });
-
-            //Create all BooksAuthors Objects
-            authors.forEach(function (authorsName) {
+            // Create all BooksAuthors Objects
+            for (const authorsName of authors) {
                 let author = allAuthors.find(author => author.name === authorsName);
-                allBooksAuthors.push({ bookId: book.id, authorId: author.id });
+                if (author) {
+                    allBooksAuthors.push({ bookId: book.id, authorId: author.id });
+                }
+            }
 
-            });
-           
-            
-
-            //Create all Categories Objects
-            categories.forEach(function (categoryName) {
-                if (!AllCategoriesSet.has(categoryName)) {
-                    AllCategoriesSet.add(categoryName);
+            // Create all Categories Objects
+            for (const categoryName of categories) {
+                if (!allCategoriesSet.has(categoryName)) {
+                    allCategoriesSet.add(categoryName);
                     allCategories.push({ id: categoryID, name: categoryName });
                     categoryID++;
                 }
-            });
+            }
 
-            //Create all BooksCategories Objects
-            categories.forEach(function (categoryName) {
+            // Create all BooksCategories Objects
+            for (const categoryName of categories) {
                 let category = allCategories.find(category => category.name === categoryName);
-                allBooksCategories.push({ bookId: book.id, categoryId: category.id });
-            });
-            
-
-
-
-        });
-
-
-
+                if (category) {
+                    allBooksCategories.push({ bookId: book.id, categoryId: category.id });
+                }
+            }
+        }
+    
 
        
         console.log(allAuthors);
-        //console.log(allCategories);
-        //console.log(allBooksAuthors);
-        //console.log(allBooksCategories);
-        //console.log(allBooks);
+        console.log(allCategories);
+        console.log(allBooksAuthors);
+        console.log(allBooksCategories);
+        console.log(allBooks);
 
 
         //await ajaxCall("POST", booksApiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
         //await ajaxCall("POST", authorsApiUrl, JSON.stringify(allAuthors), postAuthorsSCB, postAuthorsECB);
         //await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
+
+    }
+    async function fetchAuthors(query) {
+        const url = `https://openlibrary.org/search/authors.json?q=${query}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.docs[0] || [];
+        } catch (error) {
+            console.error('Error fetching data from API:', error);
+            return [];
+        }
 
     }
 
