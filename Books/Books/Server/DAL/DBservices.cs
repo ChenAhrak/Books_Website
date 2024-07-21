@@ -357,12 +357,11 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-            for (int i = 0; i < 1; i++)
-            {
+           
 
                 cmd.Parameters.AddWithValue("@BookId", bookId);
                 cmd.Parameters.AddWithValue("@CategoryId",categoryId);
-            }
+            
             return cmd;
 
         }

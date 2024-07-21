@@ -177,11 +177,11 @@ $(document).ready(function () {
             for (const authorsName of authors) {
                 let author = allAuthors.find(author => author.name === authorsName);
                 if (author) {
-                    allBooksAuthors.push({ bookId: book.id, authorId: author.id });
+                //    allBooksAuthors.push({ bookId: book.id, authorId: author.id });
+                    await ajaxCall("POST", `${booksApiURL}/InsertAllBooksAuthors/${author.id}`, JSON.stringify(book.id), postAllBooksAuthorsSCB, postAllBooksAuthorsECB);
                 }
 
                 //need to change the sending data to the server
-                await ajaxCall("POST", `${booksApiURL}/InsertAllBooksAuthors`, JSON.stringify(allBooksAuthors), postAllBooksAuthorsSCB, postAllBooksAuthorsECB);
             }
 
             // Create all Categories Objects
@@ -192,7 +192,6 @@ $(document).ready(function () {
                     categoryID++;
                 }
                 //need to change the sending data to the server
-                await ajaxCall("POST", `${booksApiURL}/InsertAllBooksCategories`, JSON.stringify(allBooksCategories), postAllBooksCategoriesSCB, postAllBooksCategoriesECB;
 
             }
 
@@ -200,7 +199,9 @@ $(document).ready(function () {
             for (const categoryName of categories) {
                 let category = allCategories.find(category => category.name === categoryName);
                 if (category) {
-                    allBooksCategories.push({ bookId: book.id, categoryId: category.id });
+                    //allBooksCategories.push({ bookId: book.id, categoryId: category.id });
+                    await ajaxCall("POST", `${booksApiURL}/InsertAllBooksCategories/${category.id}`, JSON.stringify(book.id), postAllBooksCategoriesSCB, postAllBooksCategoriesECB);
+
                 }
             }
         }
