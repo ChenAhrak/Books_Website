@@ -170,17 +170,19 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-            for (int i = 0; i < 1; i++)
-            {
+            //foreach(Author author in authors)
+           
+            //{
 
-                cmd.Parameters.AddWithValue("@Id", authors[i].Id);
-                cmd.Parameters.AddWithValue("@Name", authors[i].Name);
-                cmd.Parameters.AddWithValue("@BirthDate", authors[i].BirthDate);
-                cmd.Parameters.AddWithValue("@DeathDate", authors[i].DeathDate);
-                cmd.Parameters.AddWithValue("@TopWork", authors[i].TopWork);
-                //Add image field
+                cmd.Parameters.AddWithValue("@Id", authors[0].Id);
+                cmd.Parameters.AddWithValue("@Name", authors[0].Name);
+                cmd.Parameters.AddWithValue("@BirthDate", authors[0].BirthDate);
+                cmd.Parameters.AddWithValue("@DeathDate", authors[0].DeathDate);
+                cmd.Parameters.AddWithValue("@TopWork", authors[0].TopWork);
+                cmd.Parameters.AddWithValue("@Description", authors[0].Description);
+                cmd.Parameters.AddWithValue("@Image", authors[0].Image);
 
-            }
+            //}
             return cmd;
 
         }
@@ -236,12 +238,12 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-            for (int i = 0; i < 1; i++)
-            {
+            //foreach (Category category in categories)
+            //{
 
-                cmd.Parameters.AddWithValue("@Id", categories[i].Id);
-                cmd.Parameters.AddWithValue("@Name", categories[i].Name);
-            }
+                cmd.Parameters.AddWithValue("@Id", categories[0].Id);
+                cmd.Parameters.AddWithValue("@Name", categories[0].Name);
+            //}
             return cmd;
 
         }

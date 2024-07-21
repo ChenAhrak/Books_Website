@@ -53,8 +53,8 @@ namespace Books.Server.Controllers
         }
 
           // POST api/<BooksController>
-        [HttpPost("InsertAllBooksAuthors/{authorId}")] //----need to change this somehow
-        public IActionResult PostAllBooksAuthors([FromBody] string bookId, int authorId )
+        [HttpPost("PostAllBooksAuthors/{authorId}")] //----need to change this somehow
+        public IActionResult PostAllBooksAuthors([FromBody] string bookId, [FromQuery] int authorId )
         {
             if (!ModelState.IsValid)
             {
@@ -73,7 +73,7 @@ namespace Books.Server.Controllers
         }
            // POST api/<BooksController>
         [HttpPost("InsertAllBooksCategories/{categoryId}")]//need to change this somehow
-        public IActionResult PostAllBooksCategories([FromBody] string bookId, int categoryId)
+        public IActionResult PostAllBooksCategories([FromBody] string bookId, [FromQuery] int categoryId)
         {
             if (!ModelState.IsValid)
             {
