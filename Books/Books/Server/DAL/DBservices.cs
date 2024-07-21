@@ -180,6 +180,10 @@ namespace Books.Server.DAL
                 cmd.Parameters.AddWithValue("@DeathDate", authors[0].DeathDate);
                 cmd.Parameters.AddWithValue("@TopWork", authors[0].TopWork);
                 cmd.Parameters.AddWithValue("@Description", authors[0].Description);
+                if (String.Compare(authors[0].Image, "") == 0)
+                {
+                    authors[0].Image = "https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png";
+                }
                 cmd.Parameters.AddWithValue("@Image", authors[0].Image);
 
             //}

@@ -222,10 +222,10 @@ $(document).ready(function () {
 
     
 
-     await ajaxCall("POST", `${booksApiURL}/InsertAllBooks`, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
+    /* await ajaxCall("POST", `${booksApiURL}/InsertAllBooks`, JSON.stringify(allBooks), postBooksSCB, postBooksECB);*/
 
     await ajaxCall("POST", authorsApiUrl, JSON.stringify(allAuthors), postAuthorsSCB, postAuthorsECB);
-    await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
+    //await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
 
     //for (const bookAuthor of allBooksAuthors) {
     //    await ajaxCall("POST", `${booksApiURL}/PostAllBooksAuthors/${bookAuthor.authorId}`, JSON.stringify(bookAuhtor.bookId), postAllBooksAuthorsSCB, postAllBooksAuthorsECB);
