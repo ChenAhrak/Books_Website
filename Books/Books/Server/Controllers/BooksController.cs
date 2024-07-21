@@ -33,8 +33,8 @@ namespace Books.Server.Controllers
         }
 
         // POST api/<BooksController>
-        [HttpPost]
-        public IActionResult Post([FromBody] List<Book> allBooks)
+        [HttpPost("InsertAllBooks")]
+        public IActionResult PostAllBooks([FromBody] List<Book> allBooks)
         {
             if (!ModelState.IsValid)
             {
@@ -43,6 +43,45 @@ namespace Books.Server.Controllers
             try
             {
                 book.insertAllBooks(allBooks);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+
+          // POST api/<BooksController>
+        [HttpPost("InsertAllBooksAuthors")] //----need to change this somehow
+        public IActionResult PostAllBooksAuthors([FromBody] string bookId, int authorId )
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                book.insertAllBooksAuthors(bookId,authorId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+           // POST api/<BooksController>
+        [HttpPost("InsertAllBooksCategories")]//need to change this somehow
+        public IActionResult PostAllBooksCategories([FromBody] string bookId, int categoryId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                book.insertAllBooksCategories(bookId,categoryId);
                 return Ok();
             }
             catch (Exception ex)

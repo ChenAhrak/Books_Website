@@ -246,6 +246,127 @@ namespace Books.Server.DAL
 
         }
 
+        public int insertAllBooksAuthors(string bookId, int authorId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            cmd = CreateCommandWithStoredProcedureInsertAllBooksAuthors("SP_InsertAllBooksAuthors", con, bookId,authorId);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        public SqlCommand CreateCommandWithStoredProcedureInsertAllBooksAuthors(String spName, SqlConnection con, string bookId, int authorId)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+           
+
+                cmd.Parameters.AddWithValue("@BookId",bookId);
+                cmd.Parameters.AddWithValue("@AuthorId", authorId);
+           
+            return cmd;
+
+        }
+
+        public int insertAllBooksCategories(string bookId, int categoryId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            cmd = CreateCommandWithStoredProcedureInsertAllBooksCategories("SP_InsertAllBooksCategories", con, bookId,categoryId);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        public SqlCommand CreateCommandWithStoredProcedureInsertAllBooksCategories(String spName, SqlConnection con, string bookId, int categoryId)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            for (int i = 0; i < 1; i++)
+            {
+
+                cmd.Parameters.AddWithValue("@BookId", bookId);
+                cmd.Parameters.AddWithValue("@CategoryId",categoryId);
+            }
+            return cmd;
+
+        }
+
 
     }
 }

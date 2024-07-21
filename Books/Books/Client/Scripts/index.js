@@ -95,6 +95,18 @@ $(document).ready(function () {
     }
 
 
+    async function fetchAuthors(query) {
+        const url = `https://openlibrary.org/search/authors.json?q=${query}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.docs[0] || [];
+        } catch (error) {
+            console.error('Error fetching data from API:', error);
+            return [];
+        }
+
+    }
 
     async function insertAllDataToDB() {
         await fetchBooksAndEbooks(maxBooks, maxEbooks);
@@ -137,7 +149,7 @@ $(document).ready(function () {
                 accessViewStatus: item.accessInfo.accessViewStatus ? item.accessInfo.accessViewStatus : "",
                 quoteSharingAllowed: item.quoteSharingAllowed ? item.quoteSharingAllowed : false,
                 textSnippet: item.searchInfo ? item.searchInfo.textSnippet : "",
-                price: item.volumeInfo.pageCount ? item.volumeInfo.pageCount / 10 : 0.0 // Need to check it
+                price: item.volumeInfo.pageCount ? item.volumeInfo.pageCount / 10 : 0.0 
             };
 
 
@@ -167,6 +179,9 @@ $(document).ready(function () {
                 if (author) {
                     allBooksAuthors.push({ bookId: book.id, authorId: author.id });
                 }
+
+                //need to change the sending data to the server
+                await ajaxCall("POST", `${booksApiURL}/InsertAllBooksAuthors`, JSON.stringify(allBooksAuthors), postAllBooksAuthorsSCB, postAllBooksAuthorsECB);
             }
 
             // Create all Categories Objects
@@ -176,6 +191,9 @@ $(document).ready(function () {
                     allCategories.push({ id: categoryID, name: categoryName });
                     categoryID++;
                 }
+                //need to change the sending data to the server
+                await ajaxCall("POST", `${booksApiURL}/InsertAllBooksCategories`, JSON.stringify(allBooksCategories), postAllBooksCategoriesSCB, postAllBooksCategoriesECB;
+
             }
 
             // Create all BooksCategories Objects
@@ -189,30 +207,20 @@ $(document).ready(function () {
     
 
        
-        console.log(allAuthors);
-        console.log(allCategories);
-        console.log(allBooksAuthors);
-        console.log(allBooksCategories);
-        console.log(allBooks);
+        //console.log(allAuthors);
+        //console.log(allCategories);
+        //console.log(allBooksAuthors);
+        //console.log(allBooksCategories);
+        //console.log(allBooks);
 
 
-        //await ajaxCall("POST", booksApiURL, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
+        await ajaxCall("POST", `${booksApiURL}/InsertAllBooks`, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
+        
         //await ajaxCall("POST", authorsApiUrl, JSON.stringify(allAuthors), postAuthorsSCB, postAuthorsECB);
         //await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
 
     }
-    async function fetchAuthors(query) {
-        const url = `https://openlibrary.org/search/authors.json?q=${query}`;
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data.docs[0] || [];
-        } catch (error) {
-            console.error('Error fetching data from API:', error);
-            return [];
-        }
-
-    }
+  
 
     function postBooksSCB(result) {
         console.log(result);
@@ -235,6 +243,22 @@ $(document).ready(function () {
     }
 
     function postCategoriesECB(err) {
+        console.log(err);
+    }
+
+    function postAllBooksAuthorsSCB(result) {
+        console.log(result);
+    }
+
+    function postAllBooksAuthorsECB(err) {
+        console.log(err);
+    }
+
+    function postAllBooksCategoriesSCB(result) {
+        console.log(result);
+    }
+
+    function postAllBooksCategoriesECB(err) {
         console.log(err);
     }
 

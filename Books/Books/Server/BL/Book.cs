@@ -143,4 +143,32 @@ public class Book
             return false;
         }
     }
+
+    public bool insertAllBooksAuthors(string bookId,int authorId)
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            db.insertAllBooksAuthors(bookId,authorId);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public bool insertAllBooksCategories(string bookId, int categoryId)
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            db.insertAllBooksCategories(bookId,categoryId);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
