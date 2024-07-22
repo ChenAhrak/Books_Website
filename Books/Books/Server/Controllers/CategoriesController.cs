@@ -33,7 +33,7 @@ namespace Books.Server.Controllers
 
         // POST api/<CategoriesController>
         [HttpPost]
-        public IActionResult Post([FromBody] List<Category> categories)
+        public IActionResult Post([FromBody] Category c)
         {
             if (!ModelState.IsValid)
             {
@@ -41,12 +41,12 @@ namespace Books.Server.Controllers
             }
             try
             {
-                category.insertAllCategories(categories);
-                return Ok();
+                category.insertAllCategories(c);
+                return Ok(new { message = "Categories inserted successfully" });
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new {message="Categories error"});
             }
         }
 

@@ -18,12 +18,12 @@ namespace Books.Server.BL
         public int Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
 
-        public bool insertAllCategories(List<Category> allCategories)
+        public bool insertAllCategories(Category category)
         {
             DBservices db = new DBservices();
             try
             {
-                db.insertAllCategories(allCategories);
+                db.insertAllCategories(category);
                 return true;
             }
             catch

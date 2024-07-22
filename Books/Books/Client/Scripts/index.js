@@ -167,6 +167,10 @@ $(document).ready(function () {
 
 
             allBooks.push(book);
+            console.log("Starting to post all books");
+            await ajaxCall("POST", `${booksApiURL}/PostAllBooks`, JSON.stringify(book), postBooksSCB, postBooksECB);
+            console.log("Finished posting all books");
+            
             // Create all Authors Objects
             for (const authorsName of authors) {
                 if (!allAuthorsSet.has(authorsName)) {
@@ -174,7 +178,7 @@ $(document).ready(function () {
                     const authorsData2 = await fetchImageDescriptionAuthors(authorsName);
                     if (authorsData1 && authorsData2) {
                         allAuthorsSet.add(authorsName);
-                        allAuthors.push({
+                        const a = {
                             id: authorID,
                             name: authorsName,
                             birthDate: authorsData1.birth_date ? authorsData1.birth_date : "",
@@ -183,31 +187,39 @@ $(document).ready(function () {
                             description: authorsData2.description ? authorsData2.description : "",
                             image: authorsData2.thumbnail && authorsData2.thumbnail.url ? authorsData2.thumbnail.url : ""
 
-                        });
+                        };
+                        allAuthors.push(a);
+                        console.log("Starting to post all authors");
+                        await ajaxCall("POST", authorsApiUrl, JSON.stringify(a), postAuthorsSCB, postAuthorsECB);
+                        console.log("Finished posting all authors");
                         authorID++;
                     }
                 }
         }
 
-        // Create all BooksAuthors Objects
-        for (const authorsName of authors) {
-            let author = allAuthors.find(author => author.name === authorsName);
-            if (author) {
-                allBooksAuthors.push({ bookId: book.id, authorId: author.id });
-            }
-
-            //need to change the sending data to the server
-        }
+      
 
         // Create all Categories Objects
         for (const categoryName of categories) {
             if (!allCategoriesSet.has(categoryName)) {
                 allCategoriesSet.add(categoryName);
-                allCategories.push({ id: categoryID, name: categoryName });
+                const c = { id: categoryID, name: categoryName };
+                allCategories.push(c);
+                console.log("Starting to post all categories");
+                await ajaxCall("POST", categoriesApiUrl, JSON.stringify(c), postCategoriesSCB, postCategoriesECB);
+                console.log("Finished posting all categories");
                 categoryID++;
             }
 
         }
+            // Create all BooksAuthors Objects
+            for (const authorsName of authors) {
+                let author = allAuthors.find(author => author.name === authorsName);
+                if (author) {
+                    allBooksAuthors.push({ bookId: book.id, authorId: author.id });
+                }
+
+            }
 
         // Create all BooksCategories Objects
         for (const categoryName of categories) {
@@ -220,20 +232,32 @@ $(document).ready(function () {
     }
 
 
-    
+        
 
+        //for (const author of allAuthors) {
+        //    console.log("Starting to post all authors");
+        //    await ajaxCall("POST", authorsApiUrl, JSON.stringify(author), postAuthorsSCB, postAuthorsECB);
+        //    console.log("Finished posting all authors");
+        //}
 
-    await ajaxCall("POST", `${booksApiURL}/InsertAllBooks`, JSON.stringify(allBooks), postBooksSCB, postBooksECB);
-    await ajaxCall("POST", authorsApiUrl, JSON.stringify(allAuthors), postAuthorsSCB, postAuthorsECB);
-    await ajaxCall("POST", categoriesApiUrl, JSON.stringify(allCategories), postCategoriesSCB, postCategoriesECB);
+        //for (const category of allCategories) {
+        //    console.log("Starting to post all categories");
+        //    await ajaxCall("POST", categoriesApiUrl, JSON.stringify(category), postCategoriesSCB, postCategoriesECB);
+        //    console.log("Finished posting all categories");
+        //}
 
-    for (const bookAuthor of allBooksAuthors) {
-        await ajaxCall("POST", `${booksApiURL}/PostAllBooksAuthors/${bookAuthor.authorId}`, JSON.stringify(bookAuhtor.bookId), postAllBooksAuthorsSCB, postAllBooksAuthorsECB);
-    }
+        for (const bookAuthor of allBooksAuthors) {
+            console.log(`Starting to post book author: ${bookAuthor.authorId}`);
+            await ajaxCall("POST", `${booksApiURL}/PostAllBooksAuthors/${bookAuthor.authorId}`, JSON.stringify(bookAuthor.bookId), postAllBooksAuthorsSCB, postAllBooksAuthorsECB);
+            console.log(`Finished posting book author: ${bookAuthor.authorId}`);
+        }
 
-    for (const bookCategory of allBooksCategories) {
-        await ajaxCall("POST", `${booksApiURL}/InsertAllBooksCategories/${bookCategory.categoryId}`, JSON.stringify(bookCategory.bookId), postAllBooksCategoriesSCB, postAllBooksCategoriesECB);
-    }
+        for (const bookCategory of allBooksCategories) {
+            console.log(`Starting to post book category: ${bookCategory.categoryId}`);
+            await ajaxCall("POST", `${booksApiURL}/PostAllBooksCategories/${bookCategory.categoryId}`, JSON.stringify(bookCategory.bookId), postAllBooksCategoriesSCB, postAllBooksCategoriesECB);
+            console.log(`Finished posting book category: ${bookCategory.categoryId}`);
+        }
+
 
 }
   

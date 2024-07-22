@@ -37,12 +37,12 @@ namespace Books.Server.BL
 
 
 
-        public bool insertAllAuthors(List<Author> allAuthors)
+        public bool insertAllAuthors(Author author)
         {
             DBservices db = new DBservices();
             try
             {
-                db.insertAllAuthors(allAuthors);
+                db.insertAllAuthors(author);
                 return true;
             }
             catch

@@ -33,7 +33,7 @@ namespace Books.Server.Controllers
 
         // POST api/<AuthorsController>
         [HttpPost]
-        public IActionResult Post([FromBody] List<Author> allAuthors)
+        public IActionResult Post([FromBody] Author a)
         {
 
             if (!ModelState.IsValid)
@@ -43,12 +43,12 @@ namespace Books.Server.Controllers
 
             try
             {
-                author.insertAllAuthors(allAuthors);
-                return Ok();
+                author.insertAllAuthors(a);
+                return Ok(new { messasge = "Authors inserted successfully." });
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = "Authors erorr" });
             }
             }
 

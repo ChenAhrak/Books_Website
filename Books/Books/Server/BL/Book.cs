@@ -130,12 +130,12 @@ public class Book
 
 
     // need to rewrite this method to insert a list of books into the database
-    public bool insertAllBooks(List<Book> allBooks)
+    public bool insertAllBooks(Book b)
     {
         DBservices db = new DBservices();
         try
         {
-            db.insertAllBooks(allBooks);
+            db.insertAllBooks(b);
             return true;
         }
         catch

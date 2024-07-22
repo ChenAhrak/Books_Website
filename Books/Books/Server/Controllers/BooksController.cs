@@ -33,8 +33,8 @@ namespace Books.Server.Controllers
         }
 
         // POST api/<BooksController>
-        [HttpPost("InsertAllBooks")]
-        public IActionResult PostAllBooks([FromBody] List<Book> allBooks)
+        [HttpPost("PostAllBooks")]
+        public IActionResult PostAllBooks([FromBody] Book b)
         {
             if (!ModelState.IsValid)
             {
@@ -42,12 +42,12 @@ namespace Books.Server.Controllers
             }
             try
             {
-                book.insertAllBooks(allBooks);
-                return Ok();
+                book.insertAllBooks(b);
+                return Ok(new {message = "Books inserted successfully." });
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = "Books erorr" });
             }
 
         }
@@ -56,37 +56,30 @@ namespace Books.Server.Controllers
         [HttpPost("PostAllBooksAuthors/{authorId}")] //----need to change this somehow
         public IActionResult PostAllBooksAuthors([FromBody] string bookId, [FromQuery] int authorId )
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+           
             try
             {
                 book.insertAllBooksAuthors(bookId,authorId);
-                return Ok();
+                return Ok(new {messasge= "BooksAuthors inserted successfully." });
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = "BooksAuthors erorr" });
             }
 
         }
            // POST api/<BooksController>
-        [HttpPost("InsertAllBooksCategories/{categoryId}")]//need to change this somehow
+        [HttpPost("PostAllBooksCategories/{categoryId}")]//need to change this somehow
         public IActionResult PostAllBooksCategories([FromBody] string bookId, [FromQuery] int categoryId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 book.insertAllBooksCategories(bookId,categoryId);
-                return Ok();
+                return Ok(new { messasge = "BooksCategories inserted successfully." });
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { message = "BooksCategories erorr" });
             }
 
         }

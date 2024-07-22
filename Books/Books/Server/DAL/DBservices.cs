@@ -28,7 +28,7 @@ namespace Books.Server.DAL
             return con;
         }
 
-        public int insertAllBooks(List<Book> books)
+        public int insertAllBooks(Book book)
         {
 
             SqlConnection con;
@@ -43,7 +43,7 @@ namespace Books.Server.DAL
                 // write to log
                 throw (ex);
             }
-            cmd = CreateCommandWithStoredProcedureInsertAllBooks("SP_InsertAllBooks", con, books);             // create the command
+            cmd = CreateCommandWithStoredProcedureInsertAllBooks("SP_InsertAllBooks", con, book);             // create the command
 
             try
             {
@@ -67,7 +67,7 @@ namespace Books.Server.DAL
 
         }
 
-        public SqlCommand CreateCommandWithStoredProcedureInsertAllBooks(String spName, SqlConnection con, List<Book> books)
+        public SqlCommand CreateCommandWithStoredProcedureInsertAllBooks(String spName, SqlConnection con, Book book)
         {
             SqlCommand cmd = new SqlCommand(); // create the command object
 
@@ -79,52 +79,49 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-            // to many parameters to add to the command
-            foreach (Book book in books)
+
+            cmd.Parameters.AddWithValue("@Id", book.Id);
+            cmd.Parameters.AddWithValue("@Title", book.Title);
+            cmd.Parameters.AddWithValue("@Subtitle", book.Subtitle);
+            cmd.Parameters.AddWithValue("@Language", book.Language);
+            cmd.Parameters.AddWithValue("@Publisher", book.Publisher);
+            cmd.Parameters.AddWithValue("@PublishedDate", book.PublishedDate);
+            cmd.Parameters.AddWithValue("@Description", book.Description);
+            cmd.Parameters.AddWithValue("@PageCount", book.PageCount);
+            cmd.Parameters.AddWithValue("@PrintType", book.PrintType);
+            if (String.Compare(book.SmallThumbnail, "") == 0)
             {
-
-                cmd.Parameters.AddWithValue("@Id", book.Id);
-                cmd.Parameters.AddWithValue("@Title", book.Title);
-                cmd.Parameters.AddWithValue("@Subtitle", book.Subtitle);
-                cmd.Parameters.AddWithValue("@Language", book.Language);
-                cmd.Parameters.AddWithValue("@Publisher", book.Publisher);
-                cmd.Parameters.AddWithValue("@PublishedDate", book.PublishedDate);
-                cmd.Parameters.AddWithValue("@Description", book.Description);
-                cmd.Parameters.AddWithValue("@PageCount", book.PageCount);
-                cmd.Parameters.AddWithValue("@PrintType", book.PrintType);
-                if (String.Compare(book.SmallThumbnail, "") == 0)
-                {
-                    book.SmallThumbnail = "https://img.freepik.com/free-vector/open-book-icon_24877-82146.jpg";
-                }
-
-                    cmd.Parameters.AddWithValue("@SmallThumbnail", book.SmallThumbnail);
-                cmd.Parameters.AddWithValue("@Thumbnail", book.Thumbnail);
-                cmd.Parameters.AddWithValue("@SaleCountry", book.SaleCountry);
-                cmd.Parameters.AddWithValue("@Saleability", book.Saleability);
-                cmd.Parameters.AddWithValue("@IsEbook", book.IsEbook);
-                cmd.Parameters.AddWithValue("@AccessCountry", book.AccessCountry);
-                cmd.Parameters.AddWithValue("@Viewability", book.Viewability);
-                cmd.Parameters.AddWithValue("@PublicDomain", book.PublicDomain);
-                cmd.Parameters.AddWithValue("@TextToSpeechPermission", book.TextToSpeechPermission);
-                cmd.Parameters.AddWithValue("@EpubIsAvailable", book.EpubIsAvailable);
-                cmd.Parameters.AddWithValue("@EpubAcsTokenLink", book.EpubAcsTokenLink);
-                cmd.Parameters.AddWithValue("@PdfIsAvailable", book.PdfIsAvailable);
-                cmd.Parameters.AddWithValue("@PdfAcsTokenLink", book.PdfAcsTokenLink);
-                cmd.Parameters.AddWithValue("@WebReaderLink", book.WebReaderLink);
-                cmd.Parameters.AddWithValue("@AccessViewStatus", book.AccessViewStatus);
-                cmd.Parameters.AddWithValue("@QuoteSharingAllowed", book.QuoteSharingAllowed);
-                cmd.Parameters.AddWithValue("@TextSnippet", book.TextSnippet);
-                cmd.Parameters.AddWithValue("@EpubDownloadLink", book.EpubDownloadLink);
-                cmd.Parameters.AddWithValue("@PdfDownloadLink", book.PdfDownloadLink);
-                cmd.Parameters.AddWithValue("@Price", book.Price);
-
-
+                book.SmallThumbnail = "https://img.freepik.com/free-vector/open-book-icon_24877-82146.jpg";
             }
+
+            cmd.Parameters.AddWithValue("@SmallThumbnail", book.SmallThumbnail);
+            cmd.Parameters.AddWithValue("@Thumbnail", book.Thumbnail);
+            cmd.Parameters.AddWithValue("@SaleCountry", book.SaleCountry);
+            cmd.Parameters.AddWithValue("@Saleability", book.Saleability);
+            cmd.Parameters.AddWithValue("@IsEbook", book.IsEbook);
+            cmd.Parameters.AddWithValue("@AccessCountry", book.AccessCountry);
+            cmd.Parameters.AddWithValue("@Viewability", book.Viewability);
+            cmd.Parameters.AddWithValue("@PublicDomain", book.PublicDomain);
+            cmd.Parameters.AddWithValue("@TextToSpeechPermission", book.TextToSpeechPermission);
+            cmd.Parameters.AddWithValue("@EpubIsAvailable", book.EpubIsAvailable);
+            cmd.Parameters.AddWithValue("@EpubAcsTokenLink", book.EpubAcsTokenLink);
+            cmd.Parameters.AddWithValue("@PdfIsAvailable", book.PdfIsAvailable);
+            cmd.Parameters.AddWithValue("@PdfAcsTokenLink", book.PdfAcsTokenLink);
+            cmd.Parameters.AddWithValue("@WebReaderLink", book.WebReaderLink);
+            cmd.Parameters.AddWithValue("@AccessViewStatus", book.AccessViewStatus);
+            cmd.Parameters.AddWithValue("@QuoteSharingAllowed", book.QuoteSharingAllowed);
+            cmd.Parameters.AddWithValue("@TextSnippet", book.TextSnippet);
+            cmd.Parameters.AddWithValue("@EpubDownloadLink", book.EpubDownloadLink);
+            cmd.Parameters.AddWithValue("@PdfDownloadLink", book.PdfDownloadLink);
+            cmd.Parameters.AddWithValue("@Price", book.Price);
+
+
+            
             return cmd;
 
         }
 
-        public int insertAllAuthors(List<Author> authors)
+        public int insertAllAuthors(Author author)
         {
 
             SqlConnection con;
@@ -139,7 +136,7 @@ namespace Books.Server.DAL
                 // write to log
                 throw (ex);
             }
-            cmd = CreateCommandWithStoredProcedureInsertAllAuthors("SP_InsertAllAuthors", con, authors);             // create the command
+            cmd = CreateCommandWithStoredProcedureInsertAllAuthors("SP_InsertAllAuthors", con, author);             // create the command
 
             try
             {
@@ -163,7 +160,7 @@ namespace Books.Server.DAL
 
         }
 
-        public SqlCommand CreateCommandWithStoredProcedureInsertAllAuthors(String spName, SqlConnection con, List<Author> authors)
+        public SqlCommand CreateCommandWithStoredProcedureInsertAllAuthors(String spName, SqlConnection con, Author author)
         {
             SqlCommand cmd = new SqlCommand(); // create the command object
 
@@ -175,28 +172,25 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-            foreach (Author author in authors)
 
+            cmd.Parameters.AddWithValue("@Id", author.Id);
+            cmd.Parameters.AddWithValue("@Name", author.Name);
+            cmd.Parameters.AddWithValue("@BirthDate", author.BirthDate);
+            cmd.Parameters.AddWithValue("@DeathDate", author.DeathDate);
+            cmd.Parameters.AddWithValue("@TopWork", author.TopWork);
+            cmd.Parameters.AddWithValue("@Description", author.Description);
+            if (String.Compare(author.Image, "") == 0)
             {
-
-                cmd.Parameters.AddWithValue("@Id", author.Id);
-                cmd.Parameters.AddWithValue("@Name", author.Name);
-                cmd.Parameters.AddWithValue("@BirthDate", author.BirthDate);
-                cmd.Parameters.AddWithValue("@DeathDate", author.DeathDate);
-                cmd.Parameters.AddWithValue("@TopWork", author.TopWork);
-                cmd.Parameters.AddWithValue("@Description", author.Description);
-                if (String.Compare(author.Image, "") == 0)
-                {
-                    author.Image = "https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png";
-                }
-                cmd.Parameters.AddWithValue("@Image", author.Image);
-
+                author.Image = "https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png";
             }
+            cmd.Parameters.AddWithValue("@Image", author.Image);
+
+           
             return cmd;
 
         }
 
-        public int insertAllCategories(List<Category> categories)
+        public int insertAllCategories(Category category)
         {
 
             SqlConnection con;
@@ -211,7 +205,7 @@ namespace Books.Server.DAL
                 // write to log
                 throw (ex);
             }
-            cmd = CreateCommandWithStoredProcedureInsertAllCategories("SP_InsertAllCategories", con, categories);             // create the command
+            cmd = CreateCommandWithStoredProcedureInsertAllCategories("SP_InsertAllCategories", con, category);             // create the command
 
             try
             {
@@ -235,7 +229,7 @@ namespace Books.Server.DAL
 
         }
 
-        public SqlCommand CreateCommandWithStoredProcedureInsertAllCategories(String spName, SqlConnection con, List<Category> categories)
+        public SqlCommand CreateCommandWithStoredProcedureInsertAllCategories(String spName, SqlConnection con, Category category)
         {
             SqlCommand cmd = new SqlCommand(); // create the command object
 
@@ -247,12 +241,11 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-            foreach (Category category in categories)
-            {
+           
 
-                cmd.Parameters.AddWithValue("@Id", category.Id);
-                cmd.Parameters.AddWithValue("@Name", category.Name);
-            }
+            cmd.Parameters.AddWithValue("@Id", category.Id);
+            cmd.Parameters.AddWithValue("@Name", category.Name);
+           
             return cmd;
 
         }
