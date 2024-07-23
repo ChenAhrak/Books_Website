@@ -53,8 +53,8 @@ namespace Books.Server.Controllers
         }
 
           // POST api/<BooksController>
-        [HttpPost("PostAllBooksAuthors/{authorId}")] //----need to change this somehow
-        public IActionResult PostAllBooksAuthors([FromBody] string bookId, [FromQuery] int authorId )
+        [HttpPost("PostAllBooksAuthors/{authorId}")] 
+        public IActionResult PostAllBooksAuthors([FromBody] string bookId, int authorId )
         {
            
             try
@@ -69,8 +69,8 @@ namespace Books.Server.Controllers
 
         }
            // POST api/<BooksController>
-        [HttpPost("PostAllBooksCategories/{categoryId}")]//need to change this somehow
-        public IActionResult PostAllBooksCategories([FromBody] string bookId, [FromQuery] int categoryId)
+        [HttpPost("PostAllBooksCategories/{categoryId}")]
+        public IActionResult PostAllBooksCategories([FromBody] string bookId, int categoryId)
         {
             try
             {

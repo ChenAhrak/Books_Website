@@ -245,6 +245,11 @@ $(document).ready(function () {
         //    await ajaxCall("POST", categoriesApiUrl, JSON.stringify(category), postCategoriesSCB, postCategoriesECB);
         //    console.log("Finished posting all categories");
         //}
+   
+
+}
+
+    async function insertAllConecctionTables() {
 
         for (const bookAuthor of allBooksAuthors) {
             console.log(`Starting to post book author: ${bookAuthor.authorId}`);
@@ -257,10 +262,7 @@ $(document).ready(function () {
             await ajaxCall("POST", `${booksApiURL}/PostAllBooksCategories/${bookCategory.categoryId}`, JSON.stringify(bookCategory.bookId), postAllBooksCategoriesSCB, postAllBooksCategoriesECB);
             console.log(`Finished posting book category: ${bookCategory.categoryId}`);
         }
-
-
-}
-  
+    }
 
     function postBooksSCB(result) {
         console.log(result);
@@ -304,9 +306,10 @@ $(document).ready(function () {
 
 
     const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
-    $(insertDataToDbBtn).click(function () {
-        insertAllDataToDB();
+    $(insertDataToDbBtn).click( async function () {
         insertDataToDbBtn.disabled = true;
+        await insertAllDataToDB();
+        await insertAllConecctionTables();
 });
 
 
