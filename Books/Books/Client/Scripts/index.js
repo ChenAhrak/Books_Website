@@ -231,22 +231,7 @@ $(document).ready(function () {
         }
     }
 
-
-        
-
-        //for (const author of allAuthors) {
-        //    console.log("Starting to post all authors");
-        //    await ajaxCall("POST", authorsApiUrl, JSON.stringify(author), postAuthorsSCB, postAuthorsECB);
-        //    console.log("Finished posting all authors");
-        //}
-
-        //for (const category of allCategories) {
-        //    console.log("Starting to post all categories");
-        //    await ajaxCall("POST", categoriesApiUrl, JSON.stringify(category), postCategoriesSCB, postCategoriesECB);
-        //    console.log("Finished posting all categories");
-        //}
-   
-
+    
 }
 
     async function insertAllConecctionTables() {
@@ -305,12 +290,12 @@ $(document).ready(function () {
     }
 
 
-    const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
-    $(insertDataToDbBtn).click( async function () {
-        insertDataToDbBtn.disabled = true;
-        await insertAllDataToDB();
-        await insertAllConecctionTables();
-});
+//    const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
+//    $(insertDataToDbBtn).click( async function () {
+//        insertDataToDbBtn.disabled = true;
+//        await insertAllDataToDB();
+//        await insertAllConecctionTables();
+//});
 
 
     const authorsBtn = document.getElementById("authorsBtn");
@@ -351,6 +336,11 @@ $(document).ready(function () {
     });
 
 });
+
+
+
+
+
 
 // Check user status and display appropriate buttons
 //if (user && !user.isAdmin) {
