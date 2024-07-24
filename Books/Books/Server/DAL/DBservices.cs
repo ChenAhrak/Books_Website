@@ -370,6 +370,60 @@ namespace Books.Server.DAL
 
         }
 
+        //public List<Object> readAllBooksDisplay()
+        //{
+        //    SqlConnection con = null;
+        //    try
+        //    {
+        //        con = connect("myProjDB"); // create the connection
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // write to log
+        //        throw (ex);
+        //    }
+        //    SqlCommand cmd = CreateCommand("SP_GetBooksDisplay", con);             // create the command
+        //    SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+        //    List<Object> books = new List<Object>();
+        //    List<string> authorsNames = new List<string>();
+        //    while (reader.Read())
+        //    {
+        //        //check if the id is already in the list
+        //        if (books.Exists(x => x.bookId == (string)reader["Id"]))
+        //        {
+        //            authorsNames.Add((string)reader["AuthorName"]);
+        //        }
+        //        //check if (string)reader["AuthorName"] is null and change to unknown
+        //        else if (String.Compare((string)reader["AuthorName"], null) == 0)
+        //        {
+        //            books.Add(
+        //                                       {
+        //                bookId = (string)reader["Id"];
+        //                bookTitle = (string)reader["Title"];
+        //                bookAuthors = "Unknown";
+        //                bookPrice = (double)reader["Price"];
+        //                bookSmallImage = (string)reader["SmallThumbnail"];
+        //                bookImage = (string)reader["Thumbnail"];
+        //            });
+               
+        //        }
+        //        else
+        //        {
+        //            books.Add(
+        //                { bookId = (string)reader["Id"];
+        //                bookTitle = (string)reader["Title"];
+        //                bookAuthors = authorsNames;
+        //                bookPrice = (double)reader["Price"];
+        //                bookSmallImage = (string)reader["SmallThumbnail"];
+        //                bookImage = (string)reader["Thumbnail"];
+        //            });
+                 
+        //        }
+              
+              
+        //    }
+        //}
+
 
     }
 }

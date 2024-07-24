@@ -122,11 +122,21 @@ public class Book
 
 
     // just check of the class, need to rewrite this method to return a list of books from database
-    public List<Book> readAllBooks() {  
+    //public List<Object> readAllBooksDisplay() {
+    //    DBservices db = new DBservices();
+    //    try
+    //    {
+    //        return db.readAllBooksDisplay();
+    //    }
+    //    catch
+    //    {
+    //        return null;
+    //    }
 
-        return null;
+    //}
+        
 
-    }
+    //}
 
 
     // need to rewrite this method to insert a list of books into the database

@@ -129,8 +129,8 @@ $(document).ready(function () {
         let categoryID = 1;
 
         for (const item of allData[0]) {
-            const authors = item.volumeInfo.authors ? item.volumeInfo.authors : [];
-            const categories = item.volumeInfo.categories ? item.volumeInfo.categories : [];
+            const authors = item.volumeInfo && item.volumeInfo.authors ? item.volumeInfo.authors : "Unknown";
+            const categories = item.volumeInfo && item.volumeInfo.categories ? item.volumeInfo.categories : [];
 
             // Create the book object
             const book = {
@@ -290,12 +290,12 @@ $(document).ready(function () {
     }
 
 
-//    const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
-//    $(insertDataToDbBtn).click( async function () {
-//        insertDataToDbBtn.disabled = true;
-//        await insertAllDataToDB();
-//        await insertAllConecctionTables();
-//});
+    const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
+    $(insertDataToDbBtn).click( async function () {
+        insertDataToDbBtn.disabled = true;
+        await insertAllDataToDB();
+        await insertAllConecctionTables();
+});
 
 
     const authorsBtn = document.getElementById("authorsBtn");
