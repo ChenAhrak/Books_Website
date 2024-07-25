@@ -11,19 +11,19 @@ namespace Books.Server.Controllers
     {
         Book book = new Book();
         // GET: api/<BooksController>
-        //[HttpGet("AllBooksDisplay")]
-        //public IEnumerable<Object> GetAllBooksDisplay()
-        //{
-        //    try
-        //    {
-        //        return book.readAllBooksDisplay();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-           
-        //}
+        [HttpGet("AllBooksDisplay")]
+        public IEnumerable<Object> GetAllBooksDisplay()
+        {
+            try
+            {
+                return book.readAllBooksDisplay();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
 
         // GET api/<BooksController>/5
         [HttpGet("{id}")]

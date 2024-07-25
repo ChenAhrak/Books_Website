@@ -67,7 +67,7 @@ namespace Books.Server.DAL
 
         }
 
-        public SqlCommand CreateCommandWithStoredProcedureInsertAllBooks(String spName, SqlConnection con, Book book)
+        private SqlCommand CreateCommandWithStoredProcedureInsertAllBooks(String spName, SqlConnection con, Book book)
         {
             SqlCommand cmd = new SqlCommand(); // create the command object
 
@@ -116,7 +116,7 @@ namespace Books.Server.DAL
             cmd.Parameters.AddWithValue("@Price", book.Price);
 
 
-            
+
             return cmd;
 
         }
@@ -160,7 +160,7 @@ namespace Books.Server.DAL
 
         }
 
-        public SqlCommand CreateCommandWithStoredProcedureInsertAllAuthors(String spName, SqlConnection con, Author author)
+        private SqlCommand CreateCommandWithStoredProcedureInsertAllAuthors(String spName, SqlConnection con, Author author)
         {
             SqlCommand cmd = new SqlCommand(); // create the command object
 
@@ -185,7 +185,7 @@ namespace Books.Server.DAL
             }
             cmd.Parameters.AddWithValue("@Image", author.Image);
 
-           
+
             return cmd;
 
         }
@@ -229,7 +229,7 @@ namespace Books.Server.DAL
 
         }
 
-        public SqlCommand CreateCommandWithStoredProcedureInsertAllCategories(String spName, SqlConnection con, Category category)
+        private SqlCommand CreateCommandWithStoredProcedureInsertAllCategories(String spName, SqlConnection con, Category category)
         {
             SqlCommand cmd = new SqlCommand(); // create the command object
 
@@ -241,11 +241,11 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-           
+
 
             cmd.Parameters.AddWithValue("@Id", category.Id);
             cmd.Parameters.AddWithValue("@Name", category.Name);
-           
+
             return cmd;
 
         }
@@ -265,7 +265,7 @@ namespace Books.Server.DAL
                 // write to log
                 throw (ex);
             }
-            cmd = CreateCommandWithStoredProcedureInsertAllBooksAuthors("SP_InsertAllBooksAuthors", con, bookId,authorId);             // create the command
+            cmd = CreateCommandWithStoredProcedureInsertAllBooksAuthors("SP_InsertAllBooksAuthors", con, bookId, authorId);             // create the command
 
             try
             {
@@ -289,7 +289,7 @@ namespace Books.Server.DAL
 
         }
 
-        public SqlCommand CreateCommandWithStoredProcedureInsertAllBooksAuthors(String spName, SqlConnection con, string bookId, int authorId)
+        private SqlCommand CreateCommandWithStoredProcedureInsertAllBooksAuthors(String spName, SqlConnection con, string bookId, int authorId)
         {
             SqlCommand cmd = new SqlCommand(); // create the command object
 
@@ -301,11 +301,11 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-           
 
-                cmd.Parameters.AddWithValue("@BookId",bookId);
-                cmd.Parameters.AddWithValue("@AuthorId", authorId);
-           
+
+            cmd.Parameters.AddWithValue("@BookId", bookId);
+            cmd.Parameters.AddWithValue("@AuthorId", authorId);
+
             return cmd;
 
         }
@@ -325,7 +325,7 @@ namespace Books.Server.DAL
                 // write to log
                 throw (ex);
             }
-            cmd = CreateCommandWithStoredProcedureInsertAllBooksCategories("SP_InsertAllBooksCategories", con, bookId,categoryId);             // create the command
+            cmd = CreateCommandWithStoredProcedureInsertAllBooksCategories("SP_InsertAllBooksCategories", con, bookId, categoryId);             // create the command
 
             try
             {
@@ -361,72 +361,100 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-           
 
-                cmd.Parameters.AddWithValue("@BookId", bookId);
-                cmd.Parameters.AddWithValue("@CategoryId",categoryId);
-            
+
+            cmd.Parameters.AddWithValue("@BookId", bookId);
+            cmd.Parameters.AddWithValue("@CategoryId", categoryId);
+
             return cmd;
 
         }
 
-        //public List<Object> readAllBooksDisplay()
-        //{
-        //    SqlConnection con = null;
-        //    try
-        //    {
-        //        con = connect("myProjDB"); // create the connection
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // write to log
-        //        throw (ex);
-        //    }
-        //    SqlCommand cmd = CreateCommand("SP_GetBooksDisplay", con);             // create the command
-        //    SqlDataReader reader = cmd.ExecuteReader(); // execute the command
-        //    List<Object> books = new List<Object>();
-        //    List<string> authorsNames = new List<string>();
-        //    while (reader.Read())
-        //    {
-        //        //check if the id is already in the list
-        //        if (books.Exists(x => x.bookId == (string)reader["Id"]))
-        //        {
-        //            authorsNames.Add((string)reader["AuthorName"]);
-        //        }
-        //        //check if (string)reader["AuthorName"] is null and change to unknown
-        //        else if (String.Compare((string)reader["AuthorName"], null) == 0)
-        //        {
-        //            books.Add(
-        //                                       {
-        //                bookId = (string)reader["Id"];
-        //                bookTitle = (string)reader["Title"];
-        //                bookAuthors = "Unknown";
-        //                bookPrice = (double)reader["Price"];
-        //                bookSmallImage = (string)reader["SmallThumbnail"];
-        //                bookImage = (string)reader["Thumbnail"];
-        //            });
-               
-        //        }
-        //        else
-        //        {
-        //            books.Add(
-        //                { bookId = (string)reader["Id"];
-        //                bookTitle = (string)reader["Title"];
-        //                bookAuthors = authorsNames;
-        //                bookPrice = (double)reader["Price"];
-        //                bookSmallImage = (string)reader["SmallThumbnail"];
-        //                bookImage = (string)reader["Thumbnail"];
-        //            });
-                 
-        //        }
-              
-              
-        //    }
-        //}
+        public List<Object> readAllBooksDisplay()
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureGetAllBooksDisplay("SP_GetBooksDisplay", con);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> books = new List<Object>();
+            while (reader.Read())
+            {
+
+                if (String.Compare((string)reader["AuthorNames"], null) == 0)//Check this condition
+                {
+                    books.Add(new
+                    {
+                        id= (string)reader["Id"],
+                        title = (string)reader["Title"],
+                        authorNames = "No Authors",
+                        price = (string)reader["Price"],
+                        smallImage = (string)reader["SmallThumbnail"],
+                        image = (string)reader["Thumbnail"]
+
+                    });
+                }
+                else
+                {
+                    books.Add(new
+                    {
+                        id = (string)reader["Id"],
+                        title = (string)reader["Title"],
+                        authorNames = (string)reader["AuthorNames"],
+                        price = (double)reader["Price"],
+                        smallImage = (string)reader["SmallThumbnail"],
+                        image = (string)reader["Thumbnail"]
+
+                    });
+                }
+            }
+            return books;
+        }
+        
 
 
+
+
+
+
+
+            public SqlCommand CreateCommandWithStoredProcedureGetAllBooksDisplay(String spName, SqlConnection con)
+            {
+                SqlCommand cmd = new SqlCommand(); // create the command object
+
+                cmd.Connection = con;              // assign the connection to the command object
+
+                cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+                cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+                return cmd;
+
+            }
+
+
+        }
     }
-}
+
+
+              
+
+
+
   
 
-   
+
+       
+
+
+
+
