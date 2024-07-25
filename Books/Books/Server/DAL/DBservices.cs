@@ -387,12 +387,12 @@ namespace Books.Server.DAL
             List<Object> books = new List<Object>();
             while (reader.Read())
             {
-
-                if (String.Compare((string)reader["AuthorNames"], null) == 0)//Check this condition
+                //compare between null and (string)reader["AuthorNames"] null
+                if (reader["AuthorNames"] == DBNull.Value)
                 {
                     books.Add(new
                     {
-                        id= (string)reader["Id"],
+                        id = (string)reader["Id"],
                         title = (string)reader["Title"],
                         authorNames = "No Authors",
                         price = (string)reader["Price"],
@@ -401,6 +401,7 @@ namespace Books.Server.DAL
 
                     });
                 }
+
                 else
                 {
                     books.Add(new

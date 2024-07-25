@@ -18,9 +18,9 @@ namespace Books.Server.Controllers
             {
                 return book.readAllBooksDisplay();
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                return null;
             }
 
         }
