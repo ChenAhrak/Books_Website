@@ -370,7 +370,7 @@ namespace Books.Server.DAL
 
         }
 
-        public List<Object> readAllBooksDisplay()
+        public List<Object> getBooksDisplay()
         {
             SqlConnection con = null;
             try
@@ -387,43 +387,28 @@ namespace Books.Server.DAL
             List<Object> books = new List<Object>();
             while (reader.Read())
             {
-                //compare between null and (string)reader["AuthorNames"] null
-                if (reader["AuthorNames"] == DBNull.Value)
+                //compare between null and (string)reader["AuthorNames"] nul
+                books.Add(new
                 {
-                    books.Add(new
-                    {
-                        id = (string)reader["Id"],
-                        title = (string)reader["Title"],
-                        authorNames = "No Authors",
-                        price = (string)reader["Price"],
-                        smallImage = (string)reader["SmallThumbnail"],
-                        image = (string)reader["Thumbnail"]
+                    id = (string)reader["Id"],
+                    title = (string)reader["Title"],
+                    //Check for null value in the AuthorNames column
+                    authorNames = reader.IsDBNull(reader.GetOrdinal("AuthorNames"))
+                                        ? "Unknown"
+                                        : reader.GetString(reader.GetOrdinal("AuthorNames")),
 
-                    });
-                }
+                    price = (double)reader["Price"],
+                    smallImage = (string)reader["SmallThumbnail"],
+                    image = (string)reader["Thumbnail"]
 
-                else
-                {
-                    books.Add(new
-                    {
-                        id = (string)reader["Id"],
-                        title = (string)reader["Title"],
-                        authorNames = (string)reader["AuthorNames"],
-                        price = (double)reader["Price"],
-                        smallImage = (string)reader["SmallThumbnail"],
-                        image = (string)reader["Thumbnail"]
-
-                    });
-                }
+                }); 
             }
+
+              
+          
             return books;
         }
         
-
-
-
-
-
 
 
             public SqlCommand CreateCommandWithStoredProcedureGetAllBooksDisplay(String spName, SqlConnection con)
@@ -442,9 +427,60 @@ namespace Books.Server.DAL
 
             }
 
+            public List<Object> getEBooksDisplay()
+            {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureGetAllEBooksDisplay("SP_GetEBooksDisplay", con);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> ebooks = new List<Object>();
+            while (reader.Read())
+            {
+                //compare between null and (string)reader["AuthorNames"] nul
+                ebooks.Add(new
+                {
+                    id = (string)reader["Id"],
+                    title = (string)reader["Title"],
+                    //Check for null value in the AuthorNames column
+                    authorNames = reader.IsDBNull(reader.GetOrdinal("AuthorNames"))
+                                        ? "Unknown"
+                                        : reader.GetString(reader.GetOrdinal("AuthorNames")),
+
+                    price = (double)reader["Price"],
+                    smallImage = (string)reader["SmallThumbnail"],
+                    image = (string)reader["Thumbnail"]
+
+                });
+            }
+            return ebooks;
 
         }
+        public SqlCommand CreateCommandWithStoredProcedureGetAllEBooksDisplay(String spName, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            return cmd;
+        }
+
+
     }
+}
 
 
               

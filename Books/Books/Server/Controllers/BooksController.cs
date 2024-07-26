@@ -11,12 +11,25 @@ namespace Books.Server.Controllers
     {
         Book book = new Book();
         // GET: api/<BooksController>
-        [HttpGet("AllBooksDisplay")]
-        public IEnumerable<Object> GetAllBooksDisplay()
+        [HttpGet("GetBooksDisplay")]
+        public IEnumerable<Object> GetBooksDisplay()
         {
             try
             {
-                return book.readAllBooksDisplay();
+                return book.getBooksDisplay();
+            }
+            catch 
+            {
+                return null;
+            }
+
+        }
+          [HttpGet("GetEBooksDisplay")]
+        public IEnumerable<Object> GetEBooksDisplay()
+        {
+            try
+            {
+                return book.getEBooksDisplay();
             }
             catch 
             {

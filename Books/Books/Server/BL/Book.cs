@@ -121,13 +121,26 @@ public class Book
 
 
 
-    //just check of the class, need to rewrite this method to return a list of books from database
-    public List<Object> readAllBooksDisplay()
+    public List<Object> getBooksDisplay()
     {
         DBservices db = new DBservices();
         try
         {
-            return db.readAllBooksDisplay();
+            return db.getBooksDisplay();
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
+
+    public List<Object> getEBooksDisplay()
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            return db.getEBooksDisplay();
         }
         catch
         {
@@ -137,10 +150,7 @@ public class Book
     }
 
 
-
-
-// need to rewrite this method to insert a list of books into the database
-public bool insertAllBooks(Book b)
+    public bool insertAllBooks(Book b)
     {
         DBservices db = new DBservices();
         try
