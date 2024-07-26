@@ -34,7 +34,7 @@ $(document).ready(function () {
             bookElement.append('<img src="' + book.image + '" alt="book image" />');
             bookElement.append('<h3>' + book.title + '</h3>');
             bookElement.append('<p>' +'By: '+ book.authorNames + '</p>');
-            bookElement.append('<p>' + 'Price: '+book.price + '</p>');
+            bookElement.append('<p>' + 'Price: '+book.price +' ILS'+ '</p>');
 
             tableHeader.append(bookElement);
         });
@@ -65,9 +65,9 @@ $(document).ready(function () {
         ebooks.forEach(ebook => {
             var ebookElement = $('<td>');
             ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
-            ebookElement.append('<h3>' + +ebook.title + '</h3>');
+            ebookElement.append('<h3>' + ebook.title + '</h3>');
             ebookElement.append('<p>' + 'By: '+ebook.authorNames + '</p>');
-            ebookElement.append('<p>' + 'Price: '+ ebook.price + '</p>');
+            ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
 
             tableHeader.append(ebookElement);
         });

@@ -478,7 +478,51 @@ namespace Books.Server.DAL
             return cmd;
         }
 
+        public List<Author> ReadAllAuthors()
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureGetAllAuthors("SP_GetAllAuthors", con);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Author> authors = new List<Author>();
+            while (reader.Read())
+            {
+                authors.Add(new Author
+                {
+                    Id = (int)reader["AuthorId"],
+                    Name = (string)reader["Name"],
+                    BirthDate = (string)reader["BirthDate"]==""?"Unknown" : (string)reader["BirthDate"],
+                    DeathDate = (string)reader["DeathDate"] == "" ? "Unknown" : (string)reader["BirthDate"],
+                    TopWork = (string)reader["TopWork"],
+                    Description = (string)reader["Description"],
+                    Image = (string)reader["Image"]
+                });
+            }
+            return authors;
+        }
 
+        public SqlCommand CreateCommandWithStoredProcedureGetAllAuthors(String spName, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            return cmd;
+        }
     }
 }
 

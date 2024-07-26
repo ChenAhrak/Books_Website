@@ -53,9 +53,17 @@ namespace Books.Server.BL
 
         public List<Author> ReadAllAuthors()
         {
-
-            return null;
+            DBservices db = new DBservices();
+            try
+            {
+                return db.ReadAllAuthors();
+            }
+            catch
+            {
+                return null;
+            }
         }
+
     }
 }
 
