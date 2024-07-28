@@ -15,9 +15,9 @@ $(document).ready(function () {
          await ajaxCall("GET", `${booksApiURL}/GetBooksDisplay`, "", getBooksDataFromDBSCB, getBooksDataFromDBECB);
     }
 
-    function getBooksDataFromDBSCB(result) {
+     function getBooksDataFromDBSCB(result) {
         console.log(result);
-        renderAllBooksDisplay(result);
+         renderAllBooksDisplay(result);
     }
 
     function getBooksDataFromDBECB(err) {
@@ -41,7 +41,7 @@ $(document).ready(function () {
 
         table.append(tableHeader);
         booksContainer.append(table);
-
+    //    booksContainer.append('<button id="allBooksBtn">See more books</button>');
     }
 
     async function getEBooksDataFromDB() {
@@ -74,12 +74,23 @@ $(document).ready(function () {
 
         table.append(tableHeader);
         ebooksContainer.append(table);
+        //ebooksContainer.append('<button id="allEBooksBtn">See more ebooks</button>');
 
     }
 
     getBooksDataFromDB();
     getEBooksDataFromDB();
 
+    const allBooksBtn = document.getElementById("allBooksBtn");
+    $(allBooksBtn).click(function () {
+        window.location.href= "booksCatalog.html";
+    });
+
+    const allEBooksBtn = document.getElementById("allEBooksBtn");
+    $(allEBooksBtn).click(function () {
+
+        window.location.href= "ebooksCatalog.html";
+    });
 
     const authorsBtn = document.getElementById("authorsBtn");
     //jquery click event
