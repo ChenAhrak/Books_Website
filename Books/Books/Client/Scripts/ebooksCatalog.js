@@ -23,6 +23,8 @@ function renderAllEBooksDisplay(ebooks) {
         ebookElement.append('<h3>' + ebook.title + '</h3>');
         ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
         ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
+        ebookElement.append('<p><button id="' + ebook.id + '" class="add-book">Add Book</button></p>');
+
         ebooksContainer.append(ebookElement);
 
     });  

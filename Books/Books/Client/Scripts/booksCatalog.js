@@ -17,12 +17,14 @@ $(document).ready(function () {
     function renderAllBooksDisplay(books) {
         var booksContainer = $('#books-container');
 
-        books.forEach(ebook => {
+        books.forEach(book => {
             var bookElement = $('div');
-            bookElement.append('<img src="' + ebook.image + '" alt="book image" />');
-            bookElement.append('<h3>' + ebook.title + '</h3>');
-            bookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
-            bookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
+            bookElement.append('<img src="' + book.image + '" alt="book image" />');
+            bookElement.append('<h3>' + book.title + '</h3>');
+            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+            bookElement.append('<p><button id="' + book.id + '" class="add-book">Add Book</button></p>');
+
             booksContainer.append(bookElement);
 
         });
