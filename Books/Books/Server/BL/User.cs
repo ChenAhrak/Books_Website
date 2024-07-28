@@ -1,4 +1,6 @@
-﻿namespace Books.Server.BL;
+﻿using Books.Server.DAL;
+
+namespace Books.Server.BL;
 
 public class User
 {
@@ -29,4 +31,35 @@ public class User
     public string Password { get => password; set => password = value; }
     public bool IsAdmin { get => isAdmin; set => isAdmin = value; }
     public bool IsActive { get => isActive; set => isActive = value; }
+
+
+    public bool registration(User user)
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            db.Registration(user);
+            return true;
+
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+
+    }
+
+    public User login(Login login)
+    {
+        DBservices db = new DBservices();
+        User user = db.Login(login);
+        if (user != null)
+        {
+            return user;
+        }
+
+        return null;
+
+
+    }
 }

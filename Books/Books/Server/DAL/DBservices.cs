@@ -523,6 +523,128 @@ namespace Books.Server.DAL
 
             return cmd;
         }
+
+        public int Registration(User user)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            cmd = CreateCommandWithStoredProcedureRegistration("SP_Register", con, user); // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureRegistration(String spName, SqlConnection con, User user)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con; // assign the connection to the command object
+
+            cmd.CommandText = spName; // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            cmd.Parameters.AddWithValue("@p_name", user.UserName);
+            cmd.Parameters.AddWithValue("@p_email", user.Email);
+            cmd.Parameters.AddWithValue("@p_password", user.Password);
+            cmd.Parameters.AddWithValue("@p_isActive", user.IsActive);
+
+            return cmd;
+        }
+
+        public User Login(Login login)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            cmd = CreateCommandWithStoredProcedureLogin("SP_Login", con, login); // create the command
+
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
+                if (reader.Read())
+                {
+                    User user = new User();
+                    user.Id = Convert.ToInt32(reader["id"]);
+                    user.UserName = reader["name"].ToString();
+                    user.Email = reader["email"].ToString();
+                    user.Password = reader["password"].ToString();
+                    user.IsActive = Convert.ToBoolean(reader["isActive"]);
+                    return user;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureLogin(String spName, SqlConnection con, Login login)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con; // assign the connection to the command object
+
+            cmd.CommandText = spName; // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            cmd.Parameters.AddWithValue("@p_userEmail", login.Email);
+            cmd.Parameters.AddWithValue("@p_passwordHash", login.Password);
+
+            return cmd;
+        }
+
     }
 }
 
