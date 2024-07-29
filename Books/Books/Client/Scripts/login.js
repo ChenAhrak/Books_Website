@@ -13,7 +13,7 @@ $(document).ready(function () {
             return;
         }
 
-        if (password.length < 4) {
+        if (password.length <3) {
             alert("Password must be at least 4 characters long.");
             return;
         }

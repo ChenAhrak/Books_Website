@@ -9,6 +9,9 @@ const maxEbooks = 50;
 const booksApiURL = "https://localhost:7195/api/Books";
 const authorsApiUrl = "https://localhost:7195/api/Authors";
 const categoriesApiUrl = "https://localhost:7195/api/Categories";
+const usersApiUrl = "https://localhost:7195/api/Users";
+var user = JSON.parse(sessionStorage.getItem('user'));
+
 $(document).ready(function () {
 
      async function getBooksDataFromDB() {
@@ -35,8 +38,12 @@ $(document).ready(function () {
             bookElement.append('<h3>' + book.title + '</h3>');
             bookElement.append('<p>' +'By: '+ book.authorNames + '</p>');
             bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-            bookElement.append('<button id="' + book.id + '" class="add-book">Add Book</button>');
+            var adddBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+            bookElement.append(adddBookBtn);
             tableHeader.append(bookElement);
+
+            addBookClick(adddBookBtn);
+
         });
 
         table.append(tableHeader);
@@ -68,48 +75,90 @@ $(document).ready(function () {
             ebookElement.append('<h3>' + ebook.title + '</h3>');
             ebookElement.append('<p>' + 'By: '+ebook.authorNames + '</p>');
             ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
-            ebookElement.append('<button id="'+ ebook.id + '" class="add-book">Add Book</button>');
+            var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Add Book</button>');
+            ebookElement.append(addEBookBtn);
 
             tableHeader.append(ebookElement);
+
+            addBookClick(addEBookBtn);
         });
 
         table.append(tableHeader);
         ebooksContainer.append(table);
-        //ebooksContainer.append('<button id="allEBooksBtn">See more ebooks</button>');
 
     }
 
-    getBooksDataFromDB();
-    getEBooksDataFromDB();
+    // Event listener for add book button
+    function addBookClick(addBookBtn) {
+        addBookBtn.on('click', function (event) {
+            if (event.target.tagName.toLowerCase() === 'button') {
+                const buttonId = event.target.id;
+                console.log("Button clicked with ID:", buttonId);
 
-    const allBooksBtn = document.getElementById("allBooksBtn");
-    $(allBooksBtn).click(function () {
-        window.location.href= "booksCatalog.html";
-    });
+                if (isLoggedIn()) {
+                    const user = JSON.parse(sessionStorage.getItem('user'));
+                    addBook(buttonId, user.id);
+                } else {
+                    console.log("User not logged in. Redirecting to login.");
+                    alert("Please login or register to add book.");
+                    window.location.href = "login.html";
+                }
+            }
 
-    const allEBooksBtn = document.getElementById("allEBooksBtn");
-    $(allEBooksBtn).click(function () {
+            // Function to add a book to user's list
+            function addBook(buttonId, userId) {
+                
+                ajaxCall("POST", `${usersApiUrl}/addBookToUser/${userId}`, JSON.stringify(courseDataToSend), postSCBF, postECBF);
+                    }
+                });
+            }
 
-        window.location.href= "ebooksCatalog.html";
-    });
+            function postSCBF(result) {
+                alert("Course added successfully!");
+                console.log(result);
+            }
 
-    const authorsBtn = document.getElementById("authorsBtn");
-    //jquery click event
-    $(authorsBtn).click(function () {
-        window.location.href = "authors.html";
-    });
+            function postECBF(err) {
+                alert("Course was already added.");
+                console.log(err);
+            }
 
-    const loginBtn = document.getElementById("loginBtn");
-    $(loginBtn).click(function () {
-        window.location.href = "login.html";
-    });
+        });
+      
 
-    const logoutbtn = document.getElementById("logoutBtn");
+  
 
-    $(logoutbtn).click( function () {
-        localStorage.clear();
-        window.location.reload();
-    });
+        getBooksDataFromDB();
+        getEBooksDataFromDB();
+
+        const allBooksBtn = document.getElementById("allBooksBtn");
+        $(allBooksBtn).click(function () {
+            window.location.href= "booksCatalog.html";
+        });
+
+        const allEBooksBtn = document.getElementById("allEBooksBtn");
+        $(allEBooksBtn).click(function () {
+
+            window.location.href= "ebooksCatalog.html";
+        });
+
+        const authorsBtn = document.getElementById("authorsBtn");
+        //jquery click event
+        $(authorsBtn).click(function () {
+            window.location.href = "authors.html";
+        });
+
+        const loginBtn = document.getElementById("loginBtn");
+        $(loginBtn).click(function () {
+            window.location.href = "login.html";
+        });
+
+        const logoutbtn = document.getElementById("logoutBtn");
+
+        $(logoutbtn).click( function () {
+            sessionStorage.clear();
+            window.location.reload();
+        });
 
 
     const registerbtn = document.getElementById("registerBtn");
@@ -129,6 +178,30 @@ $(document).ready(function () {
         window.location.href = "myBooks.html";
 
     });
+
+
+    // Check user status and display appropriate buttons
+    if (user && !user.isAdmin) {
+        $('#logoutBtn').show();
+        $('#loginBtn').hide();
+        $('#registerBtn').hide();
+        $('#myBooksBtn').show();
+        $('#adminBtn').hide();
+    } else if (user && user.isAdmin) {
+        $('#logoutBtn').show();
+        $('#loginBtn').hide();
+        $('#registerBtn').hide();
+        $('#myBooksBtn').show();
+        $('#adminBtn').show();
+    } else {
+        $('#logoutBtn').hide();
+        $('#loginBtn').show();
+        $('#registerBtn').show();
+        $('#myBooksBtn').hide();
+        $('#adminBtn').hide();
+    }
+
+   
 
 });
 
@@ -423,26 +496,6 @@ $(insertDataToDbBtn).click(async function () {
 
 
 
-// Check user status and display appropriate buttons
-//if (user && !user.isAdmin) {
-//    $('#logoutBtn').show();
-//    $('#loginBtn').hide();
-//    $('#Registerbtn').hide();
-//    $('#myCourses').show();
-//    $('#Adminbtn').hide();
-//} else if (user && user.isAdmin) {
-//    $('#logoutBtn').show();
-//    $('#loginBtn').hide();
-//    $('#Registerbtn').hide();
-//    $('#myCourses').show();
-//    $('#Adminbtn').show();
-//} else {
-//    $('#logoutBtn').hide();
-//    $('#loginBtn').show();
-//    $('#Registerbtn').show();
-//    $('#myCourses').hide();
-//    $('#Adminbtn').hide();
-//}
 
 
 
