@@ -1,4 +1,4 @@
-const apiBaseUrl = "https://localhost:7283/api/Users";
+const apiUsersUrl = "https://localhost:7195/api/Users";
 
 $(document).ready(function () {
     $('#loginForm').submit(function (event) {
@@ -26,7 +26,7 @@ $(document).ready(function () {
         submitToServer(loginData);
 
         function submitToServer(loginData) {
-            let api = apiBaseUrl + '/login';
+            let api = apiUsersUrl + '/login';
             ajaxCall('POST', api, JSON.stringify(loginData), postSCBF, postECBF);
         }
 

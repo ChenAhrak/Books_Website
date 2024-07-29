@@ -42,7 +42,7 @@ public class User
             return true;
 
         }
-        catch (Exception ex)
+        catch 
         {
             return false;
         }
@@ -52,13 +52,15 @@ public class User
     public User login(Login login)
     {
         DBservices db = new DBservices();
-        User user = db.Login(login);
-        if (user != null)
+        try
         {
+            User user = db.Login(login);
             return user;
         }
-
-        return null;
+        catch
+        {
+            return null;
+        }
 
 
     }

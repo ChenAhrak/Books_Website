@@ -20,21 +20,26 @@ namespace Books.Server.Controllers
         public IActionResult Post([FromBody] User value)
         {
             bool result = user.registration(value);
-            if (result)
-                return Ok();
-            return BadRequest();
+            if (result) { 
+                return Ok(new { message = "User created successfully" });
+            }
+            else
+            {
+                return BadRequest(new {message = "Email need to be unique"});
+            }
+
         }
 
         // POST api/<UsersController>/login
         [HttpPost("login")]
-        public IActionResult Login([FromBody] Login value)
+        public User Login([FromBody] Login value)
         {
             User nUser = user.login(value);
             if (nUser != null)
             {
-                return Ok(nUser);
+                return nUser;
             }
-            return Unauthorized();
+            return null;
         }
     }
 }

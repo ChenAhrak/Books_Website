@@ -575,8 +575,9 @@ namespace Books.Server.DAL
 
             cmd.Parameters.AddWithValue("@p_name", user.UserName);
             cmd.Parameters.AddWithValue("@p_email", user.Email);
-            cmd.Parameters.AddWithValue("@p_password", user.Password);
             cmd.Parameters.AddWithValue("@p_isActive", user.IsActive);
+            cmd.Parameters.AddWithValue("@p_isAdmin", user.IsAdmin);
+            cmd.Parameters.AddWithValue("@p_password", user.Password);
 
             return cmd;
         }
@@ -603,11 +604,12 @@ namespace Books.Server.DAL
                 if (reader.Read())
                 {
                     User user = new User();
-                    user.Id = Convert.ToInt32(reader["id"]);
-                    user.UserName = reader["name"].ToString();
-                    user.Email = reader["email"].ToString();
-                    user.Password = reader["password"].ToString();
-                    user.IsActive = Convert.ToBoolean(reader["isActive"]);
+                    user.Id = Convert.ToInt32(reader["UserId"]);
+                    user.UserName = reader["UserName"].ToString();
+                    user.Email = reader["Email"].ToString();
+                    user.IsActive = Convert.ToBoolean(reader["IsActive"]);
+                    user.IsAdmin = Convert.ToBoolean(reader["IsAdmin"]);
+                    user.Password = reader["Password"].ToString();
                     return user;
                 }
                 return null;

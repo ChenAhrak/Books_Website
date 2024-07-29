@@ -1,4 +1,4 @@
-const apiBaseUrl = "https://localhost:7283/api/Users";
+const apiUsersUrl = "https://localhost:7195/api/Users";
 
 $(document).ready(function () {
     $('#registerForm').submit(function (event) {
@@ -20,19 +20,19 @@ $(document).ready(function () {
         }
 
         const newUser = {
-            Name: name,
+            userName: name,
             Email: email,
             Password: password
         };
 
         function submitToServer(newUser) {
-            let api = `https://localhost:7283/api/Users`;
-            ajaxCall("POST", api, JSON.stringify(newUser), postSCBF, postECBF);
+            ajaxCall("POST", apiUsersUrl, JSON.stringify(newUser), postSCBF, postECBF);
         }
 
         function postSCBF(response) {
             alert("Registration successful.");
             autoLogin();
+
         }
 
         function postECBF(err) {
@@ -41,7 +41,7 @@ $(document).ready(function () {
         }
 
         function autoLogin() {
-            let api = apiBaseUrl + '/login';
+            let api = apiUsersUrl + '/login';
             let userDetails = { Email: newUser.Email, Password: newUser.Password };
             ajaxCall("POST", api, JSON.stringify(userDetails), postLoginSCBF, postLoginECBF);
         }
