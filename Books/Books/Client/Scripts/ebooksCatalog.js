@@ -1,4 +1,5 @@
 const booksApiURL = "https://localhost:7195/api/Books";
+var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
    
@@ -23,13 +24,54 @@ function renderAllEBooksDisplay(ebooks) {
         ebookElement.append('<h3>' + ebook.title + '</h3>');
         ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
         ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
-        ebookElement.append('<p><button id="' + ebook.id + '" class="add-book">Add Book</button></p>');
+        var addBookBtn = $('<p><button id="' + ebook.id + '" class="add-book">Add Book</button></p>');
+        ebookElement.append( addBookBtn);
 
         ebooksContainer.append(ebookElement);
+        addBookClick(addBookBtn);
 
     });  
 
-}
+    }
+    function isLoggedIn() {
+        return sessionStorage.getItem('user') !== null;
+    }
+
+    // Event listener for add book button
+    function addBookClick(addBookBtn) {
+        addBookBtn.on('click', function (event) {
+            if (event.target.tagName.toLowerCase() === 'button') {
+                const buttonId = event.target.id;
+                console.log("Button clicked with ID:", buttonId);
+
+                if (isLoggedIn()) {
+                    const user = JSON.parse(sessionStorage.getItem('user'));
+                    addBook(buttonId, user.id);
+                } else {
+                    console.log("User not logged in. Redirecting to login.");
+                    alert("Please login or register to add book.");
+                    window.location.href = "login.html";
+                }
+            }
+        });
+    }
+
+    //// Function to add a book to user's list
+    function addBook(buttonId, userId) {
+
+        ajaxCall("POST", `${booksApiURL}/addBookToUser/${userId}`, JSON.stringify(buttonId), postSCBF, postECBF);
+
+    }
+
+    function postSCBF(result) {
+        alert("Course added successfully!");
+        console.log(result);
+    }
+
+    function postECBF(err) {
+        alert("Course was already added.");
+        console.log(err);
+    }
 
     getEBooksDataFromDB();
 
