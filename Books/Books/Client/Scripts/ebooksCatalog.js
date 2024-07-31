@@ -64,12 +64,12 @@ function renderAllEBooksDisplay(ebooks) {
     }
 
     function postSCBF(result) {
-        alert("Course added successfully!");
+        alert("Book added successfully!");
         console.log(result);
     }
 
     function postECBF(err) {
-        alert("Course was already added.");
+        alert("Book was already added.");
         console.log(err);
     }
 
