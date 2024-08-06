@@ -3,6 +3,7 @@ body {
     font-family: sans-serif;
     margin: 0; /* Remove default margin from body */
     padding: 20px; /* Add some padding for better layout */
+    height: 100%;
 }
 
 h1 {
@@ -48,13 +49,12 @@ button {
     }
 
 footer {
-    margin: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: auto;
+    text-align: center;
     display: flex;
     justify-content: center;
-    align-content: center;
-    align-items: center;
 }
-
-    footer > span {
-        padding-top: 50px;
-    }

@@ -1,2 +1,27 @@
 ﻿body {
 }
+
+button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px; /* Add rounded corners to buttons */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-bottom: 10px; /* Add space below buttons */
+}
+
+    button:hover {
+        opacity: 0.8; /* Make button slightly transparent on hover */
+    }
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}

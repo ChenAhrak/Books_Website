@@ -59,3 +59,14 @@ button {
     button:hover {
         opacity: 0.8; /* Make button slightly transparent on hover */
     }
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}

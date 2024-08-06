@@ -31,7 +31,7 @@ $(document).ready(function () {
     function renderAllBooksDisplay(books) {
         var booksContainer = $('#books-container');
         var table = $('<table>');
-        var tableHeader = $('<th>');
+        var tableHeader = $('<tr>');
 
         books.forEach(book => {
             var bookElement = $('<td>');
@@ -69,7 +69,7 @@ $(document).ready(function () {
     function renderAllEBooksDisplay(ebooks) {
         var ebooksContainer = $('#ebooks-container');
         var table = $('<table>');
-        var tableHeader = $('<th>');
+        var tableHeader = $('<tr>');
 
         ebooks.forEach(ebook => {
             var ebookElement = $('<td>');

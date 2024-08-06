@@ -1,2 +1,59 @@
-﻿body {
+﻿body{
+}
+
+table {
+    display: flex;
+    flex-direction: row;
+    border-collapse: separate; /* Ensure the borders are separated */
+    border-spacing: 10px; /* Adjust spacing as needed */
+    width: 100%; /* Optional, for better table layout */
+    margin: 20px auto; /* Optional, to center the table */
+    /*border: 1px solid #ccc;*/ /* Optional, to add a border to the table */
+}
+
+td {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    border: 1px solid #ccc; /* Optional, to add a border to table cells */
+    border-radius: 10px;
+    padding: 10px; /* Optional, to add internal padding to cells */
+    background-color: #f9f9f9; /* Optional, to add background color to cells */
+}
+
+p, h3 {
+    width: 250px; /* Adjust the width as needed */
+    white-space: nowrap; /* Prevents text from wrapping to the next line */
+    overflow: hidden; /* Hides any text that overflows the width */
+    text-overflow: ellipsis; /* Adds ellipsis (...) to indicate truncated text */
+    /*border: 1px solid #ccc;*/ /* Optional, for better visibility */
+    padding: 10px; /* Optional, for better spacing */
+}
+
+img{
+    width: 120px;
+    height: 220px;
+    border-radius: 10px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px; /* Add rounded corners to buttons */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-bottom: 10px; /* Add space below buttons */
+}
+
+    button:hover {
+        opacity: 0.8; /* Make button slightly transparent on hover */
+    }
+
+footer {
+    margin: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
