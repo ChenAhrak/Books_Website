@@ -1,4 +1,31 @@
-﻿body{
+﻿
+:root {
+    --background-color: white;
+    --text-color: black;
+    --td-background-color: #f9f9f9;
+    --button-background-color: #3498db;
+}
+
+/* Dark mode overrides */
+body.dark-mode {
+    --background-color: black;
+    --text-color: white;
+    --td-background-color: #6f6f6f;
+    --button-background-color: #37474f;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#toggle-mode {
+    position:absolute;
+    top:0;
+    right:0;
+    margin: 20px;
 }
 
 table {
@@ -19,7 +46,7 @@ td {
     border: 1px solid #ccc; /* Optional, to add a border to table cells */
     border-radius: 10px;
     padding: 10px; /* Optional, to add internal padding to cells */
-    background-color: #f9f9f9; /* Optional, to add background color to cells */
+    background-color: var(--td-background-color); /* Optional, to add background color to cells */ /* #f9f9f9 */
 }
 
 p, h3 {
@@ -38,7 +65,7 @@ img{
 }
 
 button {
-    background-color: #3498db;
+    background-color: var(--button-background-color);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -52,7 +79,7 @@ button {
     }
 
 footer {
-    margin: 0;
+    margin-top: auto;
     text-align: center;
     display: flex;
     justify-content: center;
