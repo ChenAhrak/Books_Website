@@ -19,7 +19,8 @@ function getEBooksDataFromDBECB(err) {
 function renderAllEBooksDisplay(ebooks) {
     var ebooksContainer = $('#ebooks-container');
     ebooks.forEach(ebook => {
-        var ebookElement = $('div');
+        var ebookElement = $('<div>');
+        ebookElement.addClass('ebook');
         ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
         ebookElement.append('<h3>' + ebook.title + '</h3>');
         ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');

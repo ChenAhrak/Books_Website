@@ -20,6 +20,7 @@ $(document).ready(function () {
         var authorsContainer = $("#authors-container");
         authors.forEach(function (author) {
             var authorElement = $('<div>');
+            authorElement.addClass('author');
             authorElement.append('<img src="' + author.image + '" alt="author image" />');
             authorElement.append('<h3>' + author.name + '</h3>');
             authorElement.append('<p>' + 'Birth Date: ' + author.birthDate + '</p>');
@@ -35,12 +36,7 @@ $(document).ready(function () {
 
     getAllAuthorsFromDB();
 
-    const authorsBtn = document.getElementById("authorsBtn");
-    //jquery click event
-    $(authorsBtn).click(function () {
-        window.location.href = "authors.html";
-    });
-
+   
     const loginBtn = document.getElementById("loginBtn");
     $(loginBtn).click(function () {
         window.location.href = "login.html";

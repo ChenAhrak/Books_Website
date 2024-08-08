@@ -49,7 +49,7 @@ $(document).ready(function () {
 
         table.append(tableHeader);
         booksContainer.append(table);
-        //    booksContainer.append('<button id="allBooksBtn">See more books</button>');
+    //    booksContainer.append('<button id="allBooksBtn">See more books</button>');
     }
 
     async function getEBooksDataFromDB() {
@@ -87,6 +87,7 @@ $(document).ready(function () {
 
         table.append(tableHeader);
         ebooksContainer.append(table);
+        //ebooksContainer.append('<button id="allEBooksBtn">See more ebooks</button>');
 
     }
 
