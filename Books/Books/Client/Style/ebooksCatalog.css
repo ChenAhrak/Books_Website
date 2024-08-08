@@ -1,18 +1,16 @@
-﻿body
-{
+﻿body {
 }
 
-#authors-container{
-    display:grid;
+#ebooks-container {
+    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: 100px;
+    grid-gap: 70px;
     justify-content: center;
     margin: 80px;
     padding: 40px;
-    
-
 }
-.author {
+
+.ebook {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,7 +19,6 @@
     border-radius: 10px;
     padding: 10px;
     background-color: #f9f9f9;
-    
 }
 /*same size for all img tags*/
 img {
