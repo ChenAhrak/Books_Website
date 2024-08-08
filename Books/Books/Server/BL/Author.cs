@@ -64,6 +64,21 @@ namespace Books.Server.BL
             }
         }
 
+        // שיטה לשליפת ספרים לפי מזהה מחבר
+        public List<Book> GetBooksByAuthor()
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.GetBooksByAuthor(this.Id); // שימוש במזהה המחבר הנוכחי
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return new List<Book>();
+            }
+        }
+
     }
 }
 
