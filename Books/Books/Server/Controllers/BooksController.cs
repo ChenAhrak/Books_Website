@@ -37,38 +37,36 @@ namespace Books.Server.Controllers
             }
 
         }
-          [HttpGet("GetAllBooks")]
+
+        [HttpGet("GetAllBooks")]
         public IEnumerable<Object> GetAllBooks()
         {
             try
             {
                 return book.getAllBooks();
             }
-            catch 
+            catch
             {
                 return null;
             }
 
         }
-           public IEnumerable<Object> GetAllEBooks()
+       
+        [HttpGet("GetAllEBooks")]
+
+        public IEnumerable<Object> GetAllEBooks()
         {
             try
             {
                 return book.getAllEBooks();
             }
-            catch 
+            catch
             {
                 return null;
             }
 
         }
 
-        // GET api/<BooksController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/<BooksController>
         [HttpPost("PostAllBooks")]
