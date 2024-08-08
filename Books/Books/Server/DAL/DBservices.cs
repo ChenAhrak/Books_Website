@@ -647,19 +647,266 @@ namespace Books.Server.DAL
             return cmd;
         }
 
+        
+        public List<Book> GetBooksByAuthor(int authorId)
+        {
+            SqlConnection con = null;
+            SqlCommand cmd = null;
+            List<Book> books = new List<Book>();
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+                cmd = CreateCommandWithStoredProcedureGetBooksByAuthor("SP_GetBooksByAuthor", con, authorId); // create the command
+
+                con.Open(); // open the connection
+                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
+
+                while (reader.Read())
+                {
+                    Book book = new Book
+                    {
+                        Id = reader["BookID"].ToString(),
+                        Title = reader["Title"].ToString(),
+                        Subtitle = reader["Subtitle"].ToString(),
+                        Language = reader["Language"].ToString(),
+                        Publisher = reader["Publisher"].ToString(),
+                        PublishedDate = reader["PublishedDate"] as string,
+                        Description = reader["Description"].ToString(),
+                        PageCount = reader["PageCount"] as int? ?? 0,
+                        Price = reader["Price"] as double? ?? 0.0
+                    };
+
+                    books.Add(book);
+                }
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                Console.WriteLine($"Error: {ex.Message}");
+                throw; // rethrow the exception
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close(); // close the db connection
+                }
+            }
+
+            return books;
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureGetBooksByAuthor(String spName, SqlConnection con, int authorId)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+            cmd.CommandText = spName;          // specify the stored procedure name
+            cmd.CommandTimeout = 10;           // Time to wait for the execution
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // specify that it's a stored procedure
+
+            // Add the parameter for the stored procedure
+            cmd.Parameters.AddWithValue("@AuthorID", authorId);
+
+            return cmd;
+        }
+
+
+        public List<Book> GetUserLibrary(int userId, string status)
+        {
+            SqlConnection con = null;
+            SqlCommand cmd = null;
+            List<Book> books = new List<Book>();
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+
+                // Create the command with the stored procedure and parameters
+                cmd = CreateCommandWithStoredProcedure("spGetUserLibrary", con,
+                    new SqlParameter("@UserID", userId),
+                    new SqlParameter("@Status", status));
+
+                con.Open(); // open the connection
+                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
+
+                while (reader.Read())
+                {
+                    Book book = new Book
+                    {
+                        Id = reader["BookID"].ToString(),
+                        Title = reader["Title"].ToString(),
+                        Subtitle = reader["Subtitle"].ToString(),
+                        Language = reader["Language"].ToString(),
+                        Publisher = reader["Publisher"].ToString(),
+                        PublishedDate = reader["PublishedDate"] as string,
+                        PageCount = reader["PageCount"] as int? ?? 0,
+                        PrintType = reader["PrintType"].ToString(),
+                        Price = reader["Price"] as double? ?? 0.0,
+                        //Status = reader["Status"].ToString(),
+                        //DateAdded = reader["DateAdded"] as DateTime?
+                    };
+
+                    books.Add(book);
+                }
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                Console.WriteLine($"Error: {ex.Message}");
+                throw; // rethrow the exception
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close(); // close the db connection
+                }
+            }
+
+            return books;
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedure(string spName, SqlConnection con, params SqlParameter[] parameters)
+        {
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = con,
+                CommandText = spName,
+                CommandTimeout = 10,
+                CommandType = CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddRange(parameters);
+            return cmd;
+        }
+        public bool AddBookToLibrary(UserBooks userBook)
+        {
+            SqlConnection con = null;
+            SqlCommand cmd = null;
+
+            try
+            {
+                con = connect("myProjDB"); // יצירת החיבור לבסיס הנתונים
+
+                // יצירת פקודת SQL עם פרוצדורה
+                cmd = new SqlCommand("spAddBookToLibrary", con)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = 10
+                };
+
+                // הוספת פרמטרים לפקודת SQL
+                cmd.Parameters.AddWithValue("@UserID", userBook.UserID);
+                cmd.Parameters.AddWithValue("@BookID", userBook.BookID);
+                cmd.Parameters.AddWithValue("@Status", userBook.Status);
+
+                // הרצת הפקודה
+                cmd.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // טיפול בשגיאות
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close(); // סגירת החיבור לבסיס הנתונים
+                }
+            }
+        }
+
+
+
+        public bool UpdateBookStatus(int userId, string bookId, string newStatus)
+        {
+            SqlConnection con = null;
+            SqlCommand cmd = null;
+
+            try
+            {
+                con = connect("myProjDB"); // יצירת החיבור לבסיס הנתונים
+
+                // יצירת פקודת SQL עם פרוצדורה
+                cmd = new SqlCommand("spUpdateBookStatus", con)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = 10
+                };
+
+                // הוספת פרמטרים לפקודת SQL
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                cmd.Parameters.AddWithValue("@BookID", bookId);
+                cmd.Parameters.AddWithValue("@NewStatus", newStatus);
+
+                // הרצת הפקודה
+                cmd.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // טיפול בשגיאות
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close(); // סגירת החיבור לבסיס הנתונים
+                }
+            }
+        }
+        public bool ManagePurchase(int buyerId, int sellerId, string bookId)
+        {
+            SqlConnection con = null;
+            SqlCommand cmd = null;
+
+            try
+            {
+                con = connect("myProjDB"); // יצירת החיבור לבסיס הנתונים
+
+                // יצירת פקודת SQL עם פרוצדורה
+                cmd = new SqlCommand("spManagePurchase", con)
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = 10
+                };
+
+                // הוספת פרמטרים לפקודת SQL
+                cmd.Parameters.AddWithValue("@BuyerID", buyerId);
+                cmd.Parameters.AddWithValue("@SellerID", sellerId);
+                cmd.Parameters.AddWithValue("@BookID", bookId);
+
+                // הרצת הפקודה
+                cmd.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // טיפול בשגיאות
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close(); // סגירת החיבור לבסיס הנתונים
+                }
+            }
+        }
+
+
     }
 }
-
-
-              
-
-
-
-  
-
-
-       
-
-
 
 

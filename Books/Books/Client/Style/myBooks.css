@@ -1,2 +1,36 @@
 ﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.section {
+    margin: 20px 0;
+}
+
+.book-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+    .book-list li {
+        background: #fff;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+    }
+
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#searchInput {
+    padding: 5px;
+    margin-right: 5px;
 }
