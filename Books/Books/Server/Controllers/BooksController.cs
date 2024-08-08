@@ -37,6 +37,31 @@ namespace Books.Server.Controllers
             }
 
         }
+          [HttpGet("GetAllBooks")]
+        public IEnumerable<Object> GetAllBooks()
+        {
+            try
+            {
+                return book.getAllBooks();
+            }
+            catch 
+            {
+                return null;
+            }
+
+        }
+           public IEnumerable<Object> GetAllEBooks()
+        {
+            try
+            {
+                return book.getAllEBooks();
+            }
+            catch 
+            {
+                return null;
+            }
+
+        }
 
         // GET api/<BooksController>/5
         [HttpGet("{id}")]
@@ -97,14 +122,14 @@ namespace Books.Server.Controllers
 
         }
         [HttpPost("addBookToUser/{userId}")]
-        public IActionResult AddBookToUser(int userId, [FromBody] string bookId)
-        {
-            if (book.addBookToUser(userId, bookId))
-            {
-                return Ok(new { message = "Course added to user successfully" });
-            }
-            return NotFound(new { message = "Failed to add course to user" });
-        }
+        //public IActionResult AddBookToUser(int userId, [FromBody] string bookId)
+        //{
+        //    if (book.addBookToUser(userId, bookId))
+        //    {
+        //        return Ok(new { message = "Course added to user successfully" });
+        //    }
+        //    return NotFound(new { message = "Failed to add course to user" });
+        //}
 
         // PUT api/<BooksController>/5
         [HttpPut("{id}")]

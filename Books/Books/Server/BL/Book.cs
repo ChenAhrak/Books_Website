@@ -148,6 +148,33 @@ public class Book
         }
 
     }
+    public List<Object> getAllBooks()
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            return db.getAllBooks();
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
+
+    public List<Object> getAllEBooks()
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            return db.getAllEBooks();
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
 
 
     public bool insertAllBooks(Book b)
@@ -192,17 +219,17 @@ public class Book
         }
     }
 
-    public  bool addBookToUser(int userId, string bookId)
-    {
-        DBservices db = new DBservices();
-        try
-        {
-            db.addBookToUser(userId, bookId);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
+    //    public  bool addBookToUser(int userId, string bookId)
+    //    {
+    //        DBservices db = new DBservices();
+    //        try
+    //        {
+    //            db.addBookToUser(userId, bookId);
+    //            return true;
+    //        }
+    //        catch
+    //        {
+    //            return false;
+    //        }
+    //    }
 }
