@@ -387,7 +387,6 @@ namespace Books.Server.DAL
             List<Object> books = new List<Object>();
             while (reader.Read())
             {
-                //compare between null and (string)reader["AuthorNames"] nul
                 books.Add(new
                 {
                     id = (string)reader["Id"],
@@ -444,7 +443,6 @@ namespace Books.Server.DAL
             List<Object> ebooks = new List<Object>();
             while (reader.Read())
             {
-                //compare between null and (string)reader["AuthorNames"] nul
                 ebooks.Add(new
                 {
                     id = (string)reader["Id"],
@@ -495,19 +493,27 @@ namespace Books.Server.DAL
                 List<Object> books = new List<Object>();
                 while (reader.Read())
                 {
-                    //compare between null and (string)reader["AuthorNames"] nul
                     books.Add(new
                     {
                         id = (string)reader["Id"],
                         title = (string)reader["Title"],
+                        subtitle = (string)reader["Subtitle"],
                         //Check for null value in the AuthorNames column
                         authorNames = reader.IsDBNull(reader.GetOrdinal("AuthorNames"))
                                             ? "Unknown"
                                             : reader.GetString(reader.GetOrdinal("AuthorNames")),
 
+                        publisher = (string)reader["Publisher"],
+                        publishedDate = reader.IsDBNull(reader.GetOrdinal("PublishedDate"))
+                                  ? null
+                                  : ((DateTime)reader["PublishedDate"]).ToString("yyyy-MM-dd"),
+                        description = (string)reader["Description"],
+                        pageCount = (int)reader["PageCount"],
+                        language = (string)reader["Language"],
                         price = (double)reader["Price"],
                         smallImage = (string)reader["SmallThumbnail"],
-                        image = (string)reader["Thumbnail"]
+                        image = (string)reader["Thumbnail"],
+                        pdfLink = (string)reader["PdfDownloadLink"]
 
                     });
                 }
@@ -546,20 +552,28 @@ namespace Books.Server.DAL
             List<Object> ebooks = new List<Object>();
             while (reader.Read())
             {
-                //compare between null and (string)reader["AuthorNames"] nul
+               
                 ebooks.Add(new
                 {
                     id = (string)reader["Id"],
                     title = (string)reader["Title"],
+                    subtitle = (string)reader["Subtitle"],
                     //Check for null value in the AuthorNames column
                     authorNames = reader.IsDBNull(reader.GetOrdinal("AuthorNames"))
-                                        ? "Unknown"
-                                        : reader.GetString(reader.GetOrdinal("AuthorNames")),
+                                            ? "Unknown"
+                                            : reader.GetString(reader.GetOrdinal("AuthorNames")),
 
+                    publisher = (string)reader["Publisher"],
+                    publishedDate = reader.IsDBNull(reader.GetOrdinal("PublishedDate"))
+                                  ? null
+                                  : ((DateTime)reader["PublishedDate"]).ToString("yyyy-MM-dd"),
+                    description = (string)reader["Description"],
+                    pageCount = (int)reader["PageCount"],
+                    language = (string)reader["Language"],
                     price = (double)reader["Price"],
                     smallImage = (string)reader["SmallThumbnail"],
-                    image = (string)reader["Thumbnail"]
-
+                    image = (string)reader["Thumbnail"],
+                    pdfLink = (string)reader["PdfDownloadLink"]
                 });
             }
             return ebooks;

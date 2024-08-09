@@ -22,6 +22,13 @@ td {
     background-color: #f9f9f9; /* Optional, to add background color to cells */
 }
 
+h1{
+    display:flex;
+    justify-content: center;
+    margin:40px;
+
+}
+
 p, h3 {
     width: 250px; /* Adjust the width as needed */
     white-space: nowrap; /* Prevents text from wrapping to the next line */
@@ -40,11 +47,27 @@ img{
 button {
     background-color: #3498db;
     color: white;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 4px; /* Add rounded corners to buttons */
     cursor: pointer; /* Change cursor to pointer on hover */
-    margin-bottom: 10px; /* Add space below buttons */
+    margin: 10px; /* Add space below buttons */
+}
+
+#search-container{
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    margin: 40px;
+    gap: 20px;
+    
+}
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px; 
+    margin: 10px; 
+    width: 40%; 
 }
 
     button:hover {
