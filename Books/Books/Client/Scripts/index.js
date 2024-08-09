@@ -157,14 +157,48 @@ $(document).ready(function () {
         console.log(err);
     }
 
-     function searchBooks() {
-        const query = $('#search-input').val();
-        allBooks[0].forEach(function (book) {
-            if (book.title.includes(query)) {
-                console.log(book);
-            }
+    function renderFilterdBooks(filterdBooks) {
+        const mainContent = $('#main-content');
+        //mainContent.style.display = "grid"
+        //mainContent.style.gridTemplateColumns = "repeat(auto-fill, minmax(300px, 1fr))";
+        //mainContent.style.gridGap = "70px";
 
+
+        console.log(filterdBooks);
+        filterdBooks.forEach(function (book) {
+            console.log(book);
+            console.log(book.image, book.title, book.authorNames, book.price);
+            var bookElement = $('<div>');
+            bookElement.addClass('book');
+            bookElement.append('<img src="' + book.image + '" alt="book image" />');
+            bookElement.append('<h3>' + book.title + '</h3>');
+            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+            var addBookBtn = $('<p><button id="' + book.id + '" class="add-book">Add Book</button><p>');
+            bookElement.append(addBookBtn);
+
+            mainContent.append(bookElement);
+            
         });
+    }
+
+    function searchBooks() {
+
+         const query = $('#search-input').val();
+         const filterdBooks = []  
+         allBooks.forEach(function (books) {
+             books.forEach(function (book) {
+
+                 // check if the query is in the title of the book with no case sensitivity
+                 if (book.title.toLowerCase().includes(query.toLowerCase())) {
+                     filterdBooks.push(book);
+                    }
+                
+             });
+    
+         });
+        renderFilterdBooks(filterdBooks);
+
     }
     
 
@@ -178,7 +212,11 @@ $(document).ready(function () {
     const searchBtn = document.getElementById("searchBtn");
     const mainContent = document.getElementById("main-content");
 
-    $(searchBtn).click(searchBooks);
+    $(searchBtn).click(function () {
+        mainContent.innerHTML = "";
+        searchBooks();
+
+    });
         
 
     const allBooksBtn = document.getElementById("allBooksBtn");
