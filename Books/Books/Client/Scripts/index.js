@@ -1,4 +1,5 @@
 const allData = [];
+const allBooksDisplay = [];
 const allBooks = [];
 const allAuthors = [];
 const allCategories = [];
@@ -14,17 +15,17 @@ var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
 
-    async function getBooksDataFromDB() {
-        await ajaxCall("GET", `${booksApiURL}/GetBooksDisplay`, "", getBooksDataFromDBSCB, getBooksDataFromDBECB);
+    async function getBooksDisplayDataFromDB() {
+        await ajaxCall("GET", `${booksApiURL}/GetBooksDisplay`, "", getBooksDisplayDataFromDBSCB, getBooksDisplayDataFromDBECB);
     }
 
-    function getBooksDataFromDBSCB(result) {
-        allBooks.push(result);
-        console.log(allBooks);
+    function getBooksDisplayDataFromDBSCB(result) {
+        allBooksDisplay.push(result);
+        console.log(allBooksDisplay);
         renderAllBooksDisplay(result);
     }
 
-    function getBooksDataFromDBECB(err) {
+    function getBooksDisplayDataFromDBECB(err) {
         console.log(err);
     }
 
@@ -52,17 +53,17 @@ $(document).ready(function () {
     //    booksContainer.append('<button id="allBooksBtn">See more books</button>');
     }
 
-    async function getEBooksDataFromDB() {
-        await ajaxCall("GET", `${booksApiURL}/GetEBooksDisplay`, "", getEBooksDataFromDBSCB, getEBooksDataFromDBECB);
+    async function getEBooksDisplayDataFromDB() {
+        await ajaxCall("GET", `${booksApiURL}/GetEBooksDisplay`, "", getEBooksDisplayDataFromDBSCB, getEBooksDisplayDataFromDBECB);
     }
 
-    function getEBooksDataFromDBSCB(result) {
-        allBooks.push(result);
-        console.log(allBooks);
+    function getEBooksDisplayDataFromDBSCB(result) {
+        allBooksDisplay.push(result);
+        console.log(allBooksDisplay);
         renderAllEBooksDisplay(result);
     }
 
-    function getEBooksDataFromDBECB(err) {
+    function getEBooksDisplayDataFromDBECB(err) {
         console.log(err);
     }
 
@@ -131,13 +132,54 @@ $(document).ready(function () {
         console.log(err);
     }
 
+    async function getAllBooksDataFromDB() {
+       await ajaxCall("GET", `${booksApiURL}/GetAllBooks`, "", getAllBooksDataFromDBSCB, getAllBooksDataFromDBECB);
+    }
+
+    function getAllBooksDataFromDBSCB(result) {
+        allBooks.push(result);
+    }
+
+    function getAllBooksDataFromDBECB(err) {
+        console.log(err);
+    }
+
+    async function getAllEBooksDataFromDB() {
+        await ajaxCall("GET", `${booksApiURL}/GetAllEBooks`, "", getAllEBooksDataFromDBSCB, getAllEBooksDataFromDBECB);
+    }
+
+    function getAllEBooksDataFromDBSCB(result) {
+        allBooks.push(result);
+        console.log(allBooks);
+    }
+
+    function getAllEBooksDataFromDBECB(err) {
+        console.log(err);
+    }
+
+     function searchBooks() {
+        const query = $('#search-input').val();
+        allBooks[0].forEach(function (book) {
+            if (book.title.includes(query)) {
+                console.log(book);
+            }
+
+        });
+    }
+    
 
 
 
+    getBooksDisplayDataFromDB();
+    getEBooksDisplayDataFromDB();
+    getAllBooksDataFromDB();
+    getAllEBooksDataFromDB();
 
+    const searchBtn = document.getElementById("searchBtn");
+    const mainContent = document.getElementById("main-content");
 
-    getBooksDataFromDB();
-    getEBooksDataFromDB();
+    $(searchBtn).click(searchBooks);
+        
 
     const allBooksBtn = document.getElementById("allBooksBtn");
     $(allBooksBtn).click(function () {
