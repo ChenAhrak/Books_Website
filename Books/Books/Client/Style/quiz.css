@@ -1,0 +1,16 @@
+﻿body
+{
+    font-family: Arial ,sans-serif;
+    font-size: 20px;
+}
+/* need to make the quiz text appear line by line or slower to have time to load */
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}

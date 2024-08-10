@@ -96,15 +96,15 @@ namespace Books.Server.Controllers
             }
 
         }
-        [HttpPost("addBookToUser/{userId}")]
-        public IActionResult AddBookToUser(int userId, [FromBody] string bookId)
-        {
-            if (book.addBookToUser(userId, bookId))
-            {
-                return Ok(new { message = "Course added to user successfully" });
-            }
-            return NotFound(new { message = "Failed to add course to user" });
-        }
+        //[HttpPost("addBookToUser/{userId}")]
+        //public IActionResult AddBookToUser(int userId, [FromBody] string bookId)
+        //{
+        //    if (book.addBookToUser(userId, bookId))
+        //    {
+        //        return Ok(new { message = "Course added to user successfully" });
+        //    }
+        //    return NotFound(new { message = "Failed to add course to user" });
+        //}
 
         // PUT api/<BooksController>/5
         [HttpPut("{id}")]

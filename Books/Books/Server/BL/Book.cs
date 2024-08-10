@@ -192,17 +192,17 @@ public class Book
         }
     }
 
-    public  bool addBookToUser(int userId, string bookId)
-    {
-        DBservices db = new DBservices();
-        try
-        {
-            db.addBookToUser(userId, bookId);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
+    //public  bool addBookToUser(int userId, string bookId)
+    //{
+    //    DBservices db = new DBservices();
+    //    try
+    //    {
+    //        db.addBookToUser(userId, bookId);
+    //        return true;
+    //    }
+    //    catch
+    //    {
+    //        return false;
+    //    }
+    //}
 }
