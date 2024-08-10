@@ -1,4 +1,5 @@
 const booksApiURL = "https://localhost:7195/api/Books";
+const allBooks = [];
 var user = JSON.parse(sessionStorage.getItem('user'));
 
 
@@ -9,6 +10,7 @@ $(document).ready(function () {
 
     function getBooksDataFromDBSCB(result) {
         console.log(result);
+        allBooks.push(result);
         renderAllBooksDisplay(result);
     }
 
@@ -57,7 +59,7 @@ $(document).ready(function () {
         });
     }
 
-    //// Function to add a book to user's list
+    //// ****Function to add a book to user's list not working****
     function addBook(buttonId, userId) {
 
         ajaxCall("POST", `${booksApiURL}/addBookToUser/${userId}`, JSON.stringify(buttonId), postSCBF, postECBF);
@@ -73,10 +75,62 @@ $(document).ready(function () {
         alert("Book was already added.");
         console.log(err);
     }
-     
+
+    function renderFilterdBooks(filterdBooks) {
+        const mainContent = $('#books-container');
+        mainContent.empty();
+        mainContent.css({
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '20px'
+        });
+
+
+        console.log(filterdBooks);
+        filterdBooks.forEach(function (book) {
+            var bookElement = $('<div>');
+            bookElement.addClass('book');
+            bookElement.append('<img src="' + book.image + '" alt="book image" />');
+            bookElement.append('<h3>' + book.title + '</h3>');
+            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+            //bookElement.append('<p>' + 'Description: ' + book.description + '</p>')
+            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+            var addBookBtn = $('<p><button id="' + book.id + '" class="add-book">Add Book</button><p>');
+            bookElement.append(addBookBtn);
+
+            mainContent.append(bookElement);
+            addBookClick(addBookBtn);
+
+        });
+    }
+    function searchBooks() {
+
+        const query = $('#search-input').val();
+        const filterdBooks = []
+        allBooks.forEach(function (books) {
+            books.forEach(function (book) {
+
+                // check if the query is in the title of the book with no case sensitivity
+                if (book.title.toLowerCase().includes(query.toLowerCase()) ||
+                    book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
+                    book.description.toLowerCase().includes(query.toLowerCase())) {
+                    filterdBooks.push(book);
+                }
+
+            });
+
+        });
+        renderFilterdBooks(filterdBooks);
+
+    }
+
        
 
     getBooksDataFromDB();
+
+    $('#searchBtn').on('click', function () {
+        searchBooks();
+    });
 
     const authorsBtn = document.getElementById("authorsBtn");
     //jquery click event

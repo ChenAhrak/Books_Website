@@ -117,7 +117,7 @@ $(document).ready(function () {
         });
     }
 
-    //// Function to add a book to user's list
+    //// ****Function to add a book to user's list not working****
     function addBook(buttonId, userId) {
 
         ajaxCall("POST", `${booksApiURL}/addBookToUser/${userId}`, JSON.stringify(buttonId), postSCBF, postECBF);
