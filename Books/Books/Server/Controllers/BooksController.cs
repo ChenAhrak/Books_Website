@@ -38,12 +38,35 @@ namespace Books.Server.Controllers
 
         }
 
-        // GET api/<BooksController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetAllBooks")]
+        public IEnumerable<Object> GetAllBooks()
         {
-            return "value";
+            try
+            {
+                return book.getAllBooks();
+            }
+            catch
+            {
+                return null;
+            }
+
         }
+       
+        [HttpGet("GetAllEBooks")]
+
+        public IEnumerable<Object> GetAllEBooks()
+        {
+            try
+            {
+                return book.getAllEBooks();
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
 
         // POST api/<BooksController>
         [HttpPost("PostAllBooks")]
@@ -96,7 +119,7 @@ namespace Books.Server.Controllers
             }
 
         }
-        //[HttpPost("addBookToUser/{userId}")]
+        [HttpPost("addBookToUser/{userId}")]
         //public IActionResult AddBookToUser(int userId, [FromBody] string bookId)
         //{
         //    if (book.addBookToUser(userId, bookId))

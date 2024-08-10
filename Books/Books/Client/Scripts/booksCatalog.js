@@ -4,7 +4,7 @@ var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () { 
     async function getBooksDataFromDB() {
-        await ajaxCall("GET", `${booksApiURL}/GetBooksDisplay`, "", getBooksDataFromDBSCB, getBooksDataFromDBECB);
+        await ajaxCall("GET", `${booksApiURL}/GetAllBooks`, "", getBooksDataFromDBSCB, getBooksDataFromDBECB);
     }
 
     function getBooksDataFromDBSCB(result) {
