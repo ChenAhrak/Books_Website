@@ -67,6 +67,19 @@ namespace Books.Server.Controllers
 
         }
 
+        [HttpGet("GetTitlesAndAuthors")]
+        public IEnumerable<Object> GetTitlesAndAuthors()
+        {
+            try
+            {
+                return book.getTitlesAndAuthors();
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
 
         // POST api/<BooksController>
         [HttpPost("PostAllBooks")]

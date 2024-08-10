@@ -476,49 +476,50 @@ namespace Books.Server.DAL
             return cmd;
         }
 
-        public List<Object> getAllBooks() {
-            
-                SqlConnection con = null;
-                try
-                {
-                    con = connect("myProjDB"); // create the connection
-                }
-                catch (Exception ex)
-                {
-                    // write to log
-                    throw (ex);
-                }
-                SqlCommand cmd = CreateCommandWithStoredProcedureGetAllBooks("SP_GetAllBooks", con);             // create the command
-                SqlDataReader reader = cmd.ExecuteReader(); // execute the command
-                List<Object> books = new List<Object>();
-                while (reader.Read())
-                {
-                    books.Add(new
-                    {
-                        id = (string)reader["Id"],
-                        title = (string)reader["Title"],
-                        subtitle = (string)reader["Subtitle"],
-                        //Check for null value in the AuthorNames column
-                        authorNames = reader.IsDBNull(reader.GetOrdinal("AuthorNames"))
-                                            ? "Unknown"
-                                            : reader.GetString(reader.GetOrdinal("AuthorNames")),
+        public List<Object> getAllBooks()
+        {
 
-                        publisher = (string)reader["Publisher"],
-                        publishedDate = reader.IsDBNull(reader.GetOrdinal("PublishedDate"))
-                                  ? null
-                                  : ((DateTime)reader["PublishedDate"]).ToString("yyyy-MM-dd"),
-                        description = (string)reader["Description"],
-                        pageCount = (int)reader["PageCount"],
-                        language = (string)reader["Language"],
-                        price = (double)reader["Price"],
-                        smallImage = (string)reader["SmallThumbnail"],
-                        image = (string)reader["Thumbnail"],
-                        pdfLink = (string)reader["PdfDownloadLink"]
-
-                    });
-                }
-                return books;
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
             }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureGetAllBooks("SP_GetAllBooks", con);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> books = new List<Object>();
+            while (reader.Read())
+            {
+                books.Add(new
+                {
+                    id = (string)reader["Id"],
+                    title = (string)reader["Title"],
+                    subtitle = (string)reader["Subtitle"],
+                    //Check for null value in the AuthorNames column
+                    authorNames = reader.IsDBNull(reader.GetOrdinal("AuthorNames"))
+                                        ? "Unknown"
+                                        : reader.GetString(reader.GetOrdinal("AuthorNames")),
+
+                    publisher = (string)reader["Publisher"],
+                    publishedDate = reader.IsDBNull(reader.GetOrdinal("PublishedDate"))
+                              ? null
+                              : ((DateTime)reader["PublishedDate"]).ToString("yyyy-MM-dd"),
+                    description = (string)reader["Description"],
+                    pageCount = (int)reader["PageCount"],
+                    language = (string)reader["Language"],
+                    price = (double)reader["Price"],
+                    smallImage = (string)reader["SmallThumbnail"],
+                    image = (string)reader["Thumbnail"],
+                    pdfLink = (string)reader["PdfDownloadLink"]
+
+                });
+            }
+            return books;
+        }
 
         private SqlCommand CreateCommandWithStoredProcedureGetAllBooks(String spName, SqlConnection con)
         {
@@ -885,6 +886,34 @@ namespace Books.Server.DAL
             return books;
         }
 
+        /// new procedure test
+        public List<Object> getTitlesAndAuthors()
+        {
+
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureGetAllBooks("SP_GetTitlesAndAuthors", con);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> books = new List<Object>();
+            while (reader.Read())
+            {
+                books.Add(new
+                {
+                    title = (string)reader["Title"],
+                    name = (string)reader["Name"]
+                });
+            }
+            return books;
+        }
+
         private SqlCommand CreateCommandWithStoredProcedure(string spName, SqlConnection con, params SqlParameter[] parameters)
         {
             SqlCommand cmd = new SqlCommand
@@ -898,6 +927,7 @@ namespace Books.Server.DAL
             cmd.Parameters.AddRange(parameters);
             return cmd;
         }
+
         public bool AddBookToLibrary(UserBooks userBook)
         {
             SqlConnection con = null;
@@ -938,8 +968,6 @@ namespace Books.Server.DAL
                 }
             }
         }
-
-
 
         public bool UpdateBookStatus(int userId, string bookId, string newStatus)
         {

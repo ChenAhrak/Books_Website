@@ -176,6 +176,19 @@ public class Book
 
     }
 
+    public List<Object> getTitlesAndAuthors()
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            return db.getTitlesAndAuthors();
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
 
     public bool insertAllBooks(Book b)
     {
