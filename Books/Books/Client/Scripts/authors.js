@@ -26,7 +26,7 @@ $(document).ready(function () {
             authorElement.append('<p>' + 'Birth Date: ' + author.birthDate + '</p>');
             authorElement.append('<p>' + 'Death Date: ' + author.deathDate + '</p>');
             authorElement.append('<p>' + 'Top Work: ' + author.topWork + '</p>');
-            authorElement.append('<p>' + 'Id: ' + author.id + '</p>');
+            //authorElement.append('<p>' + 'Id: ' + author.id + '</p>');
             authorElement.append('<p>' + 'Description: ' + author.description + '</p>');
 
             authorsContainer.append(authorElement);
