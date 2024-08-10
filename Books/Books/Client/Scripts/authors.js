@@ -36,6 +36,10 @@ $(document).ready(function () {
 
     getAllAuthorsFromDB();
 
+    const homeBtn = document.getElementById("homeBtn");
+    $(homeBtn).click(function () {
+        window.location.href = "index.html";
+    });
    
     const loginBtn = document.getElementById("loginBtn");
     $(loginBtn).click(function () {
