@@ -11,6 +11,8 @@ const booksApiURL = "https://localhost:7195/api/Books";
 const authorsApiUrl = "https://localhost:7195/api/Authors";
 const categoriesApiUrl = "https://localhost:7195/api/Categories";
 const usersApiUrl = "https://localhost:7195/api/Users";
+var modal = $('#coursesModal');
+var span = $('.close');
 var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
@@ -159,25 +161,28 @@ $(document).ready(function () {
 
     function renderFilterdBooks(filterdBooks) {
         const mainContent = $('#main-content');
-        //mainContent.style.display = "grid"
-        //mainContent.style.gridTemplateColumns = "repeat(auto-fill, minmax(300px, 1fr))";
-        //mainContent.style.gridGap = "70px";
+        mainContent.empty();
+        mainContent.css({
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '20px'
+        });
 
 
         console.log(filterdBooks);
         filterdBooks.forEach(function (book) {
-            console.log(book);
-            console.log(book.image, book.title, book.authorNames, book.price);
             var bookElement = $('<div>');
             bookElement.addClass('book');
             bookElement.append('<img src="' + book.image + '" alt="book image" />');
             bookElement.append('<h3>' + book.title + '</h3>');
             bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+            //bookElement.append('<p>' + 'Description: ' + book.description + '</p>')
             bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
             var addBookBtn = $('<p><button id="' + book.id + '" class="add-book">Add Book</button><p>');
             bookElement.append(addBookBtn);
 
             mainContent.append(bookElement);
+            addBookClick(addBookBtn);
             
         });
     }
@@ -190,9 +195,12 @@ $(document).ready(function () {
              books.forEach(function (book) {
 
                  // check if the query is in the title of the book with no case sensitivity
-                 if (book.title.toLowerCase().includes(query.toLowerCase())) {
+                 if(book.title.toLowerCase().includes(query.toLowerCase()) ||
+                    book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
+                    book.description.toLowerCase().includes(query.toLowerCase()))
+                 {
                      filterdBooks.push(book);
-                    }
+                 }
                 
              });
     
@@ -210,10 +218,8 @@ $(document).ready(function () {
     getAllEBooksDataFromDB();
 
     const searchBtn = document.getElementById("searchBtn");
-    const mainContent = document.getElementById("main-content");
 
     $(searchBtn).click(function () {
-        mainContent.innerHTML = "";
         searchBooks();
 
     });

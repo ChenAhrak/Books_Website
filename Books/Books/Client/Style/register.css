@@ -7,8 +7,9 @@ body {
 }
 
 h1 {
-    text-align: center; /* Center the title */
-    margin-bottom: 20px; /* Add some space below the title */
+    display: flex;
+    justify-content: center;
+    margin: 40px;
 }
 
 form {

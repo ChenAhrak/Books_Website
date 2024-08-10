@@ -23,10 +23,23 @@
     background-color: #f9f9f9;
     
 }
+h1 {
+    display: flex;
+    justify-content: center;
+    margin: 40px;
+}
+#search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px;
+    gap: 20px;
+}
+
 /*same size for all img tags*/
 img {
     width: 200px;
-    height: 200px;
+    height: 220px;
     border-radius: 10px;
 }
 
