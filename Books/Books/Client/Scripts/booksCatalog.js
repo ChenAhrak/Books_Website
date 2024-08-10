@@ -20,7 +20,7 @@ $(document).ready(function () {
 
     function renderAllBooksDisplay(books) {
         var booksContainer = $('#books-container');
-
+        booksContainer.empty();
         books.forEach(function(book) {
             var bookElement = $('<div>');
             bookElement.addClass('book');
@@ -76,33 +76,6 @@ $(document).ready(function () {
         console.log(err);
     }
 
-    function renderFilterdBooks(filterdBooks) {
-        const mainContent = $('#books-container');
-        mainContent.empty();
-        mainContent.css({
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '20px'
-        });
-
-
-        console.log(filterdBooks);
-        filterdBooks.forEach(function (book) {
-            var bookElement = $('<div>');
-            bookElement.addClass('book');
-            bookElement.append('<img src="' + book.image + '" alt="book image" />');
-            bookElement.append('<h3>' + book.title + '</h3>');
-            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
-            //bookElement.append('<p>' + 'Description: ' + book.description + '</p>')
-            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-            var addBookBtn = $('<p><button id="' + book.id + '" class="add-book">Add Book</button><p>');
-            bookElement.append(addBookBtn);
-
-            mainContent.append(bookElement);
-            addBookClick(addBookBtn);
-
-        });
-    }
     function searchBooks() {
 
         const query = $('#search-input').val();
@@ -120,7 +93,7 @@ $(document).ready(function () {
             });
 
         });
-        renderFilterdBooks(filterdBooks);
+        renderAllBooksDisplay(filterdBooks);
 
     }
 

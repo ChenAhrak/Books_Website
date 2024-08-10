@@ -20,6 +20,7 @@ function getEBooksDataFromDBECB(err) {
 
 function renderAllEBooksDisplay(ebooks) {
     var ebooksContainer = $('#ebooks-container');
+    ebooksContainer.empty();
     ebooks.forEach(ebook => {
         var ebookElement = $('<div>');
         ebookElement.addClass('ebook');
@@ -76,33 +77,7 @@ function renderAllEBooksDisplay(ebooks) {
         console.log(err);
     }
 
-    function renderFilterdEBooks(filterdBooks) {
-        const mainContent = $('#ebooks-container');
-        mainContent.empty();
-        mainContent.css({
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '20px'
-        });
-
-
-        console.log(filterdBooks);
-        filterdBooks.forEach(function (book) {
-            var bookElement = $('<div>');
-            bookElement.addClass('book');
-            bookElement.append('<img src="' + book.image + '" alt="book image" />');
-            bookElement.append('<h3>' + book.title + '</h3>');
-            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
-            //bookElement.append('<p>' + 'Description: ' + book.description + '</p>')
-            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-            var addBookBtn = $('<p><button id="' + book.id + '" class="add-book">Add Book</button><p>');
-            bookElement.append(addBookBtn);
-
-            mainContent.append(bookElement);
-            addBookClick(addBookBtn);
-
-        });
-    }
+    
     function searchEBooks() {
 
         const query = $('#search-input').val();
@@ -120,7 +95,7 @@ function renderAllEBooksDisplay(ebooks) {
             });
 
         });
-        renderFilterdEBooks(filterdEBooks);
+        renderAllEBooksDisplay(filterdEBooks);
 
     }
 

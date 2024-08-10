@@ -1,4 +1,5 @@
 const authorsApiUrl = "https://localhost:7195/api/Authors";
+const allAuthors = [];
 var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
@@ -9,6 +10,7 @@ $(document).ready(function () {
 
     function getAllAuthorsFromDBSCB(result) {
         console.log(result);
+        allAuthors.push(result);
         renderAllAuthors(result);
     }
 
@@ -18,6 +20,7 @@ $(document).ready(function () {
 
     function renderAllAuthors(authors) {
         var authorsContainer = $("#authors-container");
+        authorsContainer.empty();
         authors.forEach(function (author) {
             var authorElement = $('<div>');
             authorElement.addClass('author');
@@ -34,7 +37,32 @@ $(document).ready(function () {
         });
     }
 
+    function searchAuthorName() {
+
+        const query = $('#search-input').val();
+        const filterdAuthors = []
+        allAuthors.forEach(function (authors) {
+            authors.forEach(function (author) {
+
+                // check if the query is in the title of the book with no case sensitivity
+                if (author.name.toLowerCase().includes(query.toLowerCase())) { 
+                    filterdAuthors.push(author);  
+                }
+
+            });
+
+        });
+
+        renderAllAuthors(filterdAuthors);
+
+    }
+
     getAllAuthorsFromDB();
+
+    const searchBtn = document.getElementById("searchBtn");
+    $(searchBtn).click(function () {
+        searchAuthorName();
+    });
 
     const homeBtn = document.getElementById("homeBtn");
     $(homeBtn).click(function () {
