@@ -58,11 +58,11 @@ h1{
 
 p, h3 {
     width: 250px; /* Adjust the width as needed */
-    white-space: nowrap; /* Prevents text from wrapping to the next line */
+   /* white-space: nowrap;*/ /* Prevents text from wrapping to the next line */
     overflow: hidden; /* Hides any text that overflows the width */
     text-overflow: ellipsis; /* Adds ellipsis (...) to indicate truncated text */
     /*border: 1px solid #ccc;*/ /* Optional, for better visibility */
-    padding: 10px; /* Optional, for better spacing */
+    padding: 30px; /* Optional, for better spacing */
 }
 
 img{
@@ -88,6 +88,16 @@ button {
     margin: 40px;
     gap: 20px;
     
+}
+.book {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
 }
 input {
     padding: 10px;

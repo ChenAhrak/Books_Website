@@ -21,23 +21,31 @@
         <button id="toggle-mode"></button>
     </nav>
     <header>
+
         <h1>PLC Books</h1>
         <div id="search-container">
-            <input type="text" id="search" name="search" placeholder="Enter Book Name / Author Name / Words In Book ">
-            <button>Search</button>
+            <input type="text" id="search-input" name="search" placeholder="Enter Book Name / Author Name / Words In Book ">
+            <button id="searchBtn">Search</button>
         </div>
     </header>
-    <div id="best-seller-conainer">
-        <h2>Best Sellers</h2>
+    <div id="booksModal" class="modal">
+        <div id="modal-content">
+            <span class="close">&times;</span>
+        </div>
     </div>
-    <div id="books-container">
-        <h2>Books Catalog</h2>
+    <div id="main-content">
+        <div id="best-seller-container">
+            <h2>Best Sellers</h2>
+        </div>
+        <div id="books-container">
+            <h2>Books Catalog</h2>
+        </div>
+        <button id="allBooksBtn">See more books</button>
+        <div id="ebooks-container">
+            <h2>E-Books Catalog</h2>
+        </div>
+        <button id="allEBooksBtn">See more ebooks</button>
     </div>
-    <button id="allBooksBtn">See more books</button>
-    <div id="ebooks-container">
-        <h2>E-Books Catalog</h2>
-    </div>
-    <button id="allEBooksBtn">See more ebooks</button>
     <!--<button id="insertDataToDbBtn">Insert All Data</button>-->
     <footer>
         <p>&copy; 2024 PLC. All rights reserved.</p>
