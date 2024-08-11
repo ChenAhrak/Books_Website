@@ -1,4 +1,4 @@
-const allData = [];
+﻿const allData = [];
 const allBooksDisplay = [];
 const allBooks = [];
 const allAuthors = [];
@@ -43,6 +43,9 @@ $(document).ready(function () {
             bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
             bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
             var adddBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+
+            
+
             bookElement.append(adddBookBtn);
             tableHeader.append(bookElement);
 
@@ -52,7 +55,7 @@ $(document).ready(function () {
 
         table.append(tableHeader);
         booksContainer.append(table);
-    //    booksContainer.append('<button id="allBooksBtn">See more books</button>');
+        //    booksContainer.append('<button id="allBooksBtn">See more books</button>');
     }
 
     async function getEBooksDisplayDataFromDB() {
@@ -70,59 +73,100 @@ $(document).ready(function () {
     }
 
     function renderAllEBooksDisplay(ebooks) {
-        var ebooksContainer = $('#ebooks-container');
-        var table = $('<table>');
-        var tableHeader = $('<tr>');
+    var ebooksContainer = $('#ebooks-container');
+    var table = $('<table>');
+    var tableHeader = $('<tr>');
 
-        ebooks.forEach(ebook => {
-            var ebookElement = $('<td>');
-            ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
-            ebookElement.append('<h3>' + ebook.title + '</h3>');
-            ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
-            ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
-            var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Add Book</button>');
-            ebookElement.append(addEBookBtn);
+    ebooks.forEach(ebook => {
+        var ebookElement = $('<td>');
+        ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
+        ebookElement.append('<h3>' + ebook.title + '</h3>');
+        ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
+        ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
+        
+        // Add "Add to Wishlist" button
+        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
+        ebookElement.append(addToWishlistBtn);
+        
+        // Add "Add Book" button
+        var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Add Book</button>');
+        ebookElement.append(addEBookBtn);
 
-            tableHeader.append(ebookElement);
+        tableHeader.append(ebookElement);
 
-            addBookClick(addEBookBtn);
-        });
+        addBookClick(addEBookBtn);
+        addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+    });
 
-        table.append(tableHeader);
-        ebooksContainer.append(table);
-        //ebooksContainer.append('<button id="allEBooksBtn">See more ebooks</button>');
+    table.append(tableHeader);
+    ebooksContainer.append(table);
+}
 
-    }
+function isLoggedIn() {
+    return sessionStorage.getItem('user') !== null;
+}
 
-    function isLoggedIn() {
-        return sessionStorage.getItem('user') !== null;
-    }
+// Event listener for add book button
+function addBookClick(addBookBtn) {
+    addBookBtn.on('click', function (event) {
+        if (event.target.tagName.toLowerCase() === 'button') {
+            const buttonId = event.target.id;
+            console.log("Button clicked with ID:", buttonId);
 
-    // Event listener for add book button
-    function addBookClick(addBookBtn) {
-        addBookBtn.on('click', function (event) {
-            if (event.target.tagName.toLowerCase() === 'button') {
-                const buttonId = event.target.id;
-                console.log("Button clicked with ID:", buttonId);
-
-                if (isLoggedIn()) {
-                    const user = JSON.parse(sessionStorage.getItem('user'));
-                    addBook(buttonId, user.id);
-                } else {
-                    console.log("User not logged in. Redirecting to login.");
-                    alert("Please login or register to add book.");
-                    window.location.href = "login.html";
-                }
+            if (isLoggedIn()) {
+                const user = JSON.parse(sessionStorage.getItem('user'));
+                addBook(buttonId, user.id);
+            } else {
+                console.log("User not logged in. Redirecting to login.");
+                alert("Please login or register to add book.");
+                window.location.href = "login.html";
             }
-        });
-    }
+        }
+    });
+}
+
+// Function to handle adding book to wishlist
+function addToWishlist(bookId, userId) {
+    ajaxCall("POST", `${booksApiURL}/addBookToWishlist/${userId}`, JSON.stringify({ BookId: bookId }), postSCBF, postECBF);
+}
+
+function postSCBF(result) {
+    alert("Book added to wishlist successfully!");
+    console.log(result);
+}
+
+function postECBF(err) {
+    alert("Error adding book to wishlist.");
+    console.log(err);
+}
+
+// Event listener for wishlist button
+function addWishlistClick(wishlistBtn) {
+    wishlistBtn.on('click', function () {
+        const bookId = $(this).data('book-id');
+        const userId = getUserId(); // Implement this function to get the current user ID
+
+        // Add book to wishlist
+        addToWishlist(bookId, userId);
+
+        // Toggle button appearance
+        $(this).toggleClass('filled');
+    });
+}
+
+// Ensure you implement getUserId() to fetch the current user's ID
+function getUserId() {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    return user ? user.id : null;
+}
+
 
     //// ****Function to add a book to user's list not working****
     function addBook(buttonId, userId) {
 
         ajaxCall("POST", `${booksApiURL}/addBookToUser/${userId}`, JSON.stringify(buttonId), postSCBF, postECBF);
 
-       }
+    }
 
     function postSCBF(result) {
         alert("Book added successfully!");
@@ -135,7 +179,7 @@ $(document).ready(function () {
     }
 
     async function getAllBooksDataFromDB() {
-       await ajaxCall("GET", `${booksApiURL}/GetAllBooks`, "", getAllBooksDataFromDBSCB, getAllBooksDataFromDBECB);
+        await ajaxCall("GET", `${booksApiURL}/GetAllBooks`, "", getAllBooksDataFromDBSCB, getAllBooksDataFromDBECB);
     }
 
     function getAllBooksDataFromDBSCB(result) {
@@ -183,32 +227,31 @@ $(document).ready(function () {
 
             mainContent.append(bookElement);
             addBookClick(addBookBtn);
-            
+
         });
     }
 
     function searchBooks() {
 
-         const query = $('#search-input').val();
-         const filterdBooks = []  
-         allBooks.forEach(function (books) {
-             books.forEach(function (book) {
+        const query = $('#search-input').val();
+        const filterdBooks = []
+        allBooks.forEach(function (books) {
+            books.forEach(function (book) {
 
-                 // check if the query is in the title of the book with no case sensitivity
-                 if(book.title.toLowerCase().includes(query.toLowerCase()) ||
+                // check if the query is in the title of the book with no case sensitivity
+                if (book.title.toLowerCase().includes(query.toLowerCase()) ||
                     book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
-                    book.description.toLowerCase().includes(query.toLowerCase()))
-                 {
-                     filterdBooks.push(book);
-                 }
-                
-             });
-    
-         });
+                    book.description.toLowerCase().includes(query.toLowerCase())) {
+                    filterdBooks.push(book);
+                }
+
+            });
+
+        });
         renderFilterdBooks(filterdBooks);
 
     }
-    
+
 
 
 
@@ -223,7 +266,7 @@ $(document).ready(function () {
         searchBooks();
 
     });
-        
+
 
     const allBooksBtn = document.getElementById("allBooksBtn");
     $(allBooksBtn).click(function () {
@@ -303,7 +346,7 @@ $(document).ready(function () {
         document.body.classList.toggle('dark-mode');
     }
 
-  
+
 
 
 });
@@ -614,4 +657,3 @@ toggleButton.addEventListener('click', () => {
 
 
 
-    

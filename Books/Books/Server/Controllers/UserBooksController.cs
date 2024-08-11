@@ -28,7 +28,7 @@ namespace Books.Server.Controllers
         }
 
         // הוספת ספר לספריית המשתמש
-        [HttpPost("add")]
+        [HttpPost("purchased")]
         public IActionResult AddBookToLibrary([FromBody] UserBooks userBook)
         {
             if (userBook == null)
@@ -43,6 +43,30 @@ namespace Books.Server.Controllers
             }
             return StatusCode(500, "An error occurred while adding the book to the library.");
         }
+
+        [HttpPost("addBookToWishlist/{userId}")]
+        public IActionResult AddBookToWishlist(int userId, [FromBody] Book book)
+        {
+            if (book == null || string.IsNullOrEmpty(book.Id))
+            {
+                return BadRequest("Invalid book data.");
+            }
+
+            var result = _userBooks.AddBookToLibrary(new UserBooks
+            {
+                UserID = userId,
+                BookID = book.Id,
+                Status = "want to read"
+            });
+
+            if (result)
+            {
+                return Ok("Book added to wishlist successfully.");
+            }
+
+            return StatusCode(500, "An error occurred while adding the book to the wishlist.");
+        }
+
 
         // עדכון סטטוס הספר בספריית המשתמש
         [HttpPut("update-status")]

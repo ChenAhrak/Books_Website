@@ -960,47 +960,48 @@ namespace Books.Server.DAL
         }
 
 
-
         public bool AddBookToLibrary(UserBooks userBook)
         {
-            SqlConnection con = null;
-            SqlCommand cmd = null;
-
             try
             {
-                con = connect("myProjDB"); // יצירת החיבור לבסיס הנתונים
-
-                // יצירת פקודת SQL עם פרוצדורה
-                cmd = new SqlCommand("SP_AddBookToLibrary", con)
+                using (SqlConnection con = connect("myProjDB"))
                 {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = 10
-                };
+                    // בדיקה אם הספר קיים בטבלה Books
+                    using (SqlCommand checkCmd = new SqlCommand("SELECT COUNT(*) FROM Books WHERE Id = @BookID", con))
+                    {
+                        checkCmd.Parameters.AddWithValue("@BookID", userBook.BookID);
+                        int count = (int)checkCmd.ExecuteScalar();
 
-                // הוספת פרמטרים לפקודת SQL
-                cmd.Parameters.AddWithValue("@UserID", userBook.UserID);
-                cmd.Parameters.AddWithValue("@BookID", userBook.BookID);
-                cmd.Parameters.AddWithValue("@Status", userBook.Status);
+                        if (count == 0)
+                        {
+                            Console.WriteLine("Book does not exist in the Books table.");
+                            return false;
+                        }
+                    }
 
-                // הרצת הפקודה
-                cmd.ExecuteNonQuery();
+                    // הוספת הספר לספריית המשתמשים אם הוא קיים
+                    using (SqlCommand cmd = new SqlCommand("SP_AddBookToLibrary", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 10;
+
+                        cmd.Parameters.AddWithValue("@UserID", userBook.UserID);
+                        cmd.Parameters.AddWithValue("@BookID", userBook.BookID);
+                        cmd.Parameters.AddWithValue("@Status", userBook.Status);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
 
                 return true;
             }
             catch (Exception ex)
             {
-                // טיפול בשגיאות
                 Console.WriteLine($"Error: {ex.Message}");
                 return false;
             }
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close(); // סגירת החיבור לבסיס הנתונים
-                }
-            }
         }
+
 
         public bool UpdateBookStatus(int userId, string bookId, string newStatus)
         {
