@@ -10,9 +10,14 @@ var generatedData;
 var bookAndAuthors;
 var randomNum;
 var gameScore = 0;
+var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(async function () {
 
+    if (!user) {
+        alert("You must login to play");
+        window.location.href = "login.html";
+    }
 
     function getTitlesAndAuthors() {
         ajaxCall("GET", `${booksApiURL}/GetTitlesAndAuthors`, "", getTitlesAndAuthorsSCB, getTitlesAndAuthorsECB);
@@ -20,7 +25,6 @@ $(document).ready(async function () {
 
     function getTitlesAndAuthorsSCB(result) {
         bookAndAuthors = result;
-        console.log(bookAndAuthors[0]);
         getRandomIndex(bookAndAuthors);
         console.log(randomNum);
         // After bookAndAuthors is ready, proceed with API key retrieval and other operations
@@ -31,13 +35,11 @@ $(document).ready(async function () {
         console.log(err);
     }
 
-    function getRandomIndex(object) {
-        const length = Object.keys(object).length;
-        randomNum = Math.floor(Math.random() * length)
-        return randomNum;
-    }
-
-    
+    //function getRandomIndex(object) {
+    //    const length = Object.keys(object).length;
+    //    randomNum = Math.floor(Math.random() * length)
+    //    return randomNum;
+    //}
     
     getTitlesAndAuthors();
 
@@ -52,9 +54,10 @@ $(document).ready(async function () {
             console.log(err);
         }
     }
-
-    async function initializeGenerativeAI() {
-        API_KEY = await getApiKey();
+    window.initializeGenerativeAI = async function() {
+    //async function initializeGenerativeAI() {
+        //API_KEY = await getApiKey();
+        if (!API_KEY) { API_KEY = await getApiKey(); }
 
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({
@@ -171,6 +174,9 @@ $(document).ready(async function () {
         }
 
         run();
+        //$('#quiz').hide();
+        var startBtn = document.getElementById("startGame");
+
 
         quiz.addEventListener('change', (event) => {
             if (event.target.type === 'radio') {
@@ -185,8 +191,27 @@ $(document).ready(async function () {
                 });
             }
         });
+        startBtn.addEventListener('click', (event) => {
+            $('#startQuiz').hide();
+            $('#quiz').show();
+        });
     }
+    $('#quiz').hide();
+
+    //nextQuestion = document.getElementById('nextQuestion');
+
+
 });
+
+function getRandomIndex(object) {
+    const length = Object.keys(object).length;
+    randomNum = Math.floor(Math.random() * length)
+    return randomNum;
+}
+
+var next = document.createElement('button');
+var resultImg = document.createElement('img');
+var quizExplanation = document.createElement('p');
 
 function revealAnswer(answer, selectedAnswer, explanation, selection) {
     var image;
@@ -201,14 +226,20 @@ function revealAnswer(answer, selectedAnswer, explanation, selection) {
         selection.classList.add('incorrectAnswer');
         console.log("Incorrect, 0 points awarded");
     }
-    const resultImg = document.createElement('img');
+    next.textContent = "Next question";
+    next.id = "nextQuestion";
     resultImg.src = image;
-    const quizExplanation = document.createElement('p');
     quizExplanation.textContent = explanation;
     $('#quiz').append(resultImg);
     $('#quiz').append(quizExplanation);
-}
+    $('#quiz').append(next);
+    next.addEventListener('click', (event) => {
+        getRandomIndex(bookAndAuthors);
+        initializeGenerativeAI()
+        $('#quiz').empty();
+    });
 
+}
 
 // not yet implemented
 function increaseScore() {
@@ -217,6 +248,7 @@ function increaseScore() {
 
 function createQuiz(question, options) {
     const quizContainer = document.getElementById('quiz');
+    //$('#quiz').empty();
     quizContainer.innerHTML = '';
     var optionCount = 0;
     const quizQuestion = document.createElement('p');
