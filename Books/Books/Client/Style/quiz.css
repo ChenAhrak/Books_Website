@@ -14,3 +14,35 @@ footer {
     display: flex;
     justify-content: center;
 }
+
+img {
+    margin-top: 25px;
+    width: 60px;
+    height: 60px;
+}
+
+label{
+    margin: 15px;
+}
+
+input{
+    margin: 10px;
+}
+
+label.correctAnswer {
+    background-color: #90ee90;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+}
+
+label.incorrectAnswer {
+    background-color: #ee9090;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+}

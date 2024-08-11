@@ -3,11 +3,13 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiURL = "https://localhost:7195/GetApiKey";
 const booksApiURL = "https://localhost:7195/api/Books";
+const correctImg = 'https://upload.wikimedia.org/wikipedia/commons/7/73/Flat_tick_icon.svg';
+const incorrectImg = 'https://upload.wikimedia.org/wikipedia/commons/6/69/X_Icon_or_Close_Icon.svg';
 var API_KEY;
 var generatedData;
 var bookAndAuthors;
 var randomNum;
-
+var gameScore = 0;
 
 $(document).ready(async function () {
 
@@ -173,22 +175,45 @@ $(document).ready(async function () {
         quiz.addEventListener('change', (event) => {
             if (event.target.type === 'radio') {
                 const selectedAnswer = event.target.value;
-                console.log('Selected answer:', selectedAnswer);
-
-                if (selectedAnswer === generatedData.correctAnswer) {
-                    console.log("+100 points awarded");
-                } else {
-                    console.log("0 points awarded");
-                }
+                const selection = event.target.parentElement;
+                revealAnswer(generatedData.correctAnswer, selectedAnswer, generatedData.explanation, selection);
+                const radioButtons = document.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach(radioButton => {
+                    if (!radioButton.checked) {
+                        radioButton.disabled = true;
+                    }
+                });
             }
         });
     }
 });
 
-function revealAnswer() {
-
+function revealAnswer(answer, selectedAnswer, explanation, selection) {
+    var image;
+    if (selectedAnswer === answer) {
+        image = correctImg;
+        gameScore += 1;
+        selection.classList.add('correctAnswer');
+        console.log("Correct, +1 point awarded");
+        increaseScore(); /// to be implemented
+    } else {
+        image = incorrectImg;
+        selection.classList.add('incorrectAnswer');
+        console.log("Incorrect, 0 points awarded");
+    }
+    const resultImg = document.createElement('img');
+    resultImg.src = image;
+    const quizExplanation = document.createElement('p');
+    quizExplanation.textContent = explanation;
+    $('#quiz').append(resultImg);
+    $('#quiz').append(quizExplanation);
 }
 
+
+// not yet implemented
+function increaseScore() {
+
+}
 
 function createQuiz(question, options) {
     const quizContainer = document.getElementById('quiz');
@@ -201,6 +226,7 @@ function createQuiz(question, options) {
         if (optionCount == 4) { return; }
         const label = document.createElement('label');
         const input = document.createElement('input');
+        input.id = "answerNum" + optionCount;
         const newLine = document.createElement('br');
 
         input.type = 'radio';
