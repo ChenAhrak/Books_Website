@@ -331,17 +331,17 @@ $(document).ready(function () {
     }
 
   
-//const currentTheme = localStorage.getItem('theme');
-const toggleButton = document.getElementById('toggle-mode');
-toggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
+    //const currentTheme = localStorage.getItem('theme');
+    const toggleButton = document.getElementById('toggle-mode');
+    toggleButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
 
-    let theme = 'light';
-    if (document.body.classList.contains('dark-mode')) {
-        theme = 'dark';
-    }
-    localStorage.setItem('theme', theme);
-});
+        let theme = 'light';
+        if (document.body.classList.contains('dark-mode')) {
+            theme = 'dark';
+        }
+        localStorage.setItem('theme', theme);
+    });
 
 
 });
@@ -632,13 +632,59 @@ toggleButton.addEventListener('click', () => {
 //    console.log(err);
 //}
 
+async function updateExtractText() {
+    for (const books of allBooks) {
+        for (const book of books) {
+            try {
+                const pdfUrl = book.pdfLink;
 
-//const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
-//$(insertDataToDbBtn).click(async function () {
-//    insertDataToDbBtn.disabled = true;
-//    await insertAllDataToDB();
-//    await insertAllConecctionTables();
-//});
+                // Check if pdfDownloadLink is a valid non-empty string
+                if (pdfUrl == "") {
+                    console.warn(`Skipping book "${book.title}" due to invalid PDF URL.`);
+                    continue; // Skip this book and move to the next one
+                }
+                console.log(`Processing book: ${book.title}, PDF URL: ${pdfUrl}`);
+
+                // Load the PDF document from the URL
+                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                const pdf = await loadingTask.promise;
+
+                let extractedText = "";
+
+                // Loop through all the pages
+                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                    const page = await pdf.getPage(pageNum);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    extractedText += pageText + "\n";
+                }
+
+                extractedText = extractedText.trim();
+
+                // Log extracted text
+                console.log(`Extracted text for book "${book.title}": `, extractedText);
+
+                // Update the database with the extracted text
+                // Uncomment and implement the function call if needed
+                // await updateDatabaseWithExtractedText(book.id, extractedText);
+
+            } catch (error) {
+                console.error(`Failed to process PDF for book "${book.title}": `, error);
+            }
+        }
+    }
+
+    insertDataToDbBtn.disabled = false; // Re-enable the button after processing
+}
+
+const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
+$(insertDataToDbBtn).click(async function () {
+    insertDataToDbBtn.disabled = true;
+    //await insertAllDataToDB();
+    //await insertAllConecctionTables();
+    await updateExtractText();
+
+});
 
 
 

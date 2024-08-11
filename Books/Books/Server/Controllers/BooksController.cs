@@ -130,12 +130,12 @@ namespace Books.Server.Controllers
         //}
 
         // PUT api/<BooksController>/5
-        [HttpPut("{id}")]
-        public IActionResult Put(string id, [FromBody] string extractText)
+        [HttpPut("UpdateExtarctText/{bookId}")]
+        public IActionResult UpdateExtractText(string bookId, [FromBody] string extractText)
         {
             try
             {
-                book.updateExtractText(id, extractText);
+                book.updateExtractText(bookId, extractText);
                 return Ok(new { message = "Extract text updated successfully." });
             }
             catch

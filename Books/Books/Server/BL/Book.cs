@@ -1,4 +1,5 @@
 ﻿using Books.Server.DAL;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Metrics;
 
 namespace Books.Server.BL;
@@ -221,6 +222,20 @@ public class Book
         catch
         {
             return false;
+        }
+    }
+
+    public void updateExtractText(string bookId, string extractedText)
+    {
+        DBservices db = new DBservices();
+        try
+        {
+             db.updateExtractText(bookId, extractedText);
+           
+        }
+        catch(Exception ex)
+        {
+            throw (ex);
         }
     }
 
