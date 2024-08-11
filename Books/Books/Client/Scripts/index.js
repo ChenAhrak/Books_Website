@@ -196,10 +196,10 @@ $(document).ready(function () {
 
                  // check if the query is in the title of the book with no case sensitivity
                  if (
-                    /* book.title.toLowerCase().includes(query.toLowerCase()) ||*/
-                 //   book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
-                 //    book.description.toLowerCase().includes(query.toLowerCase()) ||
-                     checkQueryInPDF(book.pdfLink, query))
+                     book.title.toLowerCase().includes(query.toLowerCase()) ||
+                    book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
+                     book.description.toLowerCase().includes(query.toLowerCase()) ||
+                 //    checkQueryInPDF(book.pdfLink, query))
                  {
                      filterdBooks.push(book);
                  }
@@ -211,28 +211,28 @@ $(document).ready(function () {
 
     }
 
-    async function checkQueryInPDF(pdfUrl, query) {
-        // Load the PDF document from the URL
-        const loadingTask = pdfjsLib.getDocument(pdfUrl);
-        const pdf = await loadingTask.promise;
+    //async function checkQueryInPDF(pdfUrl, query) {
+    //    // Load the PDF document from the URL
+    //    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+    //    const pdf = await loadingTask.promise;
 
-        let queryExists = false;
+    //    let queryExists = false;
 
-        // Loop through all the pages
-        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-            const page = await pdf.getPage(pageNum);
-            const textContent = await page.getTextContent();
-            const pageText = textContent.items.map(item => item.str).join(' ');
+    //    // Loop through all the pages
+    //    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    //        const page = await pdf.getPage(pageNum);
+    //        const textContent = await page.getTextContent();
+    //        const pageText = textContent.items.map(item => item.str).join(' ');
 
-            // Check if the query exists in the text
-            if (pageText.toLowerCase().includes(query.toLowerCase())) {
-                queryExists = true;
-                break;
-            }
-        }
+    //        // Check if the query exists in the text
+    //        if (pageText.toLowerCase().includes(query.toLowerCase())) {
+    //            queryExists = true;
+    //            break;
+    //        }
+    //    }
 
-        return queryExists;
-    }
+    //    return queryExists;
+    //}
 
   
     
@@ -632,59 +632,73 @@ $(document).ready(function () {
 //    console.log(err);
 //}
 
-async function updateExtractText() {
-    for (const books of allBooks) {
-        for (const book of books) {
-            try {
-                const pdfUrl = book.pdfLink;
+//async function updateExtractText() {
+//    for (const books of allBooks) {
+//        for (const book of books) {
+//            try {
+//                const pdfUrl = book.pdfLink;
 
-                // Check if pdfDownloadLink is a valid non-empty string
-                if (pdfUrl == "") {
-                    console.warn(`Skipping book "${book.title}" due to invalid PDF URL.`);
-                    continue; // Skip this book and move to the next one
-                }
-                console.log(`Processing book: ${book.title}, PDF URL: ${pdfUrl}`);
+//                // Check if pdfDownloadLink is a valid non-empty string
+//                if (pdfUrl == "") {
+//                    console.warn(`Skipping book "${book.title}" due to invalid PDF URL.`);
+//                    continue; // Skip this book and move to the next one
+//                }
+//                console.log(`Processing book: ${book.title}, PDF URL: ${pdfUrl}`);
 
-                // Load the PDF document from the URL
-                const loadingTask = pdfjsLib.getDocument(pdfUrl);
-                const pdf = await loadingTask.promise;
+//                // Load the PDF document from the URL
+//                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+//                const pdf = await loadingTask.promise;
 
-                let extractedText = "";
+//                let extractedText = "";
 
-                // Loop through all the pages
-                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                    const page = await pdf.getPage(pageNum);
-                    const textContent = await page.getTextContent();
-                    const pageText = textContent.items.map(item => item.str).join(' ');
-                    extractedText += pageText + "\n";
-                }
+//                // Loop through all the pages
+//                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+//                    const page = await pdf.getPage(pageNum);
+//                    const textContent = await page.getTextContent();
+//                    const pageText = textContent.items.map(item => item.str).join(' ');
+//                    extractedText += pageText + "\n";
+//                }
 
-                extractedText = extractedText.trim();
+//                extractedText = extractedText.trim();
 
-                // Log extracted text
-                console.log(`Extracted text for book "${book.title}": `, extractedText);
+//                // Log extracted text
+//                console.log(`Extracted text for book "${book.title}": `, extractedText);
 
-                // Update the database with the extracted text
-                // Uncomment and implement the function call if needed
-                // await updateDatabaseWithExtractedText(book.id, extractedText);
+//                // Update the database with the extracted text
+//                // Uncomment and implement the function call if needed
+//                // await updateDatabaseWithExtractedText(book.id, extractedText);
 
-            } catch (error) {
-                console.error(`Failed to process PDF for book "${book.title}": `, error);
-            }
-        }
-    }
+//            } catch (error) {
+//                console.error(`Failed to process PDF for book "${book.title}": `, error);
+//            }
+//        }
+//    }
 
-    insertDataToDbBtn.disabled = false; // Re-enable the button after processing
-}
+//    insertDataToDbBtn.disabled = false; // Re-enable the button after processing
+//}
 
-const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
-$(insertDataToDbBtn).click(async function () {
-    insertDataToDbBtn.disabled = true;
-    //await insertAllDataToDB();
-    //await insertAllConecctionTables();
-    await updateExtractText();
+//async function getContent(src) {
+//    const doc = await pdfjsLib.getDocument(src).promise;
+//    const page = await doc.getPage(1);
+//    return await page.getTextContent();
+//}
 
-});
+//async function getItems(src) {
+//    const content = await getContent(src);
+//    const textItems = content.items.map((item)=>{
+//        console.log(item.str);
+//    })
+//    return textItems;
+//}
+
+//const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
+//$(insertDataToDbBtn).click(async function () {
+//    insertDataToDbBtn.disabled = true;
+//    //await insertAllDataToDB();
+//    //await insertAllConecctionTables();
+//    await getContent("../Files/ChenAhrak_CV.pdf");
+
+//});
 
 
 
