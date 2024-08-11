@@ -4,7 +4,6 @@ namespace Books.Server.BL
 {
     public class UserBooks
     {
-        private int userBookID;
         private int userID;
         private string bookID;
         private string status;
@@ -16,14 +15,11 @@ namespace Books.Server.BL
 
         public UserBooks(int userBookID, int userID, string bookID, string status, DateTime dateAdded)
         {
-            this.userBookID = userBookID;
             this.userID = userID;
             this.bookID = bookID;
             this.status = status;
             this.dateAdded = dateAdded;
         }
-
-        public int UserBookID { get => userBookID; set => userBookID = value; }
         public int UserID { get => userID; set => userID = value; }
         public string BookID { get => bookID; set => bookID = value; }
         public string Status { get => status; set => status = value; }
@@ -72,12 +68,12 @@ namespace Books.Server.BL
             }
         }
         // ניהול רכישת ספר
-        public bool ManagePurchase(int buyerId, int sellerId, string bookId)
+        public bool TransferBook(int buyerId, int sellerId, string bookId)
         {
             DBservices db = new DBservices();
             try
             {
-                return db.ManagePurchase(buyerId, sellerId, bookId);
+                return db.TransferBook(buyerId, sellerId, bookId);
             }
             catch
             {

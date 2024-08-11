@@ -764,8 +764,45 @@ namespace Books.Server.DAL
 
             return cmd;
         }
+        public List<Book> GetTop5MostPurchasedBooks()
+        {
+            List<Book> books = new List<Book>();
 
-        
+            using (SqlConnection con = new SqlConnection("myProjDB"))
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_GetTop5MostPurchasedBooks", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Book book = new Book
+                                {
+                                    Id = reader["ID"].ToString(),
+                                    Title = reader["Title"].ToString(),
+                                    //PurchaseCount = reader["PurchaseCount"] as int? ?? 0
+                                };
+
+                                books.Add(book);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                        throw;
+                    }
+                }
+            }
+
+            return books;
+        }
+
         public List<Book> GetBooksByAuthor(int authorId)
         {
             SqlConnection con = null;
@@ -831,60 +868,7 @@ namespace Books.Server.DAL
         }
 
 
-        public List<Book> GetUserLibrary(int userId, string status)
-        {
-            SqlConnection con = null;
-            SqlCommand cmd = null;
-            List<Book> books = new List<Book>();
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-
-                // Create the command with the stored procedure and parameters
-                cmd = CreateCommandWithStoredProcedure("spGetUserLibrary", con,
-                    new SqlParameter("@UserID", userId),
-                    new SqlParameter("@Status", status));
-
-                con.Open(); // open the connection
-                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
-
-                while (reader.Read())
-                {
-                    Book book = new Book
-                    {
-                        Id = reader["BookID"].ToString(),
-                        Title = reader["Title"].ToString(),
-                        Subtitle = reader["Subtitle"].ToString(),
-                        Language = reader["Language"].ToString(),
-                        Publisher = reader["Publisher"].ToString(),
-                        PublishedDate = reader["PublishedDate"] as string,
-                        PageCount = reader["PageCount"] as int? ?? 0,
-                        PrintType = reader["PrintType"].ToString(),
-                        Price = reader["Price"] as double? ?? 0.0,
-                        //Status = reader["Status"].ToString(),
-                        //DateAdded = reader["DateAdded"] as DateTime?
-                    };
-
-                    books.Add(book);
-                }
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                Console.WriteLine($"Error: {ex.Message}");
-                throw; // rethrow the exception
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    con.Close(); // close the db connection
-                }
-            }
-
-            return books;
-        }
+       
 
         /// new procedure test
         public List<Object> getTitlesAndAuthors()
@@ -927,6 +911,55 @@ namespace Books.Server.DAL
             cmd.Parameters.AddRange(parameters);
             return cmd;
         }
+        public List<Book> GetUserLibrary(int userId, string status)
+        {
+            List<Book> books = new List<Book>();
+            using (SqlConnection con = connect("myProjDB")) // Create the connection using 'using'
+            using (SqlCommand cmd = new SqlCommand("SP_GetUserLibrary", con))
+            {
+                try
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    cmd.Parameters.AddWithValue("@Status", status);
+
+                    con.Open(); // Open the connection
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection)) // Use 'using'
+                    {
+                        while (reader.Read())
+                        {
+                            Book book = new Book
+                            {
+                                Id = reader["BookID"].ToString(),
+                                Title = reader["Title"].ToString(),
+                                Subtitle = reader["Subtitle"].ToString(),
+                                Language = reader["Language"].ToString(),
+                                Publisher = reader["Publisher"].ToString(),
+                                PublishedDate = reader.IsDBNull(reader.GetOrdinal("PublishedDate"))
+                                                ? null
+                                                : reader["PublishedDate"].ToString(),
+                                PageCount = reader["PageCount"] as int? ?? 0,
+                                PrintType = reader["PrintType"].ToString(),
+                                Price = reader["Price"] as double? ?? 0.0
+                            };
+
+                            books.Add(book);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log error
+                    Console.WriteLine($"Error: {ex.Message}");
+                    // Consider logging to a file or monitoring tool
+                    throw;
+                }
+            }
+
+            return books;
+        }
+
+
 
         public bool AddBookToLibrary(UserBooks userBook)
         {
@@ -938,7 +971,7 @@ namespace Books.Server.DAL
                 con = connect("myProjDB"); // יצירת החיבור לבסיס הנתונים
 
                 // יצירת פקודת SQL עם פרוצדורה
-                cmd = new SqlCommand("spAddBookToLibrary", con)
+                cmd = new SqlCommand("SP_AddBookToLibrary", con)
                 {
                     CommandType = CommandType.StoredProcedure,
                     CommandTimeout = 10
@@ -979,7 +1012,7 @@ namespace Books.Server.DAL
                 con = connect("myProjDB"); // יצירת החיבור לבסיס הנתונים
 
                 // יצירת פקודת SQL עם פרוצדורה
-                cmd = new SqlCommand("spUpdateBookStatus", con)
+                cmd = new SqlCommand("SP_UpdateBookStatus", con)
                 {
                     CommandType = CommandType.StoredProcedure,
                     CommandTimeout = 10
@@ -1009,7 +1042,7 @@ namespace Books.Server.DAL
                 }
             }
         }
-        public bool ManagePurchase(int buyerId, int sellerId, string bookId)
+        public bool TransferBook(int buyerId, int sellerId, string bookId)
         {
             SqlConnection con = null;
             SqlCommand cmd = null;
@@ -1019,7 +1052,7 @@ namespace Books.Server.DAL
                 con = connect("myProjDB"); // יצירת החיבור לבסיס הנתונים
 
                 // יצירת פקודת SQL עם פרוצדורה
-                cmd = new SqlCommand("spManagePurchase", con)
+                cmd = new SqlCommand("SP_TransferBook", con)
                 {
                     CommandType = CommandType.StoredProcedure,
                     CommandTimeout = 10

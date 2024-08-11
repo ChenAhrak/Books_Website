@@ -16,24 +16,39 @@ function renderBooks(sectionId, books) {
 
 // פונקציה להוספת ספר לספריה
 function addBookToLibrary(bookId) {
+    // Prompt the user for the status of the book
     var status = prompt('Enter status (e.g., want to read, read, purchased):');
     if (status) {
-        var data = JSON.stringify({ bookId: bookId, status: status });
-        ajaxCall('POST', '/api/addBookToLibrary', data,
+        // Create the data object based on user input
+        var data = JSON.stringify({
+            bookID: bookId,
+            status: status
+        });
+
+        // Call the AJAX function to send the POST request
+        ajaxCall('POST', '/api/UserBooks/add', data,
             function (response) {
+                // Handle successful response
                 alert('Book added to library successfully.');
-                updateLibrary();
+                updateLibrary(); // Refresh the library view
             },
             function (error) {
+                // Handle error response
                 console.log('Error adding book to library:', error);
             }
         );
     }
 }
 
+    }
+}
+
 // פונקציה לעדכון הספריה
-function updateLibrary() {
-    ajaxCall('GET', '/api/getLibrary', null,
+function updateLibrary(userID, status) {
+    // בנה את כתובת ה-API עם פרמטרים
+    var apiUrl = `/api/UserBooks/get?userID=${encodeURIComponent(userID)}&status=${encodeURIComponent(status)}`;
+
+    ajaxCall('GET', apiUrl, null,
         function (response) {
             updateBookLists(response);
         },
@@ -42,6 +57,15 @@ function updateLibrary() {
         }
     );
 }
+
+// קריאה ראשונית לעדכון הספריה עם פרמטרים לדוגמה
+$(document).ready(function () {
+    // שים כאן את מזהה המשתמש והסטטוס הרלוונטיים
+    var userID = 2; // לדוגמה
+    var status = 'read'; // לדוגמה
+    updateLibrary(userID, status);
+});
+
 
 // פונקציה לעדכון רשימות הספרים בדף
 function updateBookLists(library) {

@@ -57,10 +57,10 @@ namespace Books.Server.Controllers
         }
 
         // ניהול רכישת ספר
-        [HttpPost("manage-purchase")]
+        [HttpPost("Transfer-Book")]
         public IActionResult ManagePurchase([FromQuery] int buyerId, [FromQuery] int sellerId, [FromQuery] string bookId)
         {
-            var result = _userBooks.ManagePurchase(buyerId, sellerId, bookId);
+            var result = _userBooks.TransferBook(buyerId, sellerId, bookId);
             if (result)
             {
                 return Ok("Purchase processed successfully.");
