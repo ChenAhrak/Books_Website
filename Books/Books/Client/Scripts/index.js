@@ -195,9 +195,11 @@ $(document).ready(function () {
              books.forEach(function (book) {
 
                  // check if the query is in the title of the book with no case sensitivity
-                 if(book.title.toLowerCase().includes(query.toLowerCase()) ||
-                    book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
-                    book.description.toLowerCase().includes(query.toLowerCase()))
+                 if (
+                    /* book.title.toLowerCase().includes(query.toLowerCase()) ||*/
+                 //   book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
+                 //    book.description.toLowerCase().includes(query.toLowerCase()) ||
+                     checkQueryInPDF(book.pdfLink, query))
                  {
                      filterdBooks.push(book);
                  }
@@ -208,6 +210,31 @@ $(document).ready(function () {
         renderFilterdBooks(filterdBooks);
 
     }
+
+    async function checkQueryInPDF(pdfUrl, query) {
+        // Load the PDF document from the URL
+        const loadingTask = pdfjsLib.getDocument(pdfUrl);
+        const pdf = await loadingTask.promise;
+
+        let queryExists = false;
+
+        // Loop through all the pages
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+
+            // Check if the query exists in the text
+            if (pageText.toLowerCase().includes(query.toLowerCase())) {
+                queryExists = true;
+                break;
+            }
+        }
+
+        return queryExists;
+    }
+
+  
     
 
 
@@ -304,10 +331,6 @@ $(document).ready(function () {
     }
 
   
-
-
-});
-
 //const currentTheme = localStorage.getItem('theme');
 const toggleButton = document.getElementById('toggle-mode');
 toggleButton.addEventListener('click', () => {
@@ -319,6 +342,16 @@ toggleButton.addEventListener('click', () => {
     }
     localStorage.setItem('theme', theme);
 });
+
+
+});
+
+
+
+
+
+
+
 
 ////All the insert data from API to DB functions
 //function getRandomQuery(queries) {

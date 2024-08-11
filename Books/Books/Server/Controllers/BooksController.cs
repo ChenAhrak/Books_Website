@@ -131,10 +131,18 @@ namespace Books.Server.Controllers
 
         // PUT api/<BooksController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(string id, [FromBody] string extractText)
         {
+            try
+            {
+                book.updateExtractText(id, extractText);
+                return Ok(new { message = "Extract text updated successfully." });
+            }
+            catch
+            {
+                return NotFound(new { message = "Failed to update extract text" });
+            }
         }
-
         // DELETE api/<BooksController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
