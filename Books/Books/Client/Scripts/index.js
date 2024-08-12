@@ -44,7 +44,7 @@ $(document).ready(function () {
             bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
             var adddBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
 
-            
+
 
             bookElement.append(adddBookBtn);
             tableHeader.append(bookElement);
@@ -73,92 +73,123 @@ $(document).ready(function () {
     }
 
     function renderAllEBooksDisplay(ebooks) {
-    var ebooksContainer = $('#ebooks-container');
-    var table = $('<table>');
-    var tableHeader = $('<tr>');
+        var ebooksContainer = $('#ebooks-container');
+        var table = $('<table>');
+        var tableHeader = $('<tr>');
 
-    ebooks.forEach(ebook => {
-        var ebookElement = $('<td>');
-        ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
-        ebookElement.append('<h3>' + ebook.title + '</h3>');
-        ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
-        ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
-        
-        // Add "Add to Wishlist" button
-        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
-        ebookElement.append(addToWishlistBtn);
-        
-        // Add "Add Book" button
-        var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Add Book</button>');
-        ebookElement.append(addEBookBtn);
+        ebooks.forEach(ebook => {
+            var ebookElement = $('<td>');
+            ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
+            ebookElement.append('<h3>' + ebook.title + '</h3>');
+            ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
+            ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
 
-        tableHeader.append(ebookElement);
+            // Add "Add to Wishlist" button
+            var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
+            ebookElement.append(addToWishlistBtn);
 
-        addBookClick(addEBookBtn);
-        addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
-    });
+            // Add "Add Book" button
+            var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Add Book</button>');
+            ebookElement.append(addEBookBtn);
 
-    table.append(tableHeader);
-    ebooksContainer.append(table);
-}
+            tableHeader.append(ebookElement);
 
-function isLoggedIn() {
-    return sessionStorage.getItem('user') !== null;
-}
+            addBookClick(addEBookBtn);
+            addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+        });
 
-// Event listener for add book button
-function addBookClick(addBookBtn) {
-    addBookBtn.on('click', function (event) {
-        if (event.target.tagName.toLowerCase() === 'button') {
-            const buttonId = event.target.id;
-            console.log("Button clicked with ID:", buttonId);
+        table.append(tableHeader);
+        ebooksContainer.append(table);
+    }
 
-            if (isLoggedIn()) {
-                const user = JSON.parse(sessionStorage.getItem('user'));
-                addBook(buttonId, user.id);
-            } else {
-                console.log("User not logged in. Redirecting to login.");
-                alert("Please login or register to add book.");
-                window.location.href = "login.html";
+    function isLoggedIn() {
+        return sessionStorage.getItem('user') !== null;
+    }
+
+    // Event listener for add book button
+    function addBookClick(addBookBtn) {
+        addBookBtn.on('click', function (event) {
+            if (event.target.tagName.toLowerCase() === 'button') {
+                const buttonId = event.target.id;
+                console.log("Button clicked with ID:", buttonId);
+
+                if (isLoggedIn()) {
+                    const user = JSON.parse(sessionStorage.getItem('user'));
+                    addBook(buttonId, user.id);
+                } else {
+                    console.log("User not logged in. Redirecting to login.");
+                    alert("Please login or register to add book.");
+                    window.location.href = "login.html";
+                }
             }
-        }
-    });
-}
+        });
+    }
 
-// Function to handle adding book to wishlist
-function addToWishlist(bookId, userId) {
-    ajaxCall("POST", `${booksApiURL}/addBookToWishlist/${userId}`, JSON.stringify({ BookId: bookId }), postSCBF, postECBF);
-}
+    // Function to add a book to the wishlist
+    function addBookToWishlist(userId, bookId) {
+        const api = `/addBookToWishlist/${userId}`;
+        const data = JSON.stringify({ id: bookId });
 
-function postSCBF(result) {
-    alert("Book added to wishlist successfully!");
-    console.log(result);
-}
+        ajaxCall(
+            'POST',
+            api,
+            data,
+            function (response) {
+                console.log("Success:", response);
+                // Update button state to indicate the book has been added to the wishlist
+                $(`button[data-book-id="${bookId}"]`).addClass('filled').text('❤️');
+            },
+            function (error) {
+                console.error("Error:", error);
+                alert("An error occurred while adding the book to the wishlist.");
+            }
+        );
+    }
 
-function postECBF(err) {
-    alert("Error adding book to wishlist.");
-    console.log(err);
-}
+    // Function to add a book to the user's library with a status of 'read'
+    function addBookToLibrary(userId, bookId) {
+        const api = `/addBookToLibrary/${userId}`;
+        const data = JSON.stringify({ id: bookId, status: 'read' });
 
-// Event listener for wishlist button
-function addWishlistClick(wishlistBtn) {
-    wishlistBtn.on('click', function () {
-        const bookId = $(this).data('book-id');
-        const userId = getUserId(); // Implement this function to get the current user ID
+        ajaxCall(
+            'POST',
+            api,
+            data,
+            function (response) {
+                console.log("Success:", response);
+                // Optionally update the button state or display a message
+                $(`button#${bookId}`).text('Added');
+            },
+            function (error) {
+                console.error("Error:", error);
+                alert("An error occurred while adding the book to the library.");
+            }
+        );
+    }
 
-        // Add book to wishlist
-        addToWishlist(bookId, userId);
+    // Add event listener for wishlist button click
+    function addWishlistClick(wishlistBtn) {
+        wishlistBtn.on('click', function () {
+            const bookId = $(this).data('book-id');
+            const userId = getUserId(); // Fetch the current user ID
 
-        // Toggle button appearance
-        $(this).toggleClass('filled');
-    });
-}
+            if (userId) {
+                // Add book to wishlist
+                addBookToWishlist(userId, bookId);
 
-// Ensure you implement getUserId() to fetch the current user's ID
-function getUserId() {
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    return user ? user.id : null;
-}
+                // Optionally toggle button appearance based on success
+                $(this).toggleClass('filled');
+            } else {
+                alert("User not logged in.");
+            }
+        });
+    }
+
+    // Implement getUserId() to fetch the current user's ID from sessionStorage
+    function getUserId() {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        return user ? user.id : null;
+    }
 
 
     //// ****Function to add a book to user's list not working****
@@ -649,11 +680,3 @@ toggleButton.addEventListener('click', () => {
 //    await insertAllDataToDB();
 //    await insertAllConecctionTables();
 //});
-
-
-
-
-
-
-
-

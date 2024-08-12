@@ -26,7 +26,7 @@ namespace Books.Server.BL
         public DateTime DateAdded { get => dateAdded; set => dateAdded = value; }
 
         // שליפת ספרים מספריית המשתמש לפי סטטוס
-        public List<Book> GetUserLibrary(int userId, string status)
+        public List<dynamic> GetUserLibrary(int userId, string status)
         {
             DBservices db = new DBservices();
             try
@@ -38,6 +38,7 @@ namespace Books.Server.BL
                 return null;
             }
         }
+
 
         // הוספת ספר לספריית המשתמש
         public bool AddBookToLibrary(UserBooks userBook)

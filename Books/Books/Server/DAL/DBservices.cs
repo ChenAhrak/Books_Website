@@ -911,24 +911,25 @@ namespace Books.Server.DAL
             cmd.Parameters.AddRange(parameters);
             return cmd;
         }
-        public List<Book> GetUserLibrary(int userId, string status)
+        public List<dynamic> GetUserLibrary(int userId, string status)
         {
-            List<Book> books = new List<Book>();
-            using (SqlConnection con = connect("myProjDB")) // Create the connection using 'using'
-            using (SqlCommand cmd = new SqlCommand("SP_GetUserLibrary", con))
+            List<dynamic> books = new List<dynamic>();
+
+            try
             {
-                try
+                using (SqlConnection con = connect("myProjDB"))
+                using (SqlCommand cmd = new SqlCommand("SP_GetUserLibrary", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserID", userId);
                     cmd.Parameters.AddWithValue("@Status", status);
 
-                    con.Open(); // Open the connection
-                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection)) // Use 'using'
+                    
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            Book book = new Book
+                            var book = new
                             {
                                 Id = reader["BookID"].ToString(),
                                 Title = reader["Title"].ToString(),
@@ -940,24 +941,26 @@ namespace Books.Server.DAL
                                                 : reader["PublishedDate"].ToString(),
                                 PageCount = reader["PageCount"] as int? ?? 0,
                                 PrintType = reader["PrintType"].ToString(),
-                                Price = reader["Price"] as double? ?? 0.0
+                                Price = reader["Price"] as double? ?? 0.0,
+                                Status = reader["Status"].ToString()
                             };
 
                             books.Add(book);
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    // Log error
-                    Console.WriteLine($"Error: {ex.Message}");
-                    // Consider logging to a file or monitoring tool
-                    throw;
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
             }
 
             return books;
         }
+
+
+
 
 
         public bool AddBookToLibrary(UserBooks userBook)
@@ -1000,6 +1003,7 @@ namespace Books.Server.DAL
                 Console.WriteLine($"Error: {ex.Message}");
                 return false;
             }
+            
         }
 
 
