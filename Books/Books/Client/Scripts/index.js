@@ -198,7 +198,7 @@ $(document).ready(function () {
                  if (
                      book.title.toLowerCase().includes(query.toLowerCase()) ||
                     book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
-                     book.description.toLowerCase().includes(query.toLowerCase()) ||
+                     book.description.toLowerCase().includes(query.toLowerCase())) /*||*/
                  //    checkQueryInPDF(book.pdfLink, query))
                  {
                      filterdBooks.push(book);

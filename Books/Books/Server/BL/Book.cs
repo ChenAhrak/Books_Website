@@ -225,19 +225,6 @@ public class Book
         }
     }
 
-    //public void updateExtractText(string bookId, string extractedText)
-    //{
-    //    DBservices db = new DBservices();
-    //    try
-    //    {
-    //         db.updateExtractText(bookId, extractedText);
-           
-    //    }
-    //    catch(Exception ex)
-    //    {
-    //        throw (ex);
-    //    }
-    //}
 
     //    public  bool addBookToUser(int userId, string bookId)
     //    {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Books.Server.DAL;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 
@@ -73,6 +74,7 @@ namespace Books.Server.BL
 
             byte[] pdfBytes = await DownloadPdfAsync(pdfDownloadLink);
             string extractedText = ExtractTextFromPdf(pdfBytes);
+            //db.InsertBookText(bookId, 1, extractedText);
 
             // Assuming you want to store the extracted text page by page
             // If the PDF extraction is one large block, you can modify this part
@@ -81,6 +83,11 @@ namespace Books.Server.BL
             {
                 for (int page = 1; page <= reader.NumberOfPages; page++)
                 {
+                    if (reader.GetPageSize(page).Width == 0 || reader.GetPageSize(page).Height == 0)
+                    {
+                        continue;
+                    }
+
                     string pageText = PdfTextExtractor.GetTextFromPage(reader, page);
                     db.InsertBookText(bookId, page, pageText);
                 }
