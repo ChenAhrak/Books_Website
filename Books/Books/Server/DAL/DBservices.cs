@@ -1022,9 +1022,7 @@ namespace Books.Server.DAL
             }
         }
 
-
-
-        public int updateExtractText(string bookId, string extractedText)
+        public int InsertBookText(string bookId, int pageNumber, string extractedText)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -1035,10 +1033,10 @@ namespace Books.Server.DAL
             }
             catch (Exception ex)
             {
-                // write to log
-                throw (ex);
+                throw ex;
             }
-            cmd = CreateCommandWithStoredProcedureUpdateExtractText("SP_UpdateExtractText", con, bookId, extractedText);             // create the command
+
+            cmd = CreateCommandWithStoredProcedureInsertBookText("SP_InsertBookText", con, bookId, pageNumber, extractedText); // create the command
 
             try
             {
@@ -1047,34 +1045,29 @@ namespace Books.Server.DAL
             }
             catch (Exception ex)
             {
-                // write to log
-                throw (ex);
+                throw ex;
             }
-
             finally
             {
                 if (con != null)
                 {
-                    // close the db connection
                     con.Close();
                 }
             }
-
         }
 
-        private SqlCommand CreateCommandWithStoredProcedureUpdateExtractText(String spName, SqlConnection con, string bookId, string extractedText)
+        private SqlCommand CreateCommandWithStoredProcedureInsertBookText(string spName, SqlConnection con, string bookId, int pageNumber, string extractedText)
         {
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = con,
+                CommandText = spName,
+                CommandTimeout = 10,
+                CommandType = System.Data.CommandType.StoredProcedure
+            };
 
             cmd.Parameters.AddWithValue("@BookId", bookId);
+            cmd.Parameters.AddWithValue("@PageNumber", pageNumber);
             cmd.Parameters.AddWithValue("@ExtractedText", extractedText);
 
             return cmd;

@@ -130,19 +130,19 @@ namespace Books.Server.Controllers
         //}
 
         // PUT api/<BooksController>/5
-        [HttpPut("UpdateExtarctText/{bookId}")]
-        public IActionResult UpdateExtractText(string bookId, [FromBody] string extractText)
-        {
-            try
-            {
-                book.updateExtractText(bookId, extractText);
-                return Ok(new { message = "Extract text updated successfully." });
-            }
-            catch
-            {
-                return NotFound(new { message = "Failed to update extract text" });
-            }
-        }
+        //[HttpPut("UpdateExtarctText/{bookId}")]
+        //public IActionResult UpdateExtractText(string bookId, [FromBody] string extractText)
+        //{
+        //    try
+        //    {
+        //        book.updateExtractText(bookId, extractText);
+        //        return Ok(new { message = "Extract text updated successfully." });
+        //    }
+        //    catch
+        //    {
+        //        return NotFound(new { message = "Failed to update extract text" });
+        //    }
+        //}
         // DELETE api/<BooksController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
