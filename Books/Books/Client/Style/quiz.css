@@ -26,6 +26,7 @@ h1 {
 }
 
 #quiz {
+    width:fit-content;
     margin: 25px;
     position: absolute;
     align-content:center;
@@ -45,6 +46,24 @@ h1 {
 #nextQuestion {
     position: absolute;
     top: 500px; /* Distance from the top */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#finishQuiz {
+    width: fit-content;
+    margin: 25px;
+    position: absolute;
+    align-content: center;
+    align-items: center;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+#finishGame {
+    position: absolute;
+    top: 700px; /* Distance from the top */
     left: 50%;
     transform: translateX(-50%);
 }
@@ -69,7 +88,6 @@ img {
     left: 50%;
     transform: translateX(-50%);
     margin-top: 25px;
-    margin-left: 25px;
     width: 60px;
     height: 60px;
 }

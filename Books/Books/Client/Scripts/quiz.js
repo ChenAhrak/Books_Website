@@ -194,10 +194,11 @@ $(document).ready(async function () {
         startBtn.addEventListener('click', (event) => {
             $('#startQuiz').hide();
             $('#quiz').show();
+            $('#finishQuiz').show();
         });
     }
     $('#quiz').hide();
-
+    $('#finishQuiz').hide();
     //nextQuestion = document.getElementById('nextQuestion');
 
 
