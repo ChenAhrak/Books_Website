@@ -9,6 +9,7 @@ using Books.Server.BL;
 using System.Data.SqlClient;
 using System.Xml.Linq;
 using System.Reflection.PortableExecutable;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Books.Server.DAL
 {
@@ -925,6 +926,76 @@ namespace Books.Server.DAL
             };
 
             cmd.Parameters.AddRange(parameters);
+            return cmd;
+        }
+
+        public void updateUserHighScore(int id, int score)
+        {
+
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureUpdateUserHighScore("SP_UpdateUserHighScore", con, id, score);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureUpdateUserHighScore(string spName, SqlConnection con, int id, int score, params SqlParameter[] parameters)
+        {
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = con,
+                CommandText = spName,
+                CommandTimeout = 10,
+                CommandType = CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddWithValue("@userId",id);
+            cmd.Parameters.AddWithValue("@NewHighScore", score);
+            return cmd;
+        }
+
+        public int getUserHighScore(int id)
+        {
+            int highScore = 0;
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureGetUserHighScore("SP_GetUserHighScore", con, id);
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            
+            while (reader.Read())
+            {
+                highScore = (int)reader["highScore"];
+            }
+            return highScore;
+
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureGetUserHighScore(string spName, SqlConnection con, int id, params SqlParameter[] parameters)
+        {
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = con,
+                CommandText = spName,
+                CommandTimeout = 10,
+                CommandType = CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddWithValue("@userId", id);
             return cmd;
         }
 

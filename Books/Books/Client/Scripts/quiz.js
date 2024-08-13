@@ -2,6 +2,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiURL = "https://localhost:7195/GetApiKey";
+const userHighScoreApiURL = "https://localhost:7195/api/Users/UpdateHighScore";
 const booksApiURL = "https://localhost:7195/api/Books";
 const correctImg = 'https://upload.wikimedia.org/wikipedia/commons/7/73/Flat_tick_icon.svg';
 const incorrectImg = 'https://upload.wikimedia.org/wikipedia/commons/6/69/X_Icon_or_Close_Icon.svg';
@@ -12,6 +13,8 @@ var randomNum;
 var gameScore = 0;
 var highScore;
 var user = JSON.parse(sessionStorage.getItem('user'));
+var playerScore = document.getElementById("gameScore");
+var isQuizChangeListenerAttached = false;
 
 $('#gameScore').hide();
 $('#finishQuiz').hide();
@@ -19,13 +22,25 @@ $('#finishQuiz').hide();
 
 $(document).ready(async function () {
 
-    
-
     if (!user) {
         alert("You must login to play");
         window.location.href = "login.html";
     }
 
+    function getUserHighScore() {
+        ajaxCall("GET", `${userHighScoreApiURL}/${user.id}`, `${gameScore}`, getUserHighScoreSCB, getUserHighScoreECB);
+    }
+
+    function getUserHighScoreSCB(result) {
+        highScore = result;
+        console.log(result);
+    }
+
+    function getUserHighScoreECB(err) {
+        console.log(err);
+    }
+
+    getUserHighScore();
 
     function getTitlesAndAuthors() {
         ajaxCall("GET", `${booksApiURL}/GetTitlesAndAuthors`, "", getTitlesAndAuthorsSCB, getTitlesAndAuthorsECB);
@@ -42,12 +57,6 @@ $(document).ready(async function () {
     function getTitlesAndAuthorsECB(err) {
         console.log(err);
     }
-
-    //function getRandomIndex(object) {
-    //    const length = Object.keys(object).length;
-    //    randomNum = Math.floor(Math.random() * length)
-    //    return randomNum;
-    //}
     
     getTitlesAndAuthors();
 
@@ -219,27 +228,31 @@ $(document).ready(async function () {
 
         run();
         var startBtn = document.getElementById("startGame");
-        var playerScore = document.getElementById("gameScore");
         playerScore.innerText = `Player Score: ${gameScore}`;
 
-        quiz.addEventListener('change', (event) => {
-            if (event.target.type === 'radio') {
-                const selectedAnswer = event.target.value;
-                const selection = event.target.parentElement;
-                revealAnswer(generatedData.correctAnswer, selectedAnswer, generatedData.explanation, selection);
-                const radioButtons = document.querySelectorAll('input[type="radio"]');
-                radioButtons.forEach(radioButton => {
-                    if (!radioButton.checked) {
-                        radioButton.disabled = true;
-                    }
-                });
-            }
-        });
+        if (!isQuizChangeListenerAttached) {
+            quiz.addEventListener('change', (event) => {
+                if (event.target.type === 'radio') {
+                    const selectedAnswer = event.target.value;
+                    const selection = event.target.parentElement;
+                    revealAnswer(generatedData.correctAnswer, selectedAnswer, generatedData.explanation, selection);
+                    const radioButtons = document.querySelectorAll('input[type="radio"]');
+                    radioButtons.forEach(radioButton => {
+                        if (!radioButton.checked) {
+                            radioButton.disabled = true;
+                        }
+                    });
+                }
+            });
+            isQuizChangeListenerAttached = true; // Set the flag to true after attaching the event listener
+        }
+
         startBtn.addEventListener('click', (event) => {
             $('#startGame').hide();
             $('#gameScore').show();
             $('#quiz').show();
             $('#finishQuiz').show();
+            gameScore = 0;
         });
     }
     $('#quiz').hide();
@@ -264,7 +277,8 @@ function revealAnswer(answer, selectedAnswer, explanation, selection) {
         gameScore += 1;
         selection.classList.add('correctAnswer');
         console.log("Correct, +1 point awarded");
-        increaseScore(); /// to be implemented
+        playerScore.innerText = `Player Score: ${gameScore}`;
+        //increaseScore(); /// to be implemented
     } else {
         image = incorrectImg;
         selection.classList.add('incorrectAnswer');
@@ -298,6 +312,7 @@ finishGameBtn.addEventListener('click', (event) => {
     $('#quiz').hide();
     $('#finishQuiz').hide();
     updateUserHighScore(); // to be implemented
+    console.log("high score:" + highScore);
     // also add modal with results of the game!
 });
 
@@ -305,8 +320,20 @@ finishGameBtn.addEventListener('click', (event) => {
 // not yet implemented
 function updateUserHighScore() {
     if (highScore < gameScore) {
-
+        sendUserHighScore();
     }
+}
+
+function sendUserHighScore() {
+    ajaxCall("PUT", `${userHighScoreApiURL}/${user.id}`, `${gameScore}`, sendUserHighScoreSCB, sendUserHighScoreECB);
+}
+
+function sendUserHighScoreSCB(result) {
+    console.log(result);
+}
+
+function sendUserHighScoreECB(err) {
+    console.log(err);
 }
 
 function createQuiz(question, options) {
