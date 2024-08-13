@@ -7,20 +7,27 @@
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
             crossorigin="anonymous"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
-
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="../Style/admin.css">
 </head>
 <body>
     <nav>
-        <button id="loginBtn">Log in</button>
-        <button id="logoutBtn">Log out</button>
-        <button id="registerBtn">Sign up</button>
+        <button id="homeBtn">Home</button>
         <button id="authorsBtn">Authors</button>
         <button id="myBooksBtn">My Books</button>
-        <button id="adminBtn">Admin</button>
     </nav>
-    <h1>Admin</h1>
-
+    <h1>Admin panel</h1>
+    <form id="dataTableForm">
+        <table id="usersDataTable" class="display">
+            <thead>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </form>
     <footer>
         <p>&copy; 2024 PLC. All rights reserved.</p>
     </footer>

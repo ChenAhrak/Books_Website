@@ -41,5 +41,23 @@ namespace Books.Server.Controllers
             }
             return null;
         }
+
+        // PUT api/<UsersController>/5
+        [HttpPut("UpdateHighScore/{id}")]
+        public void Put(int id, [FromBody] int score)
+        {
+            DBservices db = new DBservices();
+            db.updateUserHighScore(id, score);
+        }
+
+        // GET api/<UsersController>/5
+        [HttpGet("UpdateHighScore/{id}")]
+        public int GET(int id)
+        {
+            int highScore;
+            DBservices db = new DBservices();
+            highScore = db.getUserHighScore(id);
+            return highScore;
+        }
     }
 }
