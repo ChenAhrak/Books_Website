@@ -764,19 +764,19 @@ namespace Books.Server.DAL
 
             return cmd;
         }
+        //Top 5 Most Purchased Books
         public List<Book> GetTop5MostPurchasedBooks()
         {
             List<Book> books = new List<Book>();
 
-            using (SqlConnection con = new SqlConnection("myProjDB"))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand("SP_GetTop5MostPurchasedBooks", con))
+                using (SqlConnection con = connect("myProjDB"))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    try
+                    using (SqlCommand cmd = new SqlCommand("SP_GetTop5MostPurchasedBooks", con))
                     {
-                        con.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
+
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -792,17 +792,17 @@ namespace Books.Server.DAL
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error: {ex.Message}");
-                        throw;
-                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
             }
 
             return books;
         }
-
+        //
         public List<Book> GetBooksByAuthor(int authorId)
         {
             SqlConnection con = null;
@@ -813,8 +813,6 @@ namespace Books.Server.DAL
             {
                 con = connect("myProjDB"); // create the connection
                 cmd = CreateCommandWithStoredProcedureGetBooksByAuthor("SP_GetBooksByAuthor", con, authorId); // create the command
-
-                con.Open(); // open the connection
                 SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
 
                 while (reader.Read())
@@ -958,11 +956,6 @@ namespace Books.Server.DAL
 
             return books;
         }
-
-
-
-
-
         public bool AddBookToLibrary(UserBooks userBook)
         {
             try
@@ -1047,46 +1040,90 @@ namespace Books.Server.DAL
                 }
             }
         }
-        public bool TransferBook(int buyerId, int sellerId, string bookId)
+        //PurchaseRequest
+        public bool AddBookPurchaseRequest(int buyerId, int sellerId, string bookId)
         {
-            SqlConnection con = null;
-            SqlCommand cmd = null;
-
             try
             {
-                con = connect("myProjDB"); // יצירת החיבור לבסיס הנתונים
-
-                // יצירת פקודת SQL עם פרוצדורה
-                cmd = new SqlCommand("SP_TransferBook", con)
+                using (SqlConnection con = connect("myProjDB"))
                 {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = 10
-                };
+                    using (SqlCommand cmd = new SqlCommand("SP_AddBookPurchaseRequest", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 10;
 
-                // הוספת פרמטרים לפקודת SQL
-                cmd.Parameters.AddWithValue("@BuyerID", buyerId);
-                cmd.Parameters.AddWithValue("@SellerID", sellerId);
-                cmd.Parameters.AddWithValue("@BookID", bookId);
+                        // הוספת פרמטרים לפקודת SQL
+                        cmd.Parameters.AddWithValue("@BuyerID", buyerId);
+                        cmd.Parameters.AddWithValue("@SellerID", sellerId);
+                        cmd.Parameters.AddWithValue("@BookID", bookId);
 
-                // הרצת הפקודה
-                cmd.ExecuteNonQuery();
-
+                        cmd.ExecuteNonQuery();
+                    }
+                } // SqlConnection סוגר אוטומטית את החיבור
                 return true;
             }
             catch (Exception ex)
             {
-                // טיפול בשגיאות
                 Console.WriteLine($"Error: {ex.Message}");
                 return false;
             }
-            finally
+        }
+        public bool UpdateBookPurchaseRequestStatus(int requestId, string approvalStatus, DateTime approvalDate)
+        {
+            try
             {
-                if (con != null)
+                using (SqlConnection con = connect("myProjDB"))
                 {
-                    con.Close(); // סגירת החיבור לבסיס הנתונים
-                }
+                    using (SqlCommand cmd = new SqlCommand("SP_UpdateBookPurchaseRequestStatus", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 10;
+
+                        // Adding parameters to the SQL command
+                        cmd.Parameters.AddWithValue("@RequestID", requestId);
+                        cmd.Parameters.AddWithValue("@ApprovalStatus", approvalStatus);
+                        cmd.Parameters.AddWithValue("@ApprovalDate", approvalDate);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                } // SqlConnection automatically closes the connection
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
             }
         }
+
+        public bool TransferBook(int buyerId, int sellerId, string bookId)
+        {
+            try
+            {
+                using (SqlConnection con = connect("myProjDB"))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SP_TransferBook", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 10;
+
+                        // הוספת פרמטרים לפקודת SQL
+                        cmd.Parameters.AddWithValue("@BuyerID", buyerId);
+                        cmd.Parameters.AddWithValue("@SellerID", sellerId);
+                        cmd.Parameters.AddWithValue("@BookID", bookId);
+
+                        cmd.ExecuteNonQuery();
+                    } 
+                } // SqlConnection סוגר אוטומטית את החיבור
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
+        }
+
 
 
     }

@@ -68,6 +68,32 @@ namespace Books.Server.BL
                 return false;
             }
         }
+        // הוספת בקשת רכישת ספר
+        public bool AddBookPurchaseRequest(int buyerId, int sellerId, string bookId)
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.AddBookPurchaseRequest(buyerId, sellerId, bookId);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        // Function to update the status of a book purchase request
+        public bool UpdateBookPurchaseRequestStatus(int requestId, string approvalStatus, DateTime approvalDate)
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.UpdateBookPurchaseRequestStatus(requestId, approvalStatus, approvalDate);
+            }
+            catch
+            {
+                return false;
+            }
+        }
         // ניהול רכישת ספר
         public bool TransferBook(int buyerId, int sellerId, string bookId)
         {

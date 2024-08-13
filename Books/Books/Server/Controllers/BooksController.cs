@@ -132,6 +132,25 @@ namespace Books.Server.Controllers
             }
 
         }
+        //Top 5 Most Purchased Books
+        [HttpGet("GetTop5MostPurchasedBooks")]
+        public ActionResult<List<Book>> GetTop5MostPurchasedBooks()
+        {
+            try
+            {
+                var topBooks = book.GetTop5MostPurchasedBooks();
+                if (topBooks == null || !topBooks.Any())
+                {
+                    return NotFound(new { message = "No books found" });
+                }
+                return Ok(topBooks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
         [HttpPost("addBookToUser/{userId}")]
         //public IActionResult AddBookToUser(int userId, [FromBody] string bookId)
         //{
