@@ -15,7 +15,7 @@ namespace Books.Server.Controllers
         {
             try
             {
-               return author.ReadAllAuthors();
+                return author.ReadAllAuthors();
 
             }
             catch (Exception ex)
@@ -50,9 +50,23 @@ namespace Books.Server.Controllers
             {
                 return NotFound(new { message = "Authors erorr" });
             }
+        }
+        // Get Books by Author
+        // GET api/<AuthorsController>/5/Books
+        [HttpGet("GetBooksByAuthor{id}/Books")]
+        public IActionResult GetBooksByAuthor(int id)
+        {
+            try
+            {
+                Author author = new Author { Id = id };
+                var books = author.GetBooksByAuthor();
+                return Ok(books);
             }
-
-
+            catch (Exception ex)
+            {
+                return NotFound(new { message = $"Error: {ex.Message}" });
+            }
+        }
         // PUT api/<AuthorsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

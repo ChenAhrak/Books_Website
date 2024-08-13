@@ -1,39 +1,55 @@
-﻿// פונקציה לרנדר ספרים בחלקים
-function renderBooks(sectionId, books) {
-    const listElement = document.getElementById(sectionId);
+﻿function fetchBooks(status) {
+    // הגדרת פרמטרים ל-ajaxCall
+    const apiEndpoint = `api/UserBooks/get?status=${encodeURIComponent(status)}`;
+
+    // קריאה לפונקציה ajaxCall
+    ajaxCall('GET', apiEndpoint, null,
+        (books) => {
+            console.log('Books fetched successfully:', books);
+            displayBooks(books);
+        },
+        (error) => {
+            console.error('Error fetching books:', error);
+        }
+    );
+}
+
+// Step 2: Display the books to the user
+function displayBooks(books) {
+    const bookListElement = document.getElementById('bookList');
+    bookListElement.innerHTML = ''; // Clear the list before adding new items
+
     books.forEach(book => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            ${book.title}
-            <div class="actions">
-                <button onclick="changeStatus('${book.id}', 'read')">Mark as Read</button>
-                <button onclick="purchaseBook('${book.id}')">Purchase</button>
-            </div>
+        const bookItem = document.createElement('div');
+        bookItem.className = 'book-item';
+        bookItem.innerHTML = `
+            <span>${book.title} by ${book.author} (Owner: ${book.owner})</span>
+            <button onclick="requestBookPurchase(${book.id}, ${book.ownerId})">Request Purchase</button>
         `;
-        listElement.appendChild(li);
+        bookListElement.appendChild(bookItem);
     });
 }
 
-// פונקציה להוספת ספר לספריה
-function addBookToLibrary(bookId) {
-    var status = prompt('Enter status (e.g., want to read, read, purchased):');
-    if (status) {
-        var data = JSON.stringify({ bookId: bookId, status: status });
-        ajaxCall('POST', '/api/addBookToLibrary', data,
-            function (response) {
-                alert('Book added to library successfully.');
-                updateLibrary();
-            },
-            function (error) {
-                console.log('Error adding book to library:', error);
-            }
-        );
-    }
-}
+// פונקציה להוספת ספר לרשימת הקריאה
+function addBookToRead(userID, book) {
+    var apiUrl = `/api/UserBooks/addBookToRead/${encodeURIComponent(userID)}`;
 
+    ajaxCall('POST', apiUrl, JSON.stringify(book),
+        function (response) {
+            console.log('Book added to read list successfully:', response);
+            updateLibrary(userID, 'all'); // עדכן את רשימות הספרים לאחר הוספת הספר
+        },
+        function (error) {
+            console.log('Error adding book to read list:', error);
+        }
+    );
+}
 // פונקציה לעדכון הספריה
-function updateLibrary() {
-    ajaxCall('GET', '/api/getLibrary', null,
+function updateLibrary(userID, status) {
+    // בנה את כתובת ה-API עם פרמטרים
+    var apiUrl = `/api/UserBooks/get?userID=${encodeURIComponent(userID)}&status=${encodeURIComponent(status)}`;
+
+    ajaxCall('GET', apiUrl, null,
         function (response) {
             updateBookLists(response);
         },
@@ -43,74 +59,3 @@ function updateLibrary() {
     );
 }
 
-// פונקציה לעדכון רשימות הספרים בדף
-function updateBookLists(library) {
-    $('#wantToReadList').empty();
-    $('#readList').empty();
-    $('#purchasedList').empty();
-
-    library.wantToRead.forEach(function (book) {
-        renderBooks('wantToReadList', [book]);
-    });
-
-    library.read.forEach(function (book) {
-        renderBooks('readList', [book]);
-    });
-
-    library.purchased.forEach(function (book) {
-        renderBooks('purchasedList', [book]);
-    });
-}
-
-// פונקציה לחיפוש ספרים
-function searchBooks() {
-    var searchQuery = $('#searchInput').val();
-    if (searchQuery) {
-        ajaxCall('GET', '/api/searchBooks?query=' + encodeURIComponent(searchQuery), null,
-            function (response) {
-                displaySearchResults(response.books);
-            },
-            function (error) {
-                console.log('Error searching books:', error);
-            }
-        );
-    } else {
-        alert('Please enter a search query.');
-    }
-}
-
-// פונקציה להצגת תוצאות חיפוש
-function displaySearchResults(books) {
-    var searchResultsList = $('#searchResults');
-    searchResultsList.empty();
-    books.forEach(function (book) {
-        var listItem = $('<li></li>')
-            .text(book.title)
-            .append($('<button></button>')
-                .text('Add to Library')
-                .click(function () {
-                    addBookToLibrary(book.id);
-                })
-            );
-        searchResultsList.append(listItem);
-    });
-}
-
-// פונקציה לשינוי סטטוס ספר
-function changeStatus(bookId, newStatus) {
-    console.log(`Change status of book ${bookId} to ${newStatus}`);
-    // תוכל להוסיף כאן קריאה ל-API לשינוי הסטטוס אם יש צורך
-}
-
-// פונקציה לרכישת ספר
-function purchaseBook(bookId) {
-    console.log(`Purchase book ${bookId}`);
-    // תוכל להוסיף כאן קריאה ל-API לרכישת ספר אם יש צורך
-}
-
-
-
-// קריאה ראשונית לעדכון הספריה
-$(document).ready(function () {
-    updateLibrary();
-});

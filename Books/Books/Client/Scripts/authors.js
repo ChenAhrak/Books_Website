@@ -1,4 +1,4 @@
-const authorsApiUrl = "https://localhost:7195/api/Authors";
+﻿const authorsApiUrl = "https://localhost:7195/api/Authors";
 const allAuthors = [];
 var user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -22,39 +22,80 @@ $(document).ready(function () {
         var authorsContainer = $("#authors-container");
         authorsContainer.empty();
         authors.forEach(function (author) {
-            var authorElement = $('<div>');
-            authorElement.addClass('author');
+            var authorElement = $('<div class="author" data-author-id="' + author.id + '">');
             authorElement.append('<img src="' + author.image + '" alt="author image" />');
             authorElement.append('<h3>' + author.name + '</h3>');
             authorElement.append('<p>' + 'Birth Date: ' + author.birthDate + '</p>');
             authorElement.append('<p>' + 'Death Date: ' + author.deathDate + '</p>');
             authorElement.append('<p>' + 'Top Work: ' + author.topWork + '</p>');
-            //authorElement.append('<p>' + 'Id: ' + author.id + '</p>');
             authorElement.append('<p>' + 'Description: ' + author.description + '</p>');
 
             authorsContainer.append(authorElement);
-
         });
+
+        addAuthorClickHandlers(); // Add click handlers after rendering authors
     }
 
     function searchAuthorName() {
-
         const query = $('#search-input').val();
         const filterdAuthors = []
         allAuthors.forEach(function (authors) {
             authors.forEach(function (author) {
-
-                // check if the query is in the title of the book with no case sensitivity
-                if (author.name.toLowerCase().includes(query.toLowerCase())) { 
-                    filterdAuthors.push(author);  
+                if (author.name.toLowerCase().includes(query.toLowerCase())) {
+                    filterdAuthors.push(author);
                 }
-
             });
-
         });
 
         renderAllAuthors(filterdAuthors);
+    }
 
+    async function getBooksByAuthor(authorId) {
+        const apiUrl = `https://localhost:7195/api/Authors/${authorId}/Books`;
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const books = await response.json();
+            renderBooksByAuthor(books);
+        } catch (error) {
+            console.error('Error fetching books by author:', error);
+        }
+    }
+
+    function renderBooksByAuthor(books) {
+        const booksContainer = $("#books-container");
+        booksContainer.empty();
+
+        books.forEach(book => {
+            const bookElement = $('<div class="book">');
+            bookElement.append('<img src="' + book.image + '" alt="book image" />');
+            bookElement.append('<h3>' + book.title + '</h3>');
+            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+
+            // Add "Add to Wishlist" button
+            const addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
+            bookElement.append(addToWishlistBtn);
+
+            // Add "Add Book" button
+            const addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+            bookElement.append(addBookBtn);
+
+            booksContainer.append(bookElement);
+
+            addBookClick(addBookBtn);
+            addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+        });
+    }
+
+    function addAuthorClickHandlers() {
+        $('.author').click(function () {
+            const authorId = $(this).data('author-id');
+            getBooksByAuthor(authorId);
+        });
     }
 
     getAllAuthorsFromDB();
@@ -68,7 +109,7 @@ $(document).ready(function () {
     $(homeBtn).click(function () {
         window.location.href = "index.html";
     });
-   
+
     const loginBtn = document.getElementById("loginBtn");
     $(loginBtn).click(function () {
         window.location.href = "login.html";
@@ -81,7 +122,6 @@ $(document).ready(function () {
         window.location.reload();
     });
 
-
     const registerbtn = document.getElementById("registerBtn");
 
     $(registerbtn).click(function () {
@@ -90,16 +130,14 @@ $(document).ready(function () {
 
     const adminbtn = document.getElementById("adminBtn");
 
-    $(adminBtn).click(function () {
+    $(adminbtn).click(function () {
         window.location.href = "admin.html";
     });
 
     const myBooks = document.getElementById("myBooksBtn");
     $(myBooks).click(function () {
         window.location.href = "myBooks.html";
-
     });
-
 
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {
@@ -121,6 +159,4 @@ $(document).ready(function () {
         $('#myBooksBtn').hide();
         $('#adminBtn').hide();
     }
-
-
 });

@@ -237,6 +237,21 @@ public class Book
             return false;
         }
     }
+    //Top 5 Most Purchased Books
+    public List<Book> GetTop5MostPurchasedBooks()
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            return db.GetTop5MostPurchasedBooks();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return null;
+        }
+    }
+
 
 
     //    public  bool addBookToUser(int userId, string bookId)

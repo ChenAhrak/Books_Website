@@ -4,7 +4,6 @@ namespace Books.Server.BL
 {
     public class UserBooks
     {
-        private int userBookID;
         private int userID;
         private string bookID;
         private string status;
@@ -16,21 +15,18 @@ namespace Books.Server.BL
 
         public UserBooks(int userBookID, int userID, string bookID, string status, DateTime dateAdded)
         {
-            this.userBookID = userBookID;
             this.userID = userID;
             this.bookID = bookID;
             this.status = status;
             this.dateAdded = dateAdded;
         }
-
-        public int UserBookID { get => userBookID; set => userBookID = value; }
         public int UserID { get => userID; set => userID = value; }
         public string BookID { get => bookID; set => bookID = value; }
         public string Status { get => status; set => status = value; }
         public DateTime DateAdded { get => dateAdded; set => dateAdded = value; }
 
         // שליפת ספרים מספריית המשתמש לפי סטטוס
-        public List<Book> GetUserLibrary(int userId, string status)
+        public List<dynamic> GetUserLibrary(int userId, string status)
         {
             DBservices db = new DBservices();
             try
@@ -42,6 +38,7 @@ namespace Books.Server.BL
                 return null;
             }
         }
+
 
         // הוספת ספר לספריית המשתמש
         public bool AddBookToLibrary(UserBooks userBook)
@@ -71,13 +68,39 @@ namespace Books.Server.BL
                 return false;
             }
         }
-        // ניהול רכישת ספר
-        public bool ManagePurchase(int buyerId, int sellerId, string bookId)
+        // הוספת בקשת רכישת ספר
+        public bool AddBookPurchaseRequest(int buyerId, int sellerId, string bookId)
         {
             DBservices db = new DBservices();
             try
             {
-                return db.ManagePurchase(buyerId, sellerId, bookId);
+                return db.AddBookPurchaseRequest(buyerId, sellerId, bookId);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        // Function to update the status of a book purchase request
+        public bool UpdateBookPurchaseRequestStatus(int requestId, string approvalStatus, DateTime approvalDate)
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.UpdateBookPurchaseRequestStatus(requestId, approvalStatus, approvalDate);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        // ניהול רכישת ספר
+        public bool TransferBook(int buyerId, int sellerId, string bookId)
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.TransferBook(buyerId, sellerId, bookId);
             }
             catch
             {
