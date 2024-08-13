@@ -148,7 +148,7 @@ $(document).ready(function () {
                 bookElement.append('<h3>' + book.title + '</h3>');
                 bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
                 bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-
+                console.log(book);
                 tableHeader.append(bookElement);
             });
 

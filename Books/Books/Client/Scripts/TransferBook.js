@@ -32,21 +32,36 @@ function displayBooks(books) {
     });
 }
 
-// Step 3: Request to purchase a book
-function requestBookPurchase(bookId, ownerId) {
-    const buyerId = getCurrentUserId(); // Function to get current logged-in user ID
+    // Step 3: Request to purchase a book
+    function requestBookPurchase() {
+        // Get values from input fields
+        var buyerId = document.getElementById('buyerId').value; // Assuming buyerId should be the current logged-in user
+        var sellerId = document.getElementById('sellerId').value;
+        var bookId = document.getElementById('selectedBookId').value;
 
-    ajaxCall('POST', `api/UserBooks/addBookPurchaseRequest?buyerId=${buyerId}&sellerId=${ownerId}&bookId=${bookId}`, null,
-        (response) => {
-            console.log('Purchase request added successfully:', response);
-            alert('Your purchase request has been sent!');
-        },
-        (error) => {
-            console.error('Error sending purchase request:', error);
-            alert('An error occurred while sending the purchase request.');
+        // Validate input
+        if (!buyerId || !sellerId || !bookId) {
+            alert("All fields are required.");
+            return;
         }
-    );
-}
+
+        // Construct the URL with query parameters
+        var url = `api/UserBooks/addBookPurchaseRequest?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`;
+
+        // Send POST request to the API
+        ajaxCall('POST', url, null,
+            (response) => {
+                console.log('Purchase request added successfully:', response);
+                alert('Your purchase request has been sent!');
+            },
+            (error) => {
+                console.error('Error sending purchase request:', error);
+                alert('An error occurred while sending the purchase request.');
+            }
+        );
+    }
+
+    
 
 // Update the status of a book purchase request
 function updatePurchaseRequestStatus(requestId, approvalStatus, approvalDate) {
