@@ -1073,6 +1073,51 @@ namespace Books.Server.DAL
             return cmd;
         }
 
+        public List<Object> searchInBookText(string bookId,string query)
+        {
+
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureSearchInBookText("SP_SearchInBookText", con,bookId,query);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> bookText = new List<Object>();
+            while (reader.Read())
+            {
+                bookText.Add(new
+                {
+                    id = (string)reader["BookId"],
+                    pageNumber = (int)reader["PageNumber"],
+                    extractedText = (string)reader["ExtractedText"]
+
+                });
+            }
+            return bookText;
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureSearchInBookText(string spName, SqlConnection con, string bookId, string query)
+        {
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = con,
+                CommandText = spName,
+                CommandTimeout = 10,
+                CommandType = System.Data.CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddWithValue("@BookId", bookId);
+            cmd.Parameters.AddWithValue("@Query", query);
+
+            return cmd;
+        }
+
 
     }
 }

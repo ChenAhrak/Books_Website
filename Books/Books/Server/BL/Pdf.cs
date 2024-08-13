@@ -8,13 +8,16 @@ using Books.Server.DAL;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using UglyToad.PdfPig;
-using UglyToad.PdfPig.Content;
+//using UglyToad.PdfPig;
+//using UglyToad.PdfPig.Content;
 
 namespace Books.Server.BL
 {
     public class Pdf
     {
+        //string bookId;
+        //int pageNumber;
+        //string extractedText;
 
         public Pdf()
         {
@@ -91,6 +94,28 @@ namespace Books.Server.BL
                     string pageText = PdfTextExtractor.GetTextFromPage(reader, page);
                     db.InsertBookText(bookId, page, pageText);
                 }
+            }
+        }
+
+        public bool searchInBookText(string bookId, string query)
+        {
+                DBservices db = new DBservices();
+            try
+            {
+                //check if the list of objects that return not empty
+                if (db.searchInBookText(bookId, query).Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

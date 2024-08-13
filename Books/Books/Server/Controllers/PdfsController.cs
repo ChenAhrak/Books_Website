@@ -11,19 +11,22 @@ namespace Books.Server.Controllers
     public class PdfsController : ControllerBase
     {
         Pdf pdf = new Pdf();
-        // GET: api/<Pdfs>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         // GET api/<Pdfs>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("SearchInBookText/{bookId}")]
+        public IActionResult SearchInBookText(string bookId, [FromQuery] string query)
         {
-            return "value";
+            try
+            {
+                bool found = pdf.searchInBookText(bookId, query);
+                return Ok(found);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
+
 
         // POST api/<Pdfs>
         [HttpPost]

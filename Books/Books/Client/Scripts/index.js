@@ -11,6 +11,7 @@ const booksApiURL = "https://localhost:7195/api/Books";
 const authorsApiUrl = "https://localhost:7195/api/Authors";
 const categoriesApiUrl = "https://localhost:7195/api/Categories";
 const usersApiUrl = "https://localhost:7195/api/Users";
+const pdfsApiUrl = "https://localhost:7195/api/Pdfs";
 var modal = $('#coursesModal');
 var span = $('.close');
 var user = JSON.parse(sessionStorage.getItem('user'));
@@ -192,14 +193,14 @@ $(document).ready(function () {
          const query = $('#search-input').val();
          const filterdBooks = []  
          allBooks.forEach(function (books) {
-             books.forEach(function (book) {
+             books.forEach( function (book) {
 
                  // check if the query is in the title of the book with no case sensitivity
                  if (
                      book.title.toLowerCase().includes(query.toLowerCase()) ||
                     book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
-                     book.description.toLowerCase().includes(query.toLowerCase())) /*||*/
-                 //    checkQueryInPDF(book.pdfLink, query))
+                     book.description.toLowerCase().includes(query.toLowerCase())) 
+                  /*    await checkQueryInPDF(book.id, query))*/
                  {
                      filterdBooks.push(book);
                  }
@@ -211,27 +212,20 @@ $(document).ready(function () {
 
     }
 
-    //async function checkQueryInPDF(pdfUrl, query) {
-    //    // Load the PDF document from the URL
-    //    const loadingTask = pdfjsLib.getDocument(pdfUrl);
-    //    const pdf = await loadingTask.promise;
+    //async function checkQueryInPDF(bookId, query) {
+    //    const result = await ajaxCall("GET", `${pdfsApiUrl}/SearchInBookText/${bookId}?query=${encodeURIComponent(query)}`, null, SearchInBookTextPDFSCB, SearchInBookTextPDFECB);
+    //    console.log(result);
+    //    return result;
+    //}
 
-    //    let queryExists = false;
 
-    //    // Loop through all the pages
-    //    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-    //        const page = await pdf.getPage(pageNum);
-    //        const textContent = await page.getTextContent();
-    //        const pageText = textContent.items.map(item => item.str).join(' ');
+    //function SearchInBookTextPDFSCB(result) {
+    //    console.log("Found");
+ 
+    //}
 
-    //        // Check if the query exists in the text
-    //        if (pageText.toLowerCase().includes(query.toLowerCase())) {
-    //            queryExists = true;
-    //            break;
-    //        }
-    //    }
-
-    //    return queryExists;
+    //function SearchInBookTextPDFECB(err) {
+    //    console.log("Not found");
     //}
 
   
