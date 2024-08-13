@@ -2,7 +2,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiURL = "https://localhost:7195/GetApiKey";
-const userHighScoreApiURL = "https://localhost:7195/api/Users/UpdateHighScore";
 const booksApiURL = "https://localhost:7195/api/Books";
 const correctImg = 'https://upload.wikimedia.org/wikipedia/commons/7/73/Flat_tick_icon.svg';
 const incorrectImg = 'https://upload.wikimedia.org/wikipedia/commons/6/69/X_Icon_or_Close_Icon.svg';
@@ -11,14 +10,7 @@ var generatedData;
 var bookAndAuthors;
 var randomNum;
 var gameScore = 0;
-var highScore;
 var user = JSON.parse(sessionStorage.getItem('user'));
-var playerScore = document.getElementById("gameScore");
-var isQuizChangeListenerAttached = false;
-
-$('#gameScore').hide();
-$('#finishQuiz').hide();
-
 
 $(document).ready(async function () {
 
@@ -26,21 +18,6 @@ $(document).ready(async function () {
         alert("You must login to play");
         window.location.href = "login.html";
     }
-
-    function getUserHighScore() {
-        ajaxCall("GET", `${userHighScoreApiURL}/${user.id}`, `${gameScore}`, getUserHighScoreSCB, getUserHighScoreECB);
-    }
-
-    function getUserHighScoreSCB(result) {
-        highScore = result;
-        console.log(result);
-    }
-
-    function getUserHighScoreECB(err) {
-        console.log(err);
-    }
-
-    getUserHighScore();
 
     function getTitlesAndAuthors() {
         ajaxCall("GET", `${booksApiURL}/GetTitlesAndAuthors`, "", getTitlesAndAuthorsSCB, getTitlesAndAuthorsECB);
@@ -57,6 +34,12 @@ $(document).ready(async function () {
     function getTitlesAndAuthorsECB(err) {
         console.log(err);
     }
+
+    //function getRandomIndex(object) {
+    //    const length = Object.keys(object).length;
+    //    randomNum = Math.floor(Math.random() * length)
+    //    return randomNum;
+    //}
     
     getTitlesAndAuthors();
 
@@ -177,87 +160,45 @@ $(document).ready(async function () {
                     {
                         role: "model",
                         parts: [
-                            { text: "Question: In Stieg Larsson's \"The Girl with the Dragon Tattoo,\" what is the primary motive behind the decades-old murder mystery that Lisbeth Salander and Mikael Blomkvist investigate?\n\nAnswers:\nTo expose a network of child sex trafficking.\nTo uncover a hidden Nazi treasure.\nTo avenge a past betrayal within a powerful family.\nTo protect a secret government conspiracy.\n\nCorrectAnswer: To avenge a past betrayal within a powerful family.\nExplanation: The central mystery in \"The Girl with the Dragon Tattoo\" revolves around the disappearance of Harriet Vanger, a member of a wealthy and influential family. The investigation uncovers a web of dark secrets and long-held grudges within the Vanger clan, ultimately leading to a quest for justice and retribution. \n" },
-                        ],
-                    },
-                    {
-                        role: "user",
-                        parts: [
-                            { text: "There are empty lines between question answer and correctAnswer" },
-                        ],
-                    },
-                    {
-                        role: "model",
-                        parts: [
-                            { text: "You are absolutely right! I apologize for the formatting error. I will make sure to keep the text compact and without unnecessary spacing.  \n\nPlease give me another question to generate, and I will do my best to provide the formatted output correctly. \n" },
-                        ],
-                    },
-                    {
-                        role: "user",
-                        parts: [
-                            { text: "same request about the book A New and General Biographical Dictionary by Richard A. Burridge's" },
-                        ],
-                    },
-                    {
-                        role: "model",
-                        parts: [
-                            { text: "Question: What is the primary focus of Richard A. Burridge's \"A New and General Biographical Dictionary\"?\n\nAnswers:\nBiographies of prominent figures in the early Christian church.\nBiographies of notable individuals throughout history.\nBiographies of influential figures in the field of biblical studies.\nBiographies of renowned scientists and inventors.\n\nCorrectAnswer: Biographies of prominent figures in the early Christian church.\nExplanation:  \"A New and General Biographical Dictionary\" by Richard A. Burridge is specifically dedicated to providing biographies of significant individuals who played a key role in the development and spread of early Christianity. \n" },
-                        ],
-                    },
-                    {
-                        role: "user",
-                        parts: [
-                            { text: "same request about the book The Twelve Caesars by Suetonius" },
-                        ],
-                    },
-                    {
-                        role: "model",
-                        parts: [
-                            { text: "Question: What is the primary purpose of Suetonius's \"The Twelve Caesars\"?\n\nAnswers:\nTo provide a detailed account of the Roman Republic's transition to an empire.\nTo offer a historical analysis of the Roman military's rise to power.\nTo present a collection of gossipy anecdotes about the first twelve Roman emperors.\nTo examine the philosophical and religious beliefs of the Roman elite.\n\nCorrectAnswer: To present a collection of gossipy anecdotes about the first twelve Roman emperors.\nExplanation: \"The Twelve Caesars\" by Suetonius is known for its focus on the personal lives and often scandalous behavior of the first twelve Roman emperors. It provides a unique blend of historical facts and juicy details, offering a glimpse into the personalities and power struggles of these influential figures. \n" },
+                            { text: "Question: In Stieg Larsson's \"The Girl with the Dragon Tattoo,\" what is the primary motivation behind the decades-old murder investigation that Lisbeth Salander and Mikael Blomkvist undertake?\n\nAnswers:\nA desire to clear the name of a falsely accused individual.\nA personal vendetta against the perpetrator of the crime.\nA quest for justice and closure for the victims' families.\nA chance to expose a larger conspiracy and corruption within the Swedish government.\n\nCorrectAnswer: A quest for justice and closure for the victims' families.\nExplanation:  The investigation into the disappearance and presumed murder of Harriet Vanger is primarily driven by the desire for justice and closure for the Vanger family. Mikael Blomkvist is hired to investigate the case, and Lisbeth Salander joins him, driven by her own sense of justice and a desire to protect the vulnerable. While elements of conspiracy and corruption are present, the primary motivation is the pursuit of truth and closure for the victims. \n" },
                         ],
                     },
                 ],
             });
-            console.log(randomNum);
+
             const result = await chatSession.sendMessage(`same request about the book ${bookAndAuthors[randomNum].title} written by ${bookAndAuthors[randomNum].name}`);
             var text = result.response.text();
-            console.log(text);
             generatedData = parseTextToJSON(text);
-            console.log(generatedData);
+
             createQuiz(generatedData.question, generatedData.answers);
         }
 
         run();
+        //$('#quiz').hide();
         var startBtn = document.getElementById("startGame");
-        playerScore.innerText = `Player Score: ${gameScore}`;
 
-        if (!isQuizChangeListenerAttached) {
-            quiz.addEventListener('change', (event) => {
-                if (event.target.type === 'radio') {
-                    const selectedAnswer = event.target.value;
-                    const selection = event.target.parentElement;
-                    revealAnswer(generatedData.correctAnswer, selectedAnswer, generatedData.explanation, selection);
-                    const radioButtons = document.querySelectorAll('input[type="radio"]');
-                    radioButtons.forEach(radioButton => {
-                        if (!radioButton.checked) {
-                            radioButton.disabled = true;
-                        }
-                    });
-                }
-            });
-            isQuizChangeListenerAttached = true; // Set the flag to true after attaching the event listener
-        }
 
+        quiz.addEventListener('change', (event) => {
+            if (event.target.type === 'radio') {
+                const selectedAnswer = event.target.value;
+                const selection = event.target.parentElement;
+                revealAnswer(generatedData.correctAnswer, selectedAnswer, generatedData.explanation, selection);
+                const radioButtons = document.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach(radioButton => {
+                    if (!radioButton.checked) {
+                        radioButton.disabled = true;
+                    }
+                });
+            }
+        });
         startBtn.addEventListener('click', (event) => {
-            gameScore = 0;
-            $('#startGame').hide();
-            $('#gameScore').show();
+            $('#startQuiz').hide();
             $('#quiz').show();
-            $('#finishQuiz').show();
-            
         });
     }
     $('#quiz').hide();
+
+    //nextQuestion = document.getElementById('nextQuestion');
 
 
 });
@@ -271,7 +212,7 @@ function getRandomIndex(object) {
 var next = document.createElement('button');
 var resultImg = document.createElement('img');
 var quizExplanation = document.createElement('p');
-var nextEventListener = false;
+
 function revealAnswer(answer, selectedAnswer, explanation, selection) {
     var image;
     if (selectedAnswer === answer) {
@@ -279,8 +220,7 @@ function revealAnswer(answer, selectedAnswer, explanation, selection) {
         gameScore += 1;
         selection.classList.add('correctAnswer');
         console.log("Correct, +1 point awarded");
-        playerScore.innerText = `Player Score: ${gameScore}`;
-        //increaseScore(); /// to be implemented
+        increaseScore(); /// to be implemented
     } else {
         image = incorrectImg;
         selection.classList.add('incorrectAnswer');
@@ -289,53 +229,21 @@ function revealAnswer(answer, selectedAnswer, explanation, selection) {
     next.textContent = "Next question";
     next.id = "nextQuestion";
     resultImg.src = image;
-    quizExplanation.id = "quizExp";
     quizExplanation.textContent = explanation;
     $('#quiz').append(resultImg);
     $('#quiz').append(quizExplanation);
     $('#quiz').append(next);
-    if (!nextEventListener) {
-        next.addEventListener('click', (event) => {
-            getRandomIndex(bookAndAuthors);
-            initializeGenerativeAI()
-            $('#quiz').empty();
-            nextEventListener = true;
-        });
-    }
+    next.addEventListener('click', (event) => {
+        getRandomIndex(bookAndAuthors);
+        initializeGenerativeAI()
+        $('#quiz').empty();
+    });
 
 }
-
-var finishGameBtn = document.getElementById("finishGame");
-
-finishGameBtn.addEventListener('click', (event) => {
-    $('#startGame').show();
-    $('#gameScore').hide();
-    $('#quiz').empty();
-    $('#quiz').hide();
-    $('#finishQuiz').hide();
-    updateUserHighScore();
-    console.log("high score:" + highScore);
-    // also add modal with results of the game!
-});
-
 
 // not yet implemented
-function updateUserHighScore() {
-    if (highScore < gameScore) {
-        sendUserHighScore();
-    }
-}
+function increaseScore() {
 
-function sendUserHighScore() {
-    ajaxCall("PUT", `${userHighScoreApiURL}/${user.id}`, `${gameScore}`, sendUserHighScoreSCB, sendUserHighScoreECB);
-}
-
-function sendUserHighScoreSCB(result) {
-    console.log(result);
-}
-
-function sendUserHighScoreECB(err) {
-    console.log(err);
 }
 
 function createQuiz(question, options) {
