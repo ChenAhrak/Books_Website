@@ -221,8 +221,9 @@ $(document).ready(async function () {
             console.log(randomNum);
             const result = await chatSession.sendMessage(`same request about the book ${bookAndAuthors[randomNum].title} written by ${bookAndAuthors[randomNum].name}`);
             var text = result.response.text();
+            console.log(text);
             generatedData = parseTextToJSON(text);
-
+            console.log(generatedData);
             createQuiz(generatedData.question, generatedData.answers);
         }
 
@@ -248,11 +249,12 @@ $(document).ready(async function () {
         }
 
         startBtn.addEventListener('click', (event) => {
+            gameScore = 0;
             $('#startGame').hide();
             $('#gameScore').show();
             $('#quiz').show();
             $('#finishQuiz').show();
-            gameScore = 0;
+            
         });
     }
     $('#quiz').hide();
@@ -311,7 +313,7 @@ finishGameBtn.addEventListener('click', (event) => {
     $('#quiz').empty();
     $('#quiz').hide();
     $('#finishQuiz').hide();
-    updateUserHighScore(); // to be implemented
+    updateUserHighScore();
     console.log("high score:" + highScore);
     // also add modal with results of the game!
 });
