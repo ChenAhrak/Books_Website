@@ -11,6 +11,7 @@ const booksApiURL = "https://localhost:7195/api/Books";
 const authorsApiUrl = "https://localhost:7195/api/Authors";
 const categoriesApiUrl = "https://localhost:7195/api/Categories";
 const usersApiUrl = "https://localhost:7195/api/Users";
+const pdfsApiUrl = "https://localhost:7195/api/Pdfs";
 var modal = $('#coursesModal');
 var span = $('.close');
 var user = JSON.parse(sessionStorage.getItem('user'));
@@ -192,12 +193,14 @@ $(document).ready(function () {
          const query = $('#search-input').val();
          const filterdBooks = []  
          allBooks.forEach(function (books) {
-             books.forEach(function (book) {
+             books.forEach( function (book) {
 
                  // check if the query is in the title of the book with no case sensitivity
-                 if(book.title.toLowerCase().includes(query.toLowerCase()) ||
+                 if (
+                     book.title.toLowerCase().includes(query.toLowerCase()) ||
                     book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
-                    book.description.toLowerCase().includes(query.toLowerCase()))
+                     book.description.toLowerCase().includes(query.toLowerCase())) 
+                  /*    await checkQueryInPDF(book.id, query))*/
                  {
                      filterdBooks.push(book);
                  }
@@ -208,6 +211,24 @@ $(document).ready(function () {
         renderFilterdBooks(filterdBooks);
 
     }
+
+    //async function checkQueryInPDF(bookId, query) {
+    //    const result = await ajaxCall("GET", `${pdfsApiUrl}/SearchInBookText/${bookId}?query=${encodeURIComponent(query)}`, null, SearchInBookTextPDFSCB, SearchInBookTextPDFECB);
+    //    console.log(result);
+    //    return result;
+    //}
+
+
+    //function SearchInBookTextPDFSCB(result) {
+    //    console.log("Found");
+ 
+    //}
+
+    //function SearchInBookTextPDFECB(err) {
+    //    console.log("Not found");
+    //}
+
+  
     
 
 
@@ -304,21 +325,27 @@ $(document).ready(function () {
     }
 
   
+    //const currentTheme = localStorage.getItem('theme');
+    const toggleButton = document.getElementById('toggle-mode');
+    toggleButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+
+        let theme = 'light';
+        if (document.body.classList.contains('dark-mode')) {
+            theme = 'dark';
+        }
+        localStorage.setItem('theme', theme);
+    });
 
 
 });
 
-//const currentTheme = localStorage.getItem('theme');
-const toggleButton = document.getElementById('toggle-mode');
-toggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
 
-    let theme = 'light';
-    if (document.body.classList.contains('dark-mode')) {
-        theme = 'dark';
-    }
-    localStorage.setItem('theme', theme);
-});
+
+
+
+
+
 
 ////All the insert data from API to DB functions
 //function getRandomQuery(queries) {
@@ -599,12 +626,72 @@ toggleButton.addEventListener('click', () => {
 //    console.log(err);
 //}
 
+//async function updateExtractText() {
+//    for (const books of allBooks) {
+//        for (const book of books) {
+//            try {
+//                const pdfUrl = book.pdfLink;
+
+//                // Check if pdfDownloadLink is a valid non-empty string
+//                if (pdfUrl == "") {
+//                    console.warn(`Skipping book "${book.title}" due to invalid PDF URL.`);
+//                    continue; // Skip this book and move to the next one
+//                }
+//                console.log(`Processing book: ${book.title}, PDF URL: ${pdfUrl}`);
+
+//                // Load the PDF document from the URL
+//                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+//                const pdf = await loadingTask.promise;
+
+//                let extractedText = "";
+
+//                // Loop through all the pages
+//                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+//                    const page = await pdf.getPage(pageNum);
+//                    const textContent = await page.getTextContent();
+//                    const pageText = textContent.items.map(item => item.str).join(' ');
+//                    extractedText += pageText + "\n";
+//                }
+
+//                extractedText = extractedText.trim();
+
+//                // Log extracted text
+//                console.log(`Extracted text for book "${book.title}": `, extractedText);
+
+//                // Update the database with the extracted text
+//                // Uncomment and implement the function call if needed
+//                // await updateDatabaseWithExtractedText(book.id, extractedText);
+
+//            } catch (error) {
+//                console.error(`Failed to process PDF for book "${book.title}": `, error);
+//            }
+//        }
+//    }
+
+//    insertDataToDbBtn.disabled = false; // Re-enable the button after processing
+//}
+
+//async function getContent(src) {
+//    const doc = await pdfjsLib.getDocument(src).promise;
+//    const page = await doc.getPage(1);
+//    return await page.getTextContent();
+//}
+
+//async function getItems(src) {
+//    const content = await getContent(src);
+//    const textItems = content.items.map((item)=>{
+//        console.log(item.str);
+//    })
+//    return textItems;
+//}
 
 //const insertDataToDbBtn = document.getElementById("insertDataToDbBtn");
 //$(insertDataToDbBtn).click(async function () {
 //    insertDataToDbBtn.disabled = true;
-//    await insertAllDataToDB();
-//    await insertAllConecctionTables();
+//    //await insertAllDataToDB();
+//    //await insertAllConecctionTables();
+//    await getContent("../Files/ChenAhrak_CV.pdf");
+
 //});
 
 

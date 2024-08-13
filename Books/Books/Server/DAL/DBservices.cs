@@ -1050,6 +1050,102 @@ namespace Books.Server.DAL
             }
         }
 
+        public int InsertBookText(string bookId, int pageNumber, string extractedText)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            cmd = CreateCommandWithStoredProcedureInsertBookText("SP_InsertBookText", con, bookId, pageNumber, extractedText); // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureInsertBookText(string spName, SqlConnection con, string bookId, int pageNumber, string extractedText)
+        {
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = con,
+                CommandText = spName,
+                CommandTimeout = 10,
+                CommandType = System.Data.CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddWithValue("@BookId", bookId);
+            cmd.Parameters.AddWithValue("@PageNumber", pageNumber);
+            cmd.Parameters.AddWithValue("@ExtractedText", extractedText);
+
+            return cmd;
+        }
+
+        public List<Object> searchInBookText(string bookId,string query)
+        {
+
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            SqlCommand cmd = CreateCommandWithStoredProcedureSearchInBookText("SP_SearchInBookText", con,bookId,query);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> bookText = new List<Object>();
+            while (reader.Read())
+            {
+                bookText.Add(new
+                {
+                    id = (string)reader["BookId"],
+                    pageNumber = (int)reader["PageNumber"],
+                    extractedText = (string)reader["ExtractedText"]
+
+                });
+            }
+            return bookText;
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureSearchInBookText(string spName, SqlConnection con, string bookId, string query)
+        {
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = con,
+                CommandText = spName,
+                CommandTimeout = 10,
+                CommandType = System.Data.CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddWithValue("@BookId", bookId);
+            cmd.Parameters.AddWithValue("@Query", query);
+
+            return cmd;
+        }
+
 
     }
 }

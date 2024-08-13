@@ -1,4 +1,5 @@
 ﻿using Books.Server.DAL;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Metrics;
 
 namespace Books.Server.BL;
@@ -45,12 +46,13 @@ public class Book
     //searchInfo
     string textSnippet;
     double price;
+    string extarctedText;
 
     public Book()
     {
     }
     
-    public Book(string id, string title, string subtitle, string language, string publisher, string publishedDate, string description, int pageCount, string printType, string smallThumbnail, string thumbnail, string saleCountry, string saleability, bool isEbook, string accessCountry, string viewability, bool publicDomain, string textToSpeechPermission, bool epubIsAvailable, string epubDownloadLink, string epubAcsTokenLink, bool pdfIsAvailable, string pdfDownloadLink, string pdfAcsTokenLink, string webReaderLink, string accessViewStatus, bool quoteSharingAllowed, string textSnippet,double price)
+    public Book(string id, string title, string subtitle, string language, string publisher, string publishedDate, string description, int pageCount, string printType, string smallThumbnail, string thumbnail, string saleCountry, string saleability, bool isEbook, string accessCountry, string viewability, bool publicDomain, string textToSpeechPermission, bool epubIsAvailable, string epubDownloadLink, string epubAcsTokenLink, bool pdfIsAvailable, string pdfDownloadLink, string pdfAcsTokenLink, string webReaderLink, string accessViewStatus, bool quoteSharingAllowed, string textSnippet,double price,string extractedText)
     {
         this.id = id;
         this.title = title;
@@ -81,6 +83,8 @@ public class Book
         this.quoteSharingAllowed = quoteSharingAllowed;
         this.textSnippet = textSnippet;
         this.price = price;
+        this.extarctedText = extractedText;
+
     }
 
     //getters and setters for all the fields
@@ -114,6 +118,8 @@ public class Book
     public string TextSnippet { get => textSnippet; set => textSnippet = value; }
 
     public double Price { get => price; set => price = value; }
+
+    public string ExtarctedText { get => extarctedText; set => extarctedText = value; }
 
 
 
@@ -231,6 +237,7 @@ public class Book
             return false;
         }
     }
+
 
     //    public  bool addBookToUser(int userId, string bookId)
     //    {

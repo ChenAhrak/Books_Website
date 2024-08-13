@@ -142,11 +142,7 @@ namespace Books.Server.Controllers
         //    return NotFound(new { message = "Failed to add course to user" });
         //}
 
-        // PUT api/<BooksController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        
 
         // DELETE api/<BooksController>/5
         [HttpDelete("{id}")]
