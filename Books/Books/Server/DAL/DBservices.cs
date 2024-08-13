@@ -9,6 +9,7 @@ using Books.Server.BL;
 using System.Data.SqlClient;
 using System.Xml.Linq;
 using System.Reflection.PortableExecutable;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Books.Server.DAL
 {
@@ -865,10 +866,6 @@ namespace Books.Server.DAL
             return cmd;
         }
 
-
-       
-
-        /// new procedure test
         public List<Object> getTitlesAndAuthors()
         {
 
@@ -909,6 +906,8 @@ namespace Books.Server.DAL
             cmd.Parameters.AddRange(parameters);
             return cmd;
         }
+
+
         public List<dynamic> GetUserLibrary(int userId, string status)
         {
             List<dynamic> books = new List<dynamic>();
