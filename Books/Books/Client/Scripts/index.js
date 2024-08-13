@@ -18,6 +18,12 @@ var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
 
+    var quizBtn = document.getElementById("quizBtn");
+    quizBtn.addEventListener('click', event => {
+        window.location.href = "quiz.html";
+    });
+
+
     async function getBooksDisplayDataFromDB() {
         await ajaxCall("GET", `${booksApiURL}/GetBooksDisplay`, "", getBooksDisplayDataFromDBSCB, getBooksDisplayDataFromDBECB);
     }
@@ -107,7 +113,7 @@ $(document).ready(function () {
         table.append(tableHeader);
         ebooksContainer.append(table);
     }
-
+    
     function isLoggedIn() {
         return sessionStorage.getItem('user') !== null;
     }
@@ -145,9 +151,9 @@ $(document).ready(function () {
 
             books.forEach(book => {
                 var bookElement = $('<td>');
-                bookElement.append('<img src="' + book.image + '" alt="book image" />');
+                bookElement.append(`<img src="${book.smallThumbnail}" alt="book image" />`);
                 bookElement.append('<h3>' + book.title + '</h3>');
-                bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+                bookElement.append('<p>' + 'By: ' + book.authorName + '</p>');
                 bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
                 console.log(book);
                 tableHeader.append(bookElement);

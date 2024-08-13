@@ -766,9 +766,9 @@ namespace Books.Server.DAL
             return cmd;
         }
         //Top 5 Most Purchased Books
-        public List<Book> GetTop5MostPurchasedBooks()
+        public List<object> GetTop5MostPurchasedBooks()
         {
-            List<Book> books = new List<Book>();
+            List<object> fiveTopPurchased = new List<object>();
 
             try
             {
@@ -782,14 +782,16 @@ namespace Books.Server.DAL
                         {
                             while (reader.Read())
                             {
-                                Book book = new Book
+                                fiveTopPurchased.Add(new
                                 {
                                     Id = reader["ID"].ToString(),
                                     Title = reader["Title"].ToString(),
+                                    AuthorName = reader["Authors"].ToString(),
+                                    SmallThumbnail = reader["SmallThumbnail"].ToString(),
+                                    Price = reader["Price"].ToString(),
                                     //PurchaseCount = reader["PurchaseCount"] as int? ?? 0
-                                };
+                                });
 
-                                books.Add(book);
                             }
                         }
                     }
@@ -801,7 +803,7 @@ namespace Books.Server.DAL
                 throw;
             }
 
-            return books;
+            return fiveTopPurchased;
         }
         //
         public List<Book> GetBooksByAuthor(int authorId)
