@@ -138,8 +138,9 @@ namespace Books.Server.Controllers
         {
             try
             {
-                var topBooks = book.GetTop5MostPurchasedBooks();
-                if (topBooks == null || !topBooks.Any())
+                object topBooks = book.GetTop5MostPurchasedBooks();
+                //if (topBooks == null || !topBooks.Any())
+                if (topBooks == null)
                 {
                     return NotFound(new { message = "No books found" });
                 }

@@ -238,7 +238,7 @@ public class Book
         }
     }
     //Top 5 Most Purchased Books
-    public List<Book> GetTop5MostPurchasedBooks()
+    public List<object> GetTop5MostPurchasedBooks()
     {
         DBservices db = new DBservices();
         try
