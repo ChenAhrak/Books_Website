@@ -61,7 +61,25 @@ public class User
         {
             return null;
         }
+    }
 
+    public List<User> getAllUsers()
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            List<User> allUsers = db.GetAllUsers();
+            return allUsers;
+        }
+        catch
+        {
+            return null;
+        }
+    }
 
+    public void deleteUserById(int id)
+    {
+        DBservices db = new DBservices ();
+        db.DeleteUserById(id);
     }
 }
