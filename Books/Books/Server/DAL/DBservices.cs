@@ -930,6 +930,7 @@ namespace Books.Server.DAL
                         {
                             var book = new
                             {
+                                // missing thumbnail, author, isEbook
                                 Id = reader["BookID"].ToString(),
                                 Title = reader["Title"].ToString(),
                                 Subtitle = reader["Subtitle"].ToString(),
@@ -941,7 +942,10 @@ namespace Books.Server.DAL
                                 PageCount = reader["PageCount"] as int? ?? 0,
                                 PrintType = reader["PrintType"].ToString(),
                                 Price = reader["Price"] as double? ?? 0.0,
-                                Status = reader["Status"].ToString()
+                                Status = reader["Status"].ToString(),
+                                Thumbnail = reader["Thumbnail"].ToString(),
+                                Authors = reader["Authors"].ToString(),
+                                isEbook = reader["isEbook"].ToString()
                             };
 
                             books.Add(book);
@@ -957,6 +961,7 @@ namespace Books.Server.DAL
 
             return books;
         }
+
         public bool AddBookToLibrary(UserBooks userBook)
         {
             try
@@ -997,7 +1002,7 @@ namespace Books.Server.DAL
                 Console.WriteLine($"Error: {ex.Message}");
                 return false;
             }
-            
+
         }
 
         public void updateUserHighScore(int id, int score)

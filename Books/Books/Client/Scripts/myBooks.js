@@ -1,8 +1,14 @@
 ﻿// פונקציה לשליחת בקשה לשרת לצורך שליפת ספרים עם סטטוס "purchased"
+
+var user = JSON.parse(sessionStorage.getItem('user'));
+
+
+
+
 function fetchBooks() {
     const status = 'purchased'; // הגדרת הסטטוס
-    const userID = 2; // החלף בזה את מזהה המשתמש הנוכחי שלך
-    const apiEndpoint = `http://localhost:7195/api/UserBooks/get?userID=${encodeURIComponent(userID)}&status=${encodeURIComponent(status)}`;
+    //                   https://localhost:7195/api/UserBooks/get?userID=34&status=purchased
+    const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${status}`;
 
     // שלח בקשה לשרת
     ajaxCall('GET', apiEndpoint, null,
@@ -37,9 +43,9 @@ function renderAllBooksDisplay(books) {
 
     books.forEach(book => {
         var bookElement = $('<td>');
-        bookElement.append('<img src="' + book.image + '" alt="book image" />');
+        bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
         bookElement.append('<h3>' + book.title + '</h3>');
-        bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+        bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
         // הוסף כפתור "Add to Read List"
@@ -57,18 +63,21 @@ function renderAllBooksDisplay(books) {
 }
 
 // פונקציה להוספת ספר לרשימת הקריאה
-function addBookToRead(userID, book) {
-    const api = `https://localhost:7195/api/UserBooks/addBookToRead/${userID}`;
+function addBookToRead(userID, bookId) {
+
+    const status = "read";
+    const api = `https://localhost:7195/api/UserBooks/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
+    const data = JSON.stringify(bookId);
 
     ajaxCall(
-        'POST',
+        'PUT',
         api,
-        JSON.stringify(book),
+        data,
         function (response) {
             console.log("Success:", response);
             alert("Book added to read list.");
             // Update UI to reflect the book was added
-            $(`button[data-book-id="${book.id}"]`).addClass('added').text('Added'); // Update button state on success
+            $(`button[data-book-id="${bookId}"]`).addClass('added').text('Added'); // Update button state on success
         },
         function (error) {
             console.error("Error:", error);
@@ -80,11 +89,11 @@ function addBookToRead(userID, book) {
 // הוסף מאזין לאירוע ללחיצה על כפתור "Add to Read List"
 function addReadClick(readBtn) {
     readBtn.on('click', function () {
-        const bookId = $(this).data('book-id');
-        const userId = 2; // החלף בזה את מזהה המשתמש הנוכחי שלך
-        if (userId) {
-            const book = getBookById(bookId); // Assuming you have a function to get book details
-            addBookToRead(userId, book);
+        const bookId = this.getAttribute('data-book-id');
+        if (user.id) {
+            //const book = getBookById(bookId); // Assuming you have a function to get book details
+            console.log(bookId);
+            addBookToRead(user.id, bookId);
 
             // אופציונלית, עדכן את מצב הכפתור בהתאם להצלחה
             $(this).toggleClass('added');
