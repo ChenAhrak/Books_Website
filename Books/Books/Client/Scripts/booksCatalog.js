@@ -59,22 +59,105 @@ $(document).ready(function () {
         });
     }
 
+    // Function to add a book to the purchased list
+    function addBookToPurchased(userId, book) {
+        const api = `https://localhost:7195/api/UserBooks/addBookToPurchased/${userId}`;
+        const data = JSON.stringify(book);
+
+        // Print the API URL and data being sent to the console
+        console.log("API URL:", api);
+        console.log("Request Data:", data);
+
+        ajaxCall(
+            'POST',
+            api,
+            data,
+            function (response) {
+                console.log("Success:", response);
+                // Update UI on success, e.g., change button state
+            },
+            function (error) {
+                console.error("Error:", error);
+                alert("An error occurred while adding the book to the purchased list.");
+            }
+        );
+    }
+
+    // Event listener for add book button
+    function addBookClick(addBookBtn) {
+        addBookBtn.on('click', function (event) {
+            if (event.target.tagName.toLowerCase() === 'button') {
+                const buttonId = event.target.id;
+                console.log("Button clicked with ID:", buttonId);
+
+                if (isLoggedIn()) {
+                    const user = JSON.parse(sessionStorage.getItem('user'));
+                    // Assuming you have a way to get the book details by ID
+                    const book = getBookById(buttonId); // You need to implement this function
+                    addBookToPurchased(user.id, book);
+                } else {
+                    console.log("User not logged in. Redirecting to login.");
+                    alert("Please login or register to add book.");
+                    window.location.href = "login.html";
+                }
+            }
+        });
+    }
+
+    // Example implementation of getBookById function
+    function getBookById(bookId) {
+        // This function should retrieve book details by its ID
+        // You might need to implement an API call or a local function to fetch book details
+        // For now, returning a mock book object
+        return {
+            Id: bookId,
+            Title: "Example Book Title",
+            Subtitle: "Example Subtitle",
+            Language: "English",
+            Publisher: "Example Publisher",
+            PublishedDate: "2024-01-01",
+            Description: "Example book description.",
+            PageCount: 300,
+            PrintType: "BOOK",
+            SmallThumbnail: "http://example.com/small.jpg",
+            Thumbnail: "http://example.com/large.jpg",
+            SaleCountry: "US",
+            Saleability: "FOR_SALE",
+            IsEbook: false,
+            AccessCountry: "US",
+            Viewability: "PARTIAL",
+            PublicDomain: false,
+            TextToSpeechPermission: "ALLOWED",
+            EpubIsAvailable: true,
+            EpubDownloadLink: "http://example.com/epub",
+            EpubAcsTokenLink: "http://example.com/epub-token",
+            PdfIsAvailable: true,
+            PdfDownloadLink: "http://example.com/pdf",
+            PdfAcsTokenLink: "http://example.com/pdf-token",
+            WebReaderLink: "http://example.com/reader",
+            AccessViewStatus: "SAMPLE",
+            QuoteSharingAllowed: true,
+            TextSnippet: "Sample text snippet.",
+            Price: 29.99,
+            ExtarctedText: "Sample extracted text."
+        };
+    }
     //// ****Function to add a book to user's list not working****
-    function addBook(buttonId, userId) {
+    //function addBook(buttonId, userId) {
 
-        ajaxCall("POST", `${booksApiURL}/addBookToUser/${userId}`, JSON.stringify(buttonId), postSCBF, postECBF);
+    //    ajaxCall("POST", `${booksApiURL}/addBookToUser/${userId}`, JSON.stringify(buttonId), postSCBF, postECBF);
 
-    }
+    //}
 
-    function postSCBF(result) {
-        alert("Book added successfully!");
-        console.log(result);
-    }
+    //function postSCBF(result) {
+    //    alert("Book added successfully!");
+    //    console.log(result);
+    //}
 
-    function postECBF(err) {
-        alert("Book was already added.");
-        console.log(err);
-    }
+    //function postECBF(err) {
+    //    alert("Book was already added.");
+    //    console.log(err);
+    //}
 
     function searchBooks() {
 

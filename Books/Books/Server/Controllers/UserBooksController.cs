@@ -47,7 +47,7 @@ namespace Books.Server.Controllers
 
                 if (result)
                 {
-                    return Ok("Book added to purchased successfully.");
+                    return Ok(new { message = "added." });
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace Books.Server.Controllers
 
                 if (result)
                 {
-                    return Ok("Book added to wish list successfully.");
+                    return Ok(new { message = "Book added to wish list successfully." });
                 }
                 else
                 {

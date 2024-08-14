@@ -1,12 +1,16 @@
-﻿function fetchBooks(status) {
-    // הגדרת פרמטרים ל-ajaxCall
-    const apiEndpoint = `api/UserBooks/get?status=${encodeURIComponent(status)}`;
-
-    // קריאה לפונקציה ajaxCall
+﻿function fetchReadBooks() {
+    const status = 'purchased';
+    const apiEndpoint = `http://localhost:7195/api/UserBooks/get?status=${encodeURIComponent(status)}`;
     ajaxCall('GET', apiEndpoint, null,
         (books) => {
             console.log('Books fetched successfully:', books);
-            displayBooks(books);
+
+            // בדיקה אם יש ספרים
+            if (books.length === 0) {
+                console.log('No books found with the status:', status);
+            } else {
+                displayBooks(books);
+            }
         },
         (error) => {
             console.error('Error fetching books:', error);
@@ -29,6 +33,15 @@ function displayBooks(books) {
         bookListElement.appendChild(bookItem);
     });
 }
+
+// Call the function to fetch books
+fetchReadBooks();
+
+
+
+
+
+
 
 // פונקציה להוספת ספר לרשימת הקריאה
 function addBookToRead(userID, book) {
