@@ -221,9 +221,7 @@ $(document).ready(async function () {
             console.log(randomNum);
             const result = await chatSession.sendMessage(`same request about the book ${bookAndAuthors[randomNum].title} written by ${bookAndAuthors[randomNum].name}`);
             var text = result.response.text();
-            console.log(text);
             generatedData = parseTextToJSON(text);
-            console.log(generatedData);
             createQuiz(generatedData.question, generatedData.answers);
         }
 

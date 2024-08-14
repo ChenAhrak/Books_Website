@@ -59,5 +59,28 @@ namespace Books.Server.Controllers
             highScore = db.getUserHighScore(id);
             return highScore;
         }
+
+        // GET api/<UsersController>/5
+        [HttpGet("GetAllUsers")]
+        public List<User> getUsers()
+        {
+            List<User> allUsers = user.getAllUsers();
+            if (allUsers != null)
+            {
+                return allUsers;
+            }
+            return null;
+        }
+
+        // GET api/<UsersController>/6
+        [HttpDelete("{id}")]
+        public void deleteUser(int id)
+        {
+            try
+            {
+                user.deleteUserById(id);
+            }
+            catch (Exception) { };
+        }
     }
 }
