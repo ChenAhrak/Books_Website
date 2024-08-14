@@ -412,6 +412,11 @@ $(document).ready(function () {
             window.location.href = 'wishList.html'; // Redirect to the "Wish List" page
         });
     });
+    $(document).ready(function () {
+        $('#purchaseBooksBtn').on('click', function () {
+            window.location.href = 'transferBook.html'; // Redirect to the "Purchase Books from Users" page
+        });
+    });
 
 
     getBooksDisplayDataFromDB();
