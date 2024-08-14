@@ -1,6 +1,8 @@
-const booksApiURL = "https://localhost:7195/api/Books";
+﻿const booksApiURL = "https://localhost:7195/api/Books";
 const allEBooks = [];
 var user = JSON.parse(sessionStorage.getItem('user'));
+var modal = $('#booksModal');
+var span = $('.close');
 
 $(document).ready(function () {
    
@@ -28,13 +30,79 @@ function renderAllEBooksDisplay(ebooks) {
         ebookElement.append('<h3>' + ebook.title + '</h3>');
         ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
         ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
+
+        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
+        ebookElement.append(addToWishlistBtn);
+
         var addBookBtn = $('<p><button id="' + ebook.id + '" class="add-book">Add Book</button></p>');
-        ebookElement.append( addBookBtn);
+        ebookElement.append(addBookBtn);
+
+        var moreDetails = $('<p id="' + ebook.id + '" class="more-details">More Details</button></p>');
+        ebookElement.append(moreDetails);
 
         ebooksContainer.append(ebookElement);
         addBookClick(addBookBtn);
+        showMoreDetails(moreDetails, ebook);
+
 
     });  
+
+    }
+
+    modal.css('display', 'none');
+    span.on('click', function () {
+        modal.css('display', 'none');
+    });
+
+    $(window).on('click', function (event) {
+        if (event.target === $('#booksModal')[0]) {
+            $('#booksModal').hide();
+        }
+    });
+
+    function addCoursesToModal(buttonId) {
+        modal.css('display', 'block');
+
+        $('#modal-content').children().slice(1).remove(); // Clear previous modal content
+
+        let api = `https://localhost:7283/api/Courses/searchByInstructorId/${buttonId}`;
+        ajaxCall("GET", api, null, getInstructorCoursesSCBF, getInstructorCoursesECBF);
+    }
+    function showMoreDetails(moreDetails, book) {
+        moreDetails.on('click', function () {
+            modal.css('display', 'block');
+            $('#modal-content').children().slice(1).remove();
+            renderBooksModal(book);
+        });
+    }
+
+    function renderBooksModal(book) {
+        var modalContent = $('#modal-content');
+        var bookModal = {};
+        //search for the book in allBooks
+        allEBooks.forEach(function (books) {
+            books.forEach(function (b) {
+                if (b.id === book.id) {
+                    bookModal = b;
+                }
+            });
+        });
+        console.log(book.id)
+        console.log(bookModal);
+        var bookElement = $('<div>');
+        bookElement.addClass('bookModal');
+        bookElement.append('<img src="' + bookModal.image + '" alt="book image" />');
+        bookElement.append('<h3>' + bookModal.title + '</h3>');
+        bookElement.append('<h5>' + bookModal.subtitle + '</h5>');
+        bookElement.append('<p>' + 'Publisher: ' + bookModal.publisher + '</p>');
+        bookElement.append('<p>' + 'Published Date: ' + bookModal.publishedDate + '</p>');
+        bookElement.append('<p>' + 'Language: ' + bookModal.language + '</p>');
+        bookElement.append('<p>' + 'Page Count: ' + bookModal.pageCount + '</p>');
+        bookElement.append('<p>' + 'Description: ' + bookModal.description + '</p>');
+        bookElement.append('<p>' + 'By: ' + bookModal.authorNames + '</p>');
+        bookElement.append('<p>' + 'Price: ' + bookModal.price + ' ILS' + '</p>');
+
+        modalContent.append(bookElement);
 
     }
     function isLoggedIn() {
