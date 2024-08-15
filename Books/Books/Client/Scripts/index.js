@@ -18,6 +18,14 @@ var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
 
+    var userWelcome = document.getElementById("userWelcome");
+    if (user) {
+        userWelcome.innerText = `Welcome ${user.userName}!`;
+    }
+    else {
+        userWelcome.innerText = "Welcome guest!";
+    }
+
     var quizBtn = document.getElementById("quizBtn");
     quizBtn.addEventListener('click', event => {
         window.location.href = "quiz.html";
