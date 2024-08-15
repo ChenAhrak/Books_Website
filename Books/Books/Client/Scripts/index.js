@@ -12,7 +12,7 @@ const authorsApiUrl = "https://localhost:7195/api/Authors";
 const categoriesApiUrl = "https://localhost:7195/api/Categories";
 const usersApiUrl = "https://localhost:7195/api/Users";
 const pdfsApiUrl = "https://localhost:7195/api/Pdfs";
-var modal = $('#coursesModal');
+var modal = $('#booksModal');
 var span = $('.close');
 var user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -66,32 +66,32 @@ $(document).ready(function () {
             var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
             bookElement.append(addBookBtn);
 
+            var moreDetails = $('<p class="more-details">More Details</p>');
+            bookElement.append(moreDetails);
+
             tableHeader.append(bookElement);
 
             // Call the appropriate functions for the buttons
             addBookClick(addBookBtn);
             addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+            showMoreDetails(moreDetails, book);
         });
 
         table.append(tableHeader);
         booksContainer.append(table);
     }
 
-
     async function getEBooksDisplayDataFromDB() {
         await ajaxCall("GET", `${booksApiURL}/GetEBooksDisplay`, "", getEBooksDisplayDataFromDBSCB, getEBooksDisplayDataFromDBECB);
     }
-
     function getEBooksDisplayDataFromDBSCB(result) {
         allBooksDisplay.push(result);
         console.log(allBooksDisplay);
         renderAllEBooksDisplay(result);
     }
-
     function getEBooksDisplayDataFromDBECB(err) {
         console.log(err);
     }
-
     function renderAllEBooksDisplay(ebooks) {
         var ebooksContainer = $('#ebooks-container');
         var table = $('<table>');
@@ -112,10 +112,16 @@ $(document).ready(function () {
             var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Add Book</button>');
             ebookElement.append(addEBookBtn);
 
+            var moreDetails = $('<p class="more-details">More Details</p>');
+            ebookElement.append(moreDetails);
+           
+
             tableHeader.append(ebookElement);
 
             addBookClick(addEBookBtn);
             addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+            showMoreDetails(moreDetails, ebook);
+
         });
 
         table.append(tableHeader);
@@ -163,8 +169,23 @@ $(document).ready(function () {
                 bookElement.append('<h3>' + book.title + '</h3>');
                 bookElement.append('<p>' + 'By: ' + book.authorName + '</p>');
                 bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+                var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
+                bookElement.append(addToWishlistBtn);
+
+                // Add "Add Book" button
+                var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+                bookElement.append(addBookBtn);
+
+                var moreDetails = $('<p class="more-details">More Details</p>');
+                bookElement.append(moreDetails);
+
                 console.log(book);
                 tableHeader.append(bookElement);
+
+                addBookClick(addBookBtn);
+                addWishlistClick(addToWishlistBtn); 
+                showMoreDetails(moreDetails, book);
+
             });
 
             table.append(tableHeader);
@@ -173,6 +194,7 @@ $(document).ready(function () {
 
         // Call function to load top 5 most purchased books when document is ready
         getTop5MostPurchasedBooks();
+
 
         // Existing functions and code...
 
@@ -212,9 +234,44 @@ $(document).ready(function () {
             }
         });
     }
-    
-
-
+    //to be deleted
+    function getBookById(bookId) {
+        // This function should retrieve book details by its ID
+        // You might need to implement an API call or a local function to fetch book details
+        // For now, returning a mock book object
+        return {
+            Id: bookId,
+            Title: "Example Book Title",
+            Subtitle: "Example Subtitle",
+            Language: "English",
+            Publisher: "Example Publisher",
+            PublishedDate: "2024-01-01",
+            Description: "Example book description.",
+            PageCount: 300,
+            PrintType: "BOOK",
+            SmallThumbnail: "http://example.com/small.jpg",
+            Thumbnail: "http://example.com/large.jpg",
+            SaleCountry: "US",
+            Saleability: "FOR_SALE",
+            IsEbook: false,
+            AccessCountry: "US",
+            Viewability: "PARTIAL",
+            PublicDomain: false,
+            TextToSpeechPermission: "ALLOWED",
+            EpubIsAvailable: true,
+            EpubDownloadLink: "http://example.com/epub",
+            EpubAcsTokenLink: "http://example.com/epub-token",
+            PdfIsAvailable: true,
+            PdfDownloadLink: "http://example.com/pdf",
+            PdfAcsTokenLink: "http://example.com/pdf-token",
+            WebReaderLink: "http://example.com/reader",
+            AccessViewStatus: "SAMPLE",
+            QuoteSharingAllowed: true,
+            TextSnippet: "Sample text snippet.",
+            Price: 29.99,
+            ExtarctedText: "Sample extracted text."
+        };
+    }
 
     // Function to add a book to the purchased list
     function addBookToPurchased(userId, book) {
@@ -304,20 +361,63 @@ $(document).ready(function () {
 
     //// ****Function to add a book to user's list not working****
     //function addBook(buttonId, userId) {
+    
+    modal.css('display', 'none');
+    span.on('click', function () {
+        modal.css('display', 'none');
+    });
 
-    //    ajaxCall("POST", `${booksApiURL}/addBookToUser/${userId}`, JSON.stringify(buttonId), postSCBF, postECBF);
+    $(window).on('click', function (event) {
+        if (event.target === $('#booksModal')[0]) {
+            $('#booksModal').hide();
+        }
+    });
 
-    //}
+    function addCoursesToModal(buttonId) {
+        modal.css('display', 'block');
 
-    //function postSCBF(result) {
-    //    alert("Book added successfully!");
-    //    console.log(result);
-    //}
+        $('#modal-content').children().slice(1).remove(); // Clear previous modal content
 
-    //function postECBF(err) {
-    //    alert("Book was already added.");
-    //    console.log(err);
-    //}
+        let api = `https://localhost:7283/api/Courses/searchByInstructorId/${buttonId}`;
+        ajaxCall("GET", api, null, getInstructorCoursesSCBF, getInstructorCoursesECBF);
+    }
+    function showMoreDetails(moreDetails, book) {
+        moreDetails.on('click', function () {
+            modal.css('display', 'block');
+            $('#modal-content').children().slice(1).remove();
+            renderBooksModal(book);
+        });
+    }
+
+    function renderBooksModal(book) {
+        var modalContent = $('#modal-content');
+        var bookModal = {};
+        //search for the book in allBooks
+        allBooks.forEach(function (books) {
+            books.forEach(function (b) {
+                if(b.id === book.id){
+                    bookModal = b;
+                }
+            });
+        });
+        console.log(book.id)    
+        console.log(bookModal);
+        var bookElement = $('<div>');
+        bookElement.addClass('bookModal');
+        bookElement.append('<img src="' + bookModal.image + '" alt="book image" />');
+        bookElement.append('<h3>' + bookModal.title + '</h3>');
+        bookElement.append('<h5>' + bookModal.subtitle + '</h5>');
+        bookElement.append('<p>' + 'Publisher: ' + bookModal.publisher + '</p>');
+        bookElement.append('<p>' + 'Published Date: ' + bookModal.publishedDate + '</p>');
+        bookElement.append('<p>' + 'Language: ' + bookModal.language + '</p>');
+        bookElement.append('<p>' + 'Page Count: ' + bookModal.pageCount + '</p>');
+        bookElement.append('<p>' + 'Description: ' + bookModal.description + '</p>');
+        bookElement.append('<p>' + 'By: ' + bookModal.authorNames + '</p>');
+        bookElement.append('<p>' + 'Price: ' + bookModal.price + ' ILS' + '</p>');
+
+        modalContent.append(bookElement);
+
+    }
 
     async function getAllBooksDataFromDB() {
         await ajaxCall("GET", `${booksApiURL}/GetAllBooks`, "", getAllBooksDataFromDBSCB, getAllBooksDataFromDBECB);
@@ -414,17 +514,7 @@ $(document).ready(function () {
 
   
     //הגעה לעמוד ה wish list 
-    $(document).ready(function () {
-        // Event handler for wishlist button click
-        $('#wishlistBtn').on('click', function () {
-            window.location.href = 'wishList.html'; // Redirect to the "Wish List" page
-        });
-    });
-    $(document).ready(function () {
-        $('#purchaseBooksBtn').on('click', function () {
-            window.location.href = 'transferBook.html'; // Redirect to the "Purchase Books from Users" page
-        });
-    });
+    
 
 
     getBooksDisplayDataFromDB();
@@ -488,6 +578,15 @@ $(document).ready(function () {
 
     });
 
+    const wishlistBtn = document.getElementById("wishlistBtn");
+    $(wishlistBtn).click(function () {
+        window.location.href = "wishList.html";
+    });
+
+    const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
+    $(purchaseBooksBtn).click(function () {
+        window.location.href = "transferBook.html";
+    });
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {
         $('#logoutBtn').show();

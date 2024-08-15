@@ -2,9 +2,6 @@
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 
-
-
-
 function fetchBooks() {
     const status = 'purchased'; // הגדרת הסטטוס
     //                   https://localhost:7195/api/UserBooks/get?userID=34&status=purchased
@@ -62,7 +59,7 @@ function renderAllBooksDisplay(books) {
     booksContainer.append(table);
 }
 
-// פונקציה להוספת ספר לרשימת הקריאה
+// פונקציה להוספת ספר לרשימת הקריאה //Update status from purchased to read 
 function addBookToRead(userID, bookId) {
 
     const status = "read";
@@ -95,7 +92,7 @@ function addReadClick(readBtn) {
             console.log(bookId);
             addBookToRead(user.id, bookId);
 
-            // אופציונלית, עדכן את מצב הכפתור בהתאם להצלחה
+            // עדכן את מצב הכפתור בהתאם להצלחה
             $(this).toggleClass('added');
         } else {
             alert("User not logged in.");
@@ -103,20 +100,108 @@ function addReadClick(readBtn) {
     });
 }
 
-// Function to update the library based on userID and status
-function updateLibrary(userID, status) {
-    // Build API URL with parameters
-    var apiUrl = `/api/UserBooks/get?userID=${encodeURIComponent(userID)}&status=${encodeURIComponent(status)}`;
-
-    ajaxCall('GET', apiUrl, null,
-        function (response) {
-            updateBookLists(response);
-        },
-        function (error) {
-            console.log('Error updating library:', error);
-        }
-    );
-}
-
 // קריאה לפונקציה לשליפת ספרים
 fetchBooks();
+
+const allBooksBtn = document.getElementById("allBooksBtn");
+$(allBooksBtn).click(function () {
+    window.location.href = "booksCatalog.html";
+});
+
+const allEBooksBtn = document.getElementById("allEBooksBtn");
+$(allEBooksBtn).click(function () {
+
+    window.location.href = "ebooksCatalog.html";
+});
+
+const authorsBtn = document.getElementById("authorsBtn");
+//jquery click event
+$(authorsBtn).click(function () {
+    window.location.href = "authors.html";
+});
+
+const loginBtn = document.getElementById("loginBtn");
+$(loginBtn).click(function () {
+    window.location.href = "login.html";
+});
+
+const logoutbtn = document.getElementById("logoutBtn");
+
+$(logoutbtn).click(function () {
+    sessionStorage.clear();
+    window.location.reload();
+});
+
+
+const registerbtn = document.getElementById("registerBtn");
+
+$(registerbtn).click(function () {
+    window.location.href = "register.html";
+});
+
+const adminbtn = document.getElementById("adminBtn");
+
+$(adminBtn).click(function () {
+    window.location.href = "admin.html";
+});
+
+const myBooks = document.getElementById("myBooksBtn");
+$(myBooks).click(function () {
+    window.location.href = "myBooks.html";
+
+});
+const wishlistBtn = document.getElementById("wishlistBtn");
+$(wishlistBtn).click(function () {
+    window.location.href = "wishList.html";
+});
+
+const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
+$(purchaseBooksBtn).click(function () {
+    window.location.href = "transferBook.html";
+});
+
+// Check user status and display appropriate buttons
+if (user && !user.isAdmin) {
+    $('#logoutBtn').show();
+    $('#loginBtn').hide();
+    $('#registerBtn').hide();
+    $('#myBooksBtn').show();
+    $('#adminBtn').hide();
+    $('#wishlistBtn').show(); // Show wishlist button for regular users
+} else if (user && user.isAdmin) {
+    $('#logoutBtn').show();
+    $('#loginBtn').hide();
+    $('#registerBtn').hide();
+    $('#myBooksBtn').show();
+    $('#adminBtn').show();
+    $('#wishlistBtn').hide(); // Hide wishlist button for admins
+} else {
+    $('#logoutBtn').hide();
+    $('#loginBtn').show();
+    $('#registerBtn').show();
+    $('#myBooksBtn').hide();
+    $('#adminBtn').hide();
+    $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
+}
+
+
+const currentTheme = localStorage.getItem('theme');
+if (currentTheme == 'dark' && !document.body.classList.contains('dark-mode')) {
+    document.body.classList.toggle('dark-mode');
+}
+else if (currentTheme == 'light' && document.body.classList.contains('dark-mode')) {
+    document.body.classList.toggle('dark-mode');
+}
+
+
+//const currentTheme = localStorage.getItem('theme');
+const toggleButton = document.getElementById('toggle-mode');
+toggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+
+    let theme = 'light';
+    if (document.body.classList.contains('dark-mode')) {
+        theme = 'dark';
+    }
+    localStorage.setItem('theme', theme);
+});
