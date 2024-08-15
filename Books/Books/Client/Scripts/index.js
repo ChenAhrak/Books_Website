@@ -379,17 +379,7 @@ $(document).ready(function () {
 
   
     //הגעה לעמוד ה wish list 
-    $(document).ready(function () {
-        // Event handler for wishlist button click
-        $('#wishlistBtn').on('click', function () {
-            window.location.href = 'wishList.html'; // Redirect to the "Wish List" page
-        });
-    });
-    $(document).ready(function () {
-        $('#purchaseBooksBtn').on('click', function () {
-            window.location.href = 'transferBook.html'; // Redirect to the "Purchase Books from Users" page
-        });
-    });
+    
 
 
     getBooksDisplayDataFromDB();
@@ -453,6 +443,15 @@ $(document).ready(function () {
 
     });
 
+    const wishlistBtn = document.getElementById("wishlistBtn");
+    $(wishlistBtn).click(function () {
+        window.location.href = "wishList.html";
+    });
+
+    const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
+    $(purchaseBooksBtn).click(function () {
+        window.location.href = "transferBook.html";
+    });
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {
         $('#logoutBtn').show();

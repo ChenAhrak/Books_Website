@@ -3,18 +3,30 @@
 <head>
     <meta charset="utf-8" />
     <title>Transfer Books</title>
-    <script src="../Scripts/ajaxCalls.js"></script>
-    <script src="../Scripts/TransferBook.js"></script>
+    <!-- Load jQuery from a CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <!-- Load custom scripts that depend on jQuery -->
+    <script src="../Scripts/ajaxCalls.js" defer></script>
+    <script src="../Scripts/transferBook.js" defer></script>
+    <link href="../Style/transferBook.css" rel="stylesheet" />
 </head>
 <body>
+    <!-- Navigation Menu -->
+    <nav>
+        <button id="loginBtn">Log in</button>
+        <button id="logoutBtn">Log out</button>
+        <button id="registerBtn">Sign up</button>
+        <button id="authorsBtn">Authors</button>
+        <button id="myBooksBtn">My Books</button>
+        <button id="adminBtn">Admin</button>
+        <button id="toggle-mode"></button>
+        <button id="wishlistBtn">🤍</button>
+    </nav>
     <h1>Available Books for Purchase</h1>
-    <div id="bookList"></div>
-
-    <!--<h2>Add Purchase Request</h2>
-    <button onclick="addBookPurchaseRequest()">Send Purchase Request</button>-->
-    <!--<label for="requestId">Request ID:</label>
-    <input type="number" id="requestId">-->
-    <label for="approvalStatus">Approval Status:</label>
+    <div class="section" id="books-display">
+        <div id="books-container"></div>
+    </div>
+    <!--<label for="approvalStatus">Approval Status:</label>
     <select id="approvalStatus">
         <option value="approved">Approved</option>
         <option value="rejected">Rejected</option>
@@ -22,14 +34,6 @@
     <button onclick="updatePurchaseRequestStatus()">Send</button>
 
     <h2>Transfer Book</h2>
-    <!--<label for="buyerId">Buyer ID:</label>
-    <input type="number" id="buyerId">
-    <label for="sellerId">Seller ID:</label>
-    <input type="number" id="sellerId">
-    <label for="bookId">Book ID:</label>
-    <input type="text" id="bookId">-->
-    <button onclick="transferBook()">Transfer Book</button>
-
-
+    <button onclick="transferBook()">Transfer Book</button>-->
 </body>
 </html>
