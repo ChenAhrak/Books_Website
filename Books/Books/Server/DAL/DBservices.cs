@@ -930,6 +930,7 @@ namespace Books.Server.DAL
                         {
                             var book = new
                             {
+                                // missing thumbnail, author, isEbook
                                 Id = reader["BookID"].ToString(),
                                 Title = reader["Title"].ToString(),
                                 Subtitle = reader["Subtitle"].ToString(),
@@ -941,7 +942,10 @@ namespace Books.Server.DAL
                                 PageCount = reader["PageCount"] as int? ?? 0,
                                 PrintType = reader["PrintType"].ToString(),
                                 Price = reader["Price"] as double? ?? 0.0,
-                                Status = reader["Status"].ToString()
+                                Status = reader["Status"].ToString(),
+                                Thumbnail = reader["Thumbnail"].ToString(),
+                                Authors = reader["Authors"].ToString(),
+                                isEbook = reader["isEbook"].ToString()
                             };
 
                             books.Add(book);
@@ -957,6 +961,7 @@ namespace Books.Server.DAL
 
             return books;
         }
+
         public bool AddBookToLibrary(UserBooks userBook)
         {
             try
@@ -997,7 +1002,7 @@ namespace Books.Server.DAL
                 Console.WriteLine($"Error: {ex.Message}");
                 return false;
             }
-            
+
         }
 
         public void updateUserHighScore(int id, int score)
@@ -1292,6 +1297,120 @@ namespace Books.Server.DAL
         }
 
 
+        public List<User> GetAllUsers()
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            cmd = CreateCommandWithStoredProcedureGetAllUsers("SP_GetAllUsers", con); // create the command
+
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
+                List<User> allUsers = new List<User>();
+                while(reader.Read())
+                {
+                    User user = new User();
+                    user.Id = Convert.ToInt32(reader["UserId"]);
+                    user.UserName = reader["UserName"].ToString();
+                    user.Email = reader["Email"].ToString();
+                    user.IsActive = Convert.ToBoolean(reader["IsActive"]);
+                    user.IsAdmin = Convert.ToBoolean(reader["IsAdmin"]);
+                    user.Password = reader["Password"].ToString();
+                    allUsers.Add(user);
+                }
+                return allUsers;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureGetAllUsers(String spName, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con; // assign the connection to the command object
+
+            cmd.CommandText = spName; // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            return cmd;
+        }
+
+        public void DeleteUserById(int id)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            cmd = CreateCommandWithStoredProcedureDeleteUserById("SP_DeleteUserById", con, id); // create the command
+
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureDeleteUserById(String spName, SqlConnection con, int id)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con; // assign the connection to the command object
+
+            cmd.CommandText = spName; // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            cmd.Parameters.AddWithValue("@UserId", id);
+
+            return cmd;
+        }
 
     }
 }

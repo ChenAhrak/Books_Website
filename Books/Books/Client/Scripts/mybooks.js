@@ -1,52 +1,111 @@
-﻿function fetchBooks(status) {
-    // הגדרת פרמטרים ל-ajaxCall
-    const apiEndpoint = `api/UserBooks/get?status=${encodeURIComponent(status)}`;
+﻿// פונקציה לשליחת בקשה לשרת לצורך שליפת ספרים עם סטטוס "purchased"
 
-    // קריאה לפונקציה ajaxCall
+var user = JSON.parse(sessionStorage.getItem('user'));
+
+
+
+
+function fetchBooks() {
+    const status = 'purchased'; // הגדרת הסטטוס
+    //                   https://localhost:7195/api/UserBooks/get?userID=34&status=purchased
+    const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${status}`;
+
+    // שלח בקשה לשרת
     ajaxCall('GET', apiEndpoint, null,
-        (books) => {
-            console.log('Books fetched successfully:', books);
-            displayBooks(books);
-        },
-        (error) => {
-            console.error('Error fetching books:', error);
-        }
+        getBooksDisplayDataFromDBSCB,  // פונקציית הצלחה
+        getBooksDisplayDataFromDBECB  // פונקציית שגיאה
     );
 }
 
-// Step 2: Display the books to the user
-function displayBooks(books) {
-    const bookListElement = document.getElementById('bookList');
-    bookListElement.innerHTML = ''; // Clear the list before adding new items
+// פונקציית הצלחה בבקשה לשרת
+function getBooksDisplayDataFromDBSCB(result) {
+    // הצג את הספרים
+    renderAllBooksDisplay(result);
+}
+
+// פונקציית שגיאה בבקשה לשרת
+function getBooksDisplayDataFromDBECB(err) {
+    console.log("Error fetching books:", err);
+}
+
+// הצגת הספרים בטבלה
+function renderAllBooksDisplay(books) {
+    var booksContainer = $('#books-container');
+    booksContainer.empty(); // נקה את התוכן הקיים לפני הוספת ספרים חדשים
+
+    if (books.length === 0) {
+        booksContainer.append('<p>No books available in the "purchased" status.</p>');
+        return;
+    }
+
+    var table = $('<table>');
+    var tableHeader = $('<tr>');
 
     books.forEach(book => {
-        const bookItem = document.createElement('div');
-        bookItem.className = 'book-item';
-        bookItem.innerHTML = `
-            <span>${book.title} by ${book.author} (Owner: ${book.owner})</span>
-            <button onclick="requestBookPurchase(${book.id}, ${book.ownerId})">Request Purchase</button>
-        `;
-        bookListElement.appendChild(bookItem);
+        var bookElement = $('<td>');
+        bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
+        bookElement.append('<h3>' + book.title + '</h3>');
+        bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
+        bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+
+        // הוסף כפתור "Add to Read List"
+        var addToReadListBtn = $('<button class="addToReadListButton" data-book-id="' + book.id + '">Add to Read List</button>');
+        bookElement.append(addToReadListBtn);
+
+        tableHeader.append(bookElement);
+
+        // קרא לפונקציות המתאימות עבור הכפתור
+        addReadClick(addToReadListBtn);
     });
+
+    table.append(tableHeader);
+    booksContainer.append(table);
 }
 
 // פונקציה להוספת ספר לרשימת הקריאה
-function addBookToRead(userID, book) {
-    var apiUrl = `/api/UserBooks/addBookToRead/${encodeURIComponent(userID)}`;
+function addBookToRead(userID, bookId) {
 
-    ajaxCall('POST', apiUrl, JSON.stringify(book),
+    const status = "read";
+    const api = `https://localhost:7195/api/UserBooks/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
+    const data = JSON.stringify(bookId);
+
+    ajaxCall(
+        'PUT',
+        api,
+        data,
         function (response) {
-            console.log('Book added to read list successfully:', response);
-            updateLibrary(userID, 'all'); // עדכן את רשימות הספרים לאחר הוספת הספר
+            console.log("Success:", response);
+            alert("Book added to read list.");
+            // Update UI to reflect the book was added
+            $(`button[data-book-id="${bookId}"]`).addClass('added').text('Added'); // Update button state on success
         },
         function (error) {
-            console.log('Error adding book to read list:', error);
+            console.error("Error:", error);
+            alert("Error adding book to read list.");
         }
     );
 }
-// פונקציה לעדכון הספריה
+
+// הוסף מאזין לאירוע ללחיצה על כפתור "Add to Read List"
+function addReadClick(readBtn) {
+    readBtn.on('click', function () {
+        const bookId = this.getAttribute('data-book-id');
+        if (user.id) {
+            //const book = getBookById(bookId); // Assuming you have a function to get book details
+            console.log(bookId);
+            addBookToRead(user.id, bookId);
+
+            // אופציונלית, עדכן את מצב הכפתור בהתאם להצלחה
+            $(this).toggleClass('added');
+        } else {
+            alert("User not logged in.");
+        }
+    });
+}
+
+// Function to update the library based on userID and status
 function updateLibrary(userID, status) {
-    // בנה את כתובת ה-API עם פרמטרים
+    // Build API URL with parameters
     var apiUrl = `/api/UserBooks/get?userID=${encodeURIComponent(userID)}&status=${encodeURIComponent(status)}`;
 
     ajaxCall('GET', apiUrl, null,
@@ -59,3 +118,5 @@ function updateLibrary(userID, status) {
     );
 }
 
+// קריאה לפונקציה לשליפת ספרים
+fetchBooks();

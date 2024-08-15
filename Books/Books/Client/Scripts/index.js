@@ -198,18 +198,19 @@ $(document).ready(function () {
     // Function to add a book to the wishlist
     function addBookToWishlist(userId, bookId) {
         const api = `https://localhost:7195/api/UserBooks/addBookToWishlist/${userId}`;
-        const data = JSON.stringify({ id: bookId }); 
+        const data = getBookById(bookId); 
         ajaxCall(
             'POST',
             api,
-            data,
+            JSON.stringify(data),
             function (response) {
                 console.log("Success:", response);
+                alert("Added");
                 $(`button[data-book-id="${bookId}"]`).addClass('filled').text('❤️'); // Update button state on success
             },
             function (error) {
                 console.error("Error:", error);
-                alert("An error occurred while adding the book to the wishlist.");
+                alert("Book was already added");
             }
         );
     }
@@ -217,8 +218,7 @@ $(document).ready(function () {
     function addWishlistClick(wishlistBtn) {
         wishlistBtn.on('click', function () {
             const bookId = $(this).data('book-id');
-            const userId = getUserId(); // Fetch the current user ID
-
+            const userId = user.id; // Fetch the current user ID
             if (userId) {
                 // Add book to wishlist
                 addBookToWishlist(userId, bookId);
@@ -230,11 +230,18 @@ $(document).ready(function () {
             }
         });
     }
+    
 
-    // Function to add a book to the user's library with a status of 'purchased'
-    function addBookToPurchased(userId, bookId) {
-        const api = `https://localhost:7195/api/Books/addBookToPurchased/${userId}`;
-        const data = JSON.stringify({ id: bookId });
+
+
+    // Function to add a book to the purchased list
+    function addBookToPurchased(userId, book) {
+        const api = `https://localhost:7195/api/UserBooks/addBookToPurchased/${userId}`;
+        const data = JSON.stringify(book);
+
+        // Print the API URL and data being sent to the console
+        console.log("API URL:", api);
+        console.log("Request Data:", data);
 
         ajaxCall(
             'POST',
@@ -242,12 +249,12 @@ $(document).ready(function () {
             data,
             function (response) {
                 console.log("Success:", response);
-                // Optionally update the button state or display a message
-                $(`button#${bookId}`).text('Added to Purchased');
+                alert("The book added");
+                // Update UI on success, e.g., change button state
             },
             function (error) {
                 console.error("Error:", error);
-                alert("An error occurred while adding the book to the purchased list.");
+                alert("You already added this book.");
             }
         );
     }
@@ -261,7 +268,9 @@ $(document).ready(function () {
 
                 if (isLoggedIn()) {
                     const user = JSON.parse(sessionStorage.getItem('user'));
-                    addBookToPurchased(user.id, buttonId);
+                    // Assuming you have a way to get the book details by ID
+                    const book = getBookById(buttonId); // You need to implement this function
+                    addBookToPurchased(user.id, book);
                 } else {
                     console.log("User not logged in. Redirecting to login.");
                     alert("Please login or register to add book.");
@@ -271,6 +280,49 @@ $(document).ready(function () {
         });
     }
 
+    //to be deleted
+    function getBookById(bookId) {
+        // This function should retrieve book details by its ID
+        // You might need to implement an API call or a local function to fetch book details
+        // For now, returning a mock book object
+        return {
+            Id: bookId,
+            Title: "Example Book Title",
+            Subtitle: "Example Subtitle",
+            Language: "English",
+            Publisher: "Example Publisher",
+            PublishedDate: "2024-01-01",
+            Description: "Example book description.",
+            PageCount: 300,
+            PrintType: "BOOK",
+            SmallThumbnail: "http://example.com/small.jpg",
+            Thumbnail: "http://example.com/large.jpg",
+            SaleCountry: "US",
+            Saleability: "FOR_SALE",
+            IsEbook: false,
+            AccessCountry: "US",
+            Viewability: "PARTIAL",
+            PublicDomain: false,
+            TextToSpeechPermission: "ALLOWED",
+            EpubIsAvailable: true,
+            EpubDownloadLink: "http://example.com/epub",
+            EpubAcsTokenLink: "http://example.com/epub-token",
+            PdfIsAvailable: true,
+            PdfDownloadLink: "http://example.com/pdf",
+            PdfAcsTokenLink: "http://example.com/pdf-token",
+            WebReaderLink: "http://example.com/reader",
+            AccessViewStatus: "SAMPLE",
+            QuoteSharingAllowed: true,
+            TextSnippet: "Sample text snippet.",
+            Price: 29.99,
+            ExtarctedText: "Sample extracted text."
+        };
+    }
+
+
+    //// ****Function to add a book to user's list not working****
+    //function addBook(buttonId, userId) {
+    
     modal.css('display', 'none');
     span.on('click', function () {
         modal.css('display', 'none');
@@ -422,8 +474,18 @@ $(document).ready(function () {
     //}
 
   
-    
-
+    //הגעה לעמוד ה wish list 
+    $(document).ready(function () {
+        // Event handler for wishlist button click
+        $('#wishlistBtn').on('click', function () {
+            window.location.href = 'wishList.html'; // Redirect to the "Wish List" page
+        });
+    });
+    $(document).ready(function () {
+        $('#purchaseBooksBtn').on('click', function () {
+            window.location.href = 'transferBook.html'; // Redirect to the "Purchase Books from Users" page
+        });
+    });
 
 
     getBooksDisplayDataFromDB();
@@ -487,7 +549,6 @@ $(document).ready(function () {
 
     });
 
-
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {
         $('#logoutBtn').show();
@@ -495,19 +556,23 @@ $(document).ready(function () {
         $('#registerBtn').hide();
         $('#myBooksBtn').show();
         $('#adminBtn').hide();
+        $('#wishlistBtn').show(); // Show wishlist button for regular users
     } else if (user && user.isAdmin) {
         $('#logoutBtn').show();
         $('#loginBtn').hide();
         $('#registerBtn').hide();
         $('#myBooksBtn').show();
         $('#adminBtn').show();
+        $('#wishlistBtn').hide(); // Hide wishlist button for admins
     } else {
         $('#logoutBtn').hide();
         $('#loginBtn').show();
         $('#registerBtn').show();
         $('#myBooksBtn').hide();
         $('#adminBtn').hide();
+        $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
     }
+
 
     const currentTheme = localStorage.getItem('theme');
     if (currentTheme == 'dark' && !document.body.classList.contains('dark-mode')) {

@@ -10,6 +10,7 @@
     <link href="../Style/myBooks.css" rel="stylesheet" />
 </head>
 <body>
+
     <!-- Navigation Menu -->
     <nav>
         <button id="loginBtn">Log in</button>
@@ -21,13 +22,16 @@
         <button id="toggle-mode"></button>
         <button id="wishlistBtn">🤍</button>
     </nav>
-    <h1>My Library</h1>
 
-    <div class="section" id="books-display">
-        <h2>Purchased Books</h2>
-        <div id="books-container"></div>
+    <!-- Main Content -->
+    <h1>Wish List</h1>
+    <div class="section" id="wantToReadSection">
+        <h2>Books I Want to Read</h2>
+        <div id="bookList"></div>
+
+        <ul class="book-list" id="wantToReadList"></ul>
     </div>
 
-    <script src="../Scripts/mybooks.js"></script>
+    <script src="../Scripts/wishList.js"></script>
 </body>
 </html>
