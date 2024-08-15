@@ -2,9 +2,6 @@
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 
-
-
-
 function fetchBooks() {
     const status = 'purchased'; // הגדרת הסטטוס
     //                   https://localhost:7195/api/UserBooks/get?userID=34&status=purchased
@@ -62,7 +59,7 @@ function renderAllBooksDisplay(books) {
     booksContainer.append(table);
 }
 
-// פונקציה להוספת ספר לרשימת הקריאה
+// פונקציה להוספת ספר לרשימת הקריאה //Update status from purchased to read 
 function addBookToRead(userID, bookId) {
 
     const status = "read";
@@ -95,7 +92,7 @@ function addReadClick(readBtn) {
             console.log(bookId);
             addBookToRead(user.id, bookId);
 
-            // אופציונלית, עדכן את מצב הכפתור בהתאם להצלחה
+            // עדכן את מצב הכפתור בהתאם להצלחה
             $(this).toggleClass('added');
         } else {
             alert("User not logged in.");
@@ -103,20 +100,20 @@ function addReadClick(readBtn) {
     });
 }
 
-// Function to update the library based on userID and status
-function updateLibrary(userID, status) {
-    // Build API URL with parameters
-    var apiUrl = `/api/UserBooks/get?userID=${encodeURIComponent(userID)}&status=${encodeURIComponent(status)}`;
+//// Function to update the library based on userID and status
+//function updateLibrary(userID, status) {
+//    // Build API URL with parameters
+//    var apiUrl = `/api/UserBooks/get?userID=${encodeURIComponent(userID)}&status=${encodeURIComponent(status)}`;
 
-    ajaxCall('GET', apiUrl, null,
-        function (response) {
-            updateBookLists(response);
-        },
-        function (error) {
-            console.log('Error updating library:', error);
-        }
-    );
-}
+//    ajaxCall('GET', apiUrl, null,
+//        function (response) {
+//            updateBookLists(response);
+//        },
+//        function (error) {
+//            console.log('Error updating library:', error);
+//        }
+//    );
+//}
 
 // קריאה לפונקציה לשליפת ספרים
 fetchBooks();

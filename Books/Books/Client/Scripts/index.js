@@ -73,21 +73,17 @@ $(document).ready(function () {
         booksContainer.append(table);
     }
 
-
     async function getEBooksDisplayDataFromDB() {
         await ajaxCall("GET", `${booksApiURL}/GetEBooksDisplay`, "", getEBooksDisplayDataFromDBSCB, getEBooksDisplayDataFromDBECB);
     }
-
     function getEBooksDisplayDataFromDBSCB(result) {
         allBooksDisplay.push(result);
         console.log(allBooksDisplay);
         renderAllEBooksDisplay(result);
     }
-
     function getEBooksDisplayDataFromDBECB(err) {
         console.log(err);
     }
-
     function renderAllEBooksDisplay(ebooks) {
         var ebooksContainer = $('#ebooks-container');
         var table = $('<table>');
@@ -230,9 +226,44 @@ $(document).ready(function () {
             }
         });
     }
-    
-
-
+    //to be deleted
+    function getBookById(bookId) {
+        // This function should retrieve book details by its ID
+        // You might need to implement an API call or a local function to fetch book details
+        // For now, returning a mock book object
+        return {
+            Id: bookId,
+            Title: "Example Book Title",
+            Subtitle: "Example Subtitle",
+            Language: "English",
+            Publisher: "Example Publisher",
+            PublishedDate: "2024-01-01",
+            Description: "Example book description.",
+            PageCount: 300,
+            PrintType: "BOOK",
+            SmallThumbnail: "http://example.com/small.jpg",
+            Thumbnail: "http://example.com/large.jpg",
+            SaleCountry: "US",
+            Saleability: "FOR_SALE",
+            IsEbook: false,
+            AccessCountry: "US",
+            Viewability: "PARTIAL",
+            PublicDomain: false,
+            TextToSpeechPermission: "ALLOWED",
+            EpubIsAvailable: true,
+            EpubDownloadLink: "http://example.com/epub",
+            EpubAcsTokenLink: "http://example.com/epub-token",
+            PdfIsAvailable: true,
+            PdfDownloadLink: "http://example.com/pdf",
+            PdfAcsTokenLink: "http://example.com/pdf-token",
+            WebReaderLink: "http://example.com/reader",
+            AccessViewStatus: "SAMPLE",
+            QuoteSharingAllowed: true,
+            TextSnippet: "Sample text snippet.",
+            Price: 29.99,
+            ExtarctedText: "Sample extracted text."
+        };
+    }
 
     // Function to add a book to the purchased list
     function addBookToPurchased(userId, book) {
