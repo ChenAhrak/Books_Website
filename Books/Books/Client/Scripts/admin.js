@@ -50,7 +50,7 @@ $(document).ready(async function () {
                     title: "User Name",
 
                     render: function (data, type, row, meta) {
-                        return '<p>' + data + '</p>';
+                        return '<input type="text" class="editUserName" id="editUserName' + row.id + '" value="' + data + '" data-user-name="' + row.id + '" disabled>';
                     }
                 },
 
@@ -58,7 +58,8 @@ $(document).ready(async function () {
                     data: "email",
                     title: "User Email",
                     render: function (data, type, row, meta) {
-                        return '<p>' + data + '</p>';
+                        //return '<p>' + data + '</p>';
+                        return '<input type="text" class="editEmail" id="editEmail' + row.id + '" value="' + data + '" data-email="' + row.id + '" disabled>';
                     }
                 },
 
@@ -66,7 +67,8 @@ $(document).ready(async function () {
                     data: "password",
                     title: "password",
                     render: function (data, type, row, meta) {
-                        return '<p>' + data + '</p>'
+                        //return '<p>' + data + '</p>';
+                        return '<input type="text" class="editPassword" id="editPassword' + row.id + '" value="' + data + '" data-password="' + row.id + '" disabled>';
                     }
                 },
 
@@ -74,7 +76,7 @@ $(document).ready(async function () {
                     data: "isAdmin",
                     title: "Admin",
                     render: function (data, type, row, meta) {
-                        return '<input type="checkbox" class="isAdminCheckbox" id="isAdmin' + meta.row + '" data-course-id="' + row.id + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
+                        return '<input type="checkbox" class="isAdminCheckbox" id="isAdmin' + meta.row + '" data-isAdmin="' + row.id + '"' + '" value="' + data + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
                     }
                 },
 
@@ -82,7 +84,7 @@ $(document).ready(async function () {
                     data: "isActive",
                     title: "Active",
                     render: function (data, type, row, meta) {
-                        return '<input type="checkbox" class="isActiveCheckbox" id="isActive' + meta.row + '" data-course-id="' + row.id + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
+                        return '<input type="checkbox" class="isActiveCheckbox" id="isActive' + meta.row + '" data-isActive="' + row.id + '"' + '" value="' + data + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
                     }
                 },
 
@@ -93,7 +95,7 @@ $(document).ready(async function () {
                         //let dataUser = row.id;
 
                         editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataUser + "> Edit </button>";
-                        viewBtn = "<button type='button' class = 'viewBtn btn btn-info' " + dataUser + "> View </button>";
+                        viewBtn = "<button type='button' class = 'saveBtn btn btn-info' " + dataUser + "> Save </button>";
                         deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataUser + "> Delete </button>";
                         return editBtn + viewBtn + deleteBtn;
                     }
@@ -108,20 +110,40 @@ $(document).ready(async function () {
     function buttonEvents() {
 
         $(document).on("click", ".editBtn", function () {
-            mode = "edit";
+            disableInputs();
+            //mode = "edit";
             markSelected(this);
-            $("#editDiv").show();
-            $("#editDiv :input").prop("disabled", false); // edit mode: enable all controls in the form
+            //$("#editDiv").show();
+            $(".selected :input").prop("disabled", false); // edit mode: enable all controls in the form
             //populateFields(this.getAttribute('data-carId')); // fill the form fields according to the selected row
         });
 
-        $(document).on("click", ".viewBtn", function () {
-            mode = "view";
+        $(document).on("click", ".saveBtn", function () {
+            //mode = "view";
             markSelected(this);
-            $("#editDiv").show();
+            //$("#editDiv").show();
             row.className = 'selected';
-            $("#editDiv :input").attr("disabled", "disabled"); // view mode: disable all controls in the form
+            
+            //item = document.getElementsByClassName("selected");
+            var child = row.childNodes[4].childNodes[0].getAttribute("value");
+            //var secondChild = row.childNodes[1];
+            //console.log(child);
+            //var id = row.childNodes[0].childNodes[0].textContent;
+            //console.log(id);
+            console.log(row.childNodes[0].childNodes[0].textContent);
+            var data = {
+                id: row.childNodes[0].childNodes[0].textContent.trim(),
+                userName: row.childNodes[1].childNodes[0].value,
+                email: row.childNodes[2].childNodes[0].value,
+                password: row.childNodes[3].childNodes[0].value,
+                isAdmin: row.childNodes[4].childNodes[0].checked,
+                isActive: row.childNodes[5].childNodes[0].checked,
+            };
+            updateUser(data);
+            $(".selected :input").attr("disabled", "disabled"); // view mode: disable all controls in the form
+            $(".selected :button").attr("disabled", false);
             //populateFields(this.getAttribute('data-carId'));
+            
         });
 
         $(document).on("click", ".deleteBtn", function () {
@@ -129,23 +151,40 @@ $(document).ready(async function () {
             markSelected(this);
             console.log(this);
             var userId = this.getAttribute('data-userId');
-            console.log(userId);
             swal({ // this will open a dialouge 
-                title: "Are you sure ??",
+                title: "Deleting this user permenantly?",
                 text: "",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true
             })
                 .then(function (willDelete) {
-                    if (willDelete) deleteUser(userId);
-                    else swal("Not Deleted!");
+                    if (willDelete && !user.isAdmin) deleteUser(userId);
+                    else swal("User was not deleted!");
                 });
         });
     }
 
 
 });
+
+function disableInputs() {
+    $("input").attr("disabled", "disabled");
+}
+
+///////////// need to check if need to add control for each save button  ///////////////////////////
+function updateUser(data) {
+
+    ajaxCall('PUT', usersApiUrl + `/UpdateUserData/${data.id}`, JSON.stringify(data), updateUserSCBF, updateUserECBF);
+}
+
+function updateUserSCBF(response) {
+    console.log(response);
+}
+
+function updateUserECBF(err) {
+    console.log(err);
+}
 
 function deleteUser(id) {
     ajaxCall('DELETE', usersApiUrl +"/"+ id, "", deleteUserSCBF, deleteUserECBF);

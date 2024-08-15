@@ -1412,6 +1412,66 @@ namespace Books.Server.DAL
             return cmd;
         }
 
+        //UpdateUserData(id, user)
+
+        public bool UpdateUserInfo(int id, User user)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            cmd = CreateCommandWithStoredProcedureUpdateUserInfo("SP_UpdateUserInfo", con, id, user.UserName, user.Email, user.IsActive, user.IsAdmin, user.Password); // create the command
+
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureUpdateUserInfo(String spName, SqlConnection con, int id, string name, string email, bool isActive, bool isAdmin, string password)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con; // assign the connection to the command object
+
+            cmd.CommandText = spName; // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            cmd.Parameters.AddWithValue("@UserId", id);
+            cmd.Parameters.AddWithValue("@userName", name);
+            cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@isActive", isActive);
+            cmd.Parameters.AddWithValue("@isAdmin", isAdmin);
+            cmd.Parameters.AddWithValue("@password", password);
+
+            return cmd;
+        }
+
     }
 }
 

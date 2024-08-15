@@ -43,8 +43,25 @@ namespace Books.Server.Controllers
         }
 
         // PUT api/<UsersController>/5
+        [HttpPut("UpdateUserData/{id}")]
+        public IActionResult updateUserInfo([FromBody] User user)
+        {
+            DBservices db = new DBservices();
+            User update = new(user.Id, user.UserName, user.Email, user.Password, user.IsAdmin, user.IsActive);
+            try
+            {
+                db.UpdateUserInfo(user.Id, update);
+                return Ok(new { message = "User updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        // PUT api/<UsersController>/5
         [HttpPut("UpdateHighScore/{id}")]
-        public void Put(int id, [FromBody] int score)
+        public void updateHighScore(int id, [FromBody] int score)
         {
             DBservices db = new DBservices();
             db.updateUserHighScore(id, score);
@@ -52,7 +69,7 @@ namespace Books.Server.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("UpdateHighScore/{id}")]
-        public int GET(int id)
+        public int getHighScore(int id)
         {
             int highScore;
             DBservices db = new DBservices();
@@ -72,7 +89,7 @@ namespace Books.Server.Controllers
             return null;
         }
 
-        // GET api/<UsersController>/6
+        // DELETE api/<UsersController>/6
         [HttpDelete("{id}")]
         public void deleteUser(int id)
         {

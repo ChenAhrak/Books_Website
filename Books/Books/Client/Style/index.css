@@ -28,6 +28,13 @@ body {
     margin: 20px;
 }
 
+#userWelcome{
+    position: absolute;
+    top:0;
+    right: 50px;
+    margin: 20px;
+}
+
 table {
     display: flex;
     flex-direction: row;
