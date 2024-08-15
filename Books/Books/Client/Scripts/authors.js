@@ -1,6 +1,8 @@
 ﻿const authorsApiUrl = "https://localhost:7195/api/Authors";
 const allAuthors = [];
 var user = JSON.parse(sessionStorage.getItem('user'));
+var modal = $('#authorsModal');
+var span = $('.close');
 
 $(document).ready(function () {
 
@@ -29,11 +31,13 @@ $(document).ready(function () {
             authorElement.append('<p>' + 'Death Date: ' + author.deathDate + '</p>');
             authorElement.append('<p>' + 'Top Work: ' + author.topWork + '</p>');
             authorElement.append('<p>' + 'Description: ' + author.description + '</p>');
-
+            var authorBooks = $('<p class="author-books">' + 'Books ' + '</p>');
+            authorElement.append(authorBooks);
             authorsContainer.append(authorElement);
+
+            addAuthorClickHandlers(authorBooks, author.id); // Add click handlers after rendering authors
         });
 
-        addAuthorClickHandlers(); // Add click handlers after rendering authors
     }
 
     function searchAuthorName() {
@@ -50,52 +54,60 @@ $(document).ready(function () {
         renderAllAuthors(filterdAuthors);
     }
 
-    async function getBooksByAuthor(authorId) {
-        const apiUrl = `https://localhost:7195/api/Authors/${authorId}/Books`;
 
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const books = await response.json();
-            renderBooksByAuthor(books);
-        } catch (error) {
-            console.error('Error fetching books by author:', error);
+    modal.css('display', 'none');
+    span.on('click', function () {
+        modal.css('display', 'none');
+    });
+
+    $(window).on('click', function (event) {
+        if (event.target === $('#authorsModal')[0]) {
+            $('#authorsModal').hide();
         }
+    });
+
+    async function getBooksByAuthor(authorId) {
+        ajaxCall("GET", `${authorsApiUrl}/GetBooksByAuthor${authorId}`, "", getBooksByAuthorSCB, getBooksByAuthorECB);
+       
+    }
+
+    function getBooksByAuthorSCB(result){
+        console.log(result);
+        renderBooksByAuthor(result);
+    }
+
+    function getBooksByAuthorECB(err) {
+        console.log(err);
     }
 
     function renderBooksByAuthor(books) {
-        const booksContainer = $("#books-container");
-        booksContainer.empty();
+        var modalContent = $('#modal-content');
 
         books.forEach(book => {
             const bookElement = $('<div class="book">');
             bookElement.append('<img src="' + book.image + '" alt="book image" />');
             bookElement.append('<h3>' + book.title + '</h3>');
-            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
-            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+            bookElement.append('<h4>' + book.subtitle + '</h4>');
+            bookElement.append('<p>' + book.description + '</p>');   
 
-            // Add "Add to Wishlist" button
-            const addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
-            bookElement.append(addToWishlistBtn);
+            modalContent.append(bookElement);
 
-            // Add "Add Book" button
-            const addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
-            bookElement.append(addBookBtn);
-
-            booksContainer.append(bookElement);
-
-            addBookClick(addBookBtn);
-            addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+            //addBookClick(addBookBtn);
+            //addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
         });
     }
 
-    function addAuthorClickHandlers() {
-        $('.author').click(function () {
-            const authorId = $(this).data('author-id');
-            getBooksByAuthor(authorId);
+    
+
+    function addAuthorClickHandlers(authorBooks, authorID) {
+        authorBooks.on('click', function () {
+            modal.css('display', 'block');
+
+            $('#modal-content').children().slice(1).remove();
+            getBooksByAuthor(authorID);
+           
         });
+       
     }
 
     getAllAuthorsFromDB();

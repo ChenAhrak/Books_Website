@@ -351,8 +351,6 @@ $(document).ready(function () {
     }
 
 
-    //// ****Function to add a book to user's list not working****
-    //function addBook(buttonId, userId) {
     
     modal.css('display', 'none');
     span.on('click', function () {
@@ -365,14 +363,7 @@ $(document).ready(function () {
         }
     });
 
-    function addCoursesToModal(buttonId) {
-        modal.css('display', 'block');
 
-        $('#modal-content').children().slice(1).remove(); // Clear previous modal content
-
-        let api = `https://localhost:7283/api/Courses/searchByInstructorId/${buttonId}`;
-        ajaxCall("GET", api, null, getInstructorCoursesSCBF, getInstructorCoursesECBF);
-    }
     function showMoreDetails(moreDetails, book) {
         moreDetails.on('click', function () {
             modal.css('display', 'block');

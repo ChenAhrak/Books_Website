@@ -806,35 +806,36 @@ namespace Books.Server.DAL
             return fiveTopPurchased;
         }
         //
-        public List<Book> GetBooksByAuthor(int authorId)
+        public List<Object> getBooksByAuthor(int authorId)
         {
             SqlConnection con = null;
             SqlCommand cmd = null;
-            List<Book> books = new List<Book>();
+            List<Object> books = new List<Object>();
 
             try
             {
                 con = connect("myProjDB"); // create the connection
-                cmd = CreateCommandWithStoredProcedureGetBooksByAuthor("SP_GetBooksByAuthor", con, authorId); // create the command
+                cmd = CreateCommandWithStoredProcedureGetBooksByAuthor("SP_getBooksByAuthor", con, authorId); // create the command
                 SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
-
                 while (reader.Read())
                 {
-                    Book book = new Book
+                    books.Add( new 
                     {
-                        Id = reader["BookID"].ToString(),
-                        Title = reader["Title"].ToString(),
-                        Subtitle = reader["Subtitle"].ToString(),
-                        Language = reader["Language"].ToString(),
-                        Publisher = reader["Publisher"].ToString(),
-                        PublishedDate = reader["PublishedDate"] as string,
-                        Description = reader["Description"].ToString(),
-                        PageCount = reader["PageCount"] as int? ?? 0,
-                        Price = reader["Price"] as double? ?? 0.0
-                    };
+                        id = reader["BookID"].ToString(),
+                        image = reader["Thumbnail"].ToString(),
+                        title = reader["Title"].ToString(),
+                        subtitle = reader["Subtitle"].ToString(),
+                        language = reader["Language"].ToString(),
+                        publisher = reader["Publisher"].ToString(),
+                        publishedDate = reader["PublishedDate"] as string,
+                        description = reader["Description"].ToString(),
+                        pageCount = reader["PageCount"] as int? ?? 0,
+                        price = reader["Price"] as double? ?? 0.0
+                    });
 
-                    books.Add(book);
                 }
+                return books;
+
             }
             catch (Exception ex)
             {
@@ -850,7 +851,6 @@ namespace Books.Server.DAL
                 }
             }
 
-            return books;
         }
 
         private SqlCommand CreateCommandWithStoredProcedureGetBooksByAuthor(String spName, SqlConnection con, int authorId)

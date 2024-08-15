@@ -52,19 +52,19 @@ namespace Books.Server.Controllers
             }
         }
         // Get Books by Author
-        // GET api/<AuthorsController>/5/Books
-        [HttpGet("GetBooksByAuthor{id}/Books")]
-        public IActionResult GetBooksByAuthor(int id)
+        // GET api/<AuthorsController>/5/
+        [HttpGet("GetBooksByAuthor{authorId}")]
+        public IActionResult GetBooksByAuthor(int authorId)
         {
             try
             {
-                Author author = new Author { Id = id };
-                var books = author.GetBooksByAuthor();
+                
+                var books = author.getBooksByAuthor(authorId);
                 return Ok(books);
             }
-            catch (Exception ex)
+            catch
             {
-                return NotFound(new { message = $"Error: {ex.Message}" });
+                return NotFound(new { message = "Not Working well" });
             }
         }
         // PUT api/<AuthorsController>/5
