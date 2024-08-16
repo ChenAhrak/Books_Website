@@ -2,6 +2,29 @@ const apiUsersUrl = "https://localhost:7195/api/Users";
 var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
+
+    const toggleModeCheckbox = document.getElementById('toggle-mode');
+    const currentTheme = localStorage.getItem('theme');
+
+    // Apply the saved theme on load
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        toggleModeCheckbox.checked = true;
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+
+    // Toggle dark mode and save the theme
+    toggleModeCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
     $('#registerForm').submit(function (event) {
         event.preventDefault();
 

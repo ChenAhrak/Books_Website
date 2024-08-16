@@ -1,6 +1,9 @@
 ﻿// Fetch books with 'read' status for all users except the current user
 var user = JSON.parse(sessionStorage.getItem('user'));
 
+
+
+
 function fetchBooks() {
     // Use the endpoint that fetches all 'read' books excluding the current user's
     const apiEndpoint = `https://localhost:7195/api/Books/GetAllReadBooks?currentUserId=${user.id}`;
@@ -196,24 +199,28 @@ if (user && !user.isAdmin) {
     $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
 }
 
-
+const toggleModeCheckbox = document.getElementById('toggle-mode');
 const currentTheme = localStorage.getItem('theme');
-if (currentTheme == 'dark' && !document.body.classList.contains('dark-mode')) {
-    document.body.classList.toggle('dark-mode');
+
+// Apply the saved theme on load
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    toggleModeCheckbox.checked = true;
+} else {
+    document.body.classList.remove('dark-mode');
 }
-else if (currentTheme == 'light' && document.body.classList.contains('dark-mode')) {
-    document.body.classList.toggle('dark-mode');
-}
 
-
-//const currentTheme = localStorage.getItem('theme');
-const toggleButton = document.getElementById('toggle-mode');
-toggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-
-    let theme = 'light';
-    if (document.body.classList.contains('dark-mode')) {
-        theme = 'dark';
+// Toggle dark mode and save the theme
+toggleModeCheckbox.addEventListener('change', function () {
+    if (this.checked) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
     }
-    localStorage.setItem('theme', theme);
+});
+
+$('#homeBtn').on('click', function () {
+    window.location.href = "../Pages/index.html";
 });

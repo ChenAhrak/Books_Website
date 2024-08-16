@@ -1,5 +1,32 @@
 ﻿var user = JSON.parse(sessionStorage.getItem('user'));
 
+
+const toggleModeCheckbox = document.getElementById('toggle-mode');
+const currentTheme = localStorage.getItem('theme');
+
+// Apply the saved theme on load
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    toggleModeCheckbox.checked = true;
+} else {
+    document.body.classList.remove('dark-mode');
+}
+
+// Toggle dark mode and save the theme
+toggleModeCheckbox.addEventListener('change', function () {
+    if (this.checked) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+    }
+});
+
+$('#homeBtn').on('click', function () {
+    window.location.href = "../Pages/index.html";
+});
+
 function fetchBooks() {
     const status = 'want to read'; // הגדרת הסטטוס
 
@@ -171,7 +198,7 @@ if (user && !user.isAdmin) {
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').hide();
-    $('#wishlistBtn').show(); // Show wishlist button for regular users
+    $('#wishlistBtn').hide(); // inside wishlist page - dont need a button to enter wishlist
 } else if (user && user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
@@ -187,28 +214,5 @@ if (user && !user.isAdmin) {
     $('#adminBtn').hide();
     $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
 }
-
-
-const currentTheme = localStorage.getItem('theme');
-if (currentTheme == 'dark' && !document.body.classList.contains('dark-mode')) {
-    document.body.classList.toggle('dark-mode');
-}
-else if (currentTheme == 'light' && document.body.classList.contains('dark-mode')) {
-    document.body.classList.toggle('dark-mode');
-}
-
-
-//const currentTheme = localStorage.getItem('theme');
-const toggleButton = document.getElementById('toggle-mode');
-toggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-
-    let theme = 'light';
-    if (document.body.classList.contains('dark-mode')) {
-        theme = 'dark';
-    }
-    localStorage.setItem('theme', theme);
-});
-
 
 

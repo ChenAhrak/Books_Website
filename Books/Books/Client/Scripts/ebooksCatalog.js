@@ -5,47 +5,73 @@ var modal = $('#booksModal');
 var span = $('.close');
 
 $(document).ready(function () {
+
+    const toggleModeCheckbox = document.getElementById('toggle-mode');
+    const currentTheme = localStorage.getItem('theme');
+
+    // Apply the saved theme on load
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        toggleModeCheckbox.checked = true;
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+
+    // Toggle dark mode and save the theme
+    toggleModeCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    $('#homeBtn').on('click', function () {
+        window.location.href = "../Pages/index.html";
+    });
    
-async function getEBooksDataFromDB() {
-    await ajaxCall("GET", `${booksApiURL}/GetAllEBooks`, "", getEBooksDataFromDBSCB, getEBooksDataFromDBECB);
-}
+    async function getEBooksDataFromDB() {
+        await ajaxCall("GET", `${booksApiURL}/GetAllEBooks`, "", getEBooksDataFromDBSCB, getEBooksDataFromDBECB);
+    }
 
-function getEBooksDataFromDBSCB(result) {
-    console.log(result);
-    allEBooks.push(result);
-    renderAllEBooksDisplay(result);
-}
+    function getEBooksDataFromDBSCB(result) {
+        console.log(result);
+        allEBooks.push(result);
+        renderAllEBooksDisplay(result);
+    }
 
-function getEBooksDataFromDBECB(err) {
-    console.log(err);
-}
+    function getEBooksDataFromDBECB(err) {
+        console.log(err);
+    }
 
-function renderAllEBooksDisplay(ebooks) {
-    var ebooksContainer = $('#ebooks-container');
-    ebooksContainer.empty();
-    ebooks.forEach(ebook => {
-        var ebookElement = $('<div>');
-        ebookElement.addClass('ebook');
-        ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
-        ebookElement.append('<h3>' + ebook.title + '</h3>');
-        ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
-        ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
+    function renderAllEBooksDisplay(ebooks) {
+        var ebooksContainer = $('#ebooks-container');
+        ebooksContainer.empty();
+        ebooks.forEach(ebook => {
+            var ebookElement = $('<div>');
+            ebookElement.addClass('ebook');
+            ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
+            ebookElement.append('<h3>' + ebook.title + '</h3>');
+            ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
+            ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
 
-        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
-        ebookElement.append(addToWishlistBtn);
+            var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
+            ebookElement.append(addToWishlistBtn);
 
-        var addBookBtn = $('<p><button id="' + ebook.id + '" class="add-book">Add Book</button></p>');
-        ebookElement.append(addBookBtn);
+            var addBookBtn = $('<p><button id="' + ebook.id + '" class="add-book">Add Book</button></p>');
+            ebookElement.append(addBookBtn);
 
-        var moreDetails = $('<p id="' + ebook.id + '" class="more-details">More Details</button></p>');
-        ebookElement.append(moreDetails);
+            var moreDetails = $('<p id="' + ebook.id + '" class="more-details">More Details</button></p>');
+            ebookElement.append(moreDetails);
 
-        ebooksContainer.append(ebookElement);
-        addBookClick(addBookBtn);
-        showMoreDetails(moreDetails, ebook);
+            ebooksContainer.append(ebookElement);
+            addBookClick(addBookBtn);
+            showMoreDetails(moreDetails, ebook);
 
 
-    });  
+        });
 
     }
 
@@ -145,7 +171,7 @@ function renderAllEBooksDisplay(ebooks) {
         console.log(err);
     }
 
-    
+
     function searchEBooks() {
 
         const query = $('#search-input').val();

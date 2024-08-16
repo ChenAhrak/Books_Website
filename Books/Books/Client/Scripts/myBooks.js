@@ -2,9 +2,35 @@
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 
+
+const toggleModeCheckbox = document.getElementById('toggle-mode');
+const currentTheme = localStorage.getItem('theme');
+
+// Apply the saved theme on load
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    toggleModeCheckbox.checked = true;
+} else {
+    document.body.classList.remove('dark-mode');
+}
+
+// Toggle dark mode and save the theme
+toggleModeCheckbox.addEventListener('change', function () {
+    if (this.checked) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+    }
+});
+
+$('#homeBtn').on('click', function () {
+    window.location.href = "../Pages/index.html";
+});
+
 function fetchBooks() {
     const status = 'purchased'; // הגדרת הסטטוס
-    //                   https://localhost:7195/api/UserBooks/get?userID=34&status=purchased
     const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${status}`;
 
     // שלח בקשה לשרת
@@ -192,25 +218,3 @@ if (user && !user.isAdmin) {
     $('#adminBtn').hide();
     $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
 }
-
-
-const currentTheme = localStorage.getItem('theme');
-if (currentTheme == 'dark' && !document.body.classList.contains('dark-mode')) {
-    document.body.classList.toggle('dark-mode');
-}
-else if (currentTheme == 'light' && document.body.classList.contains('dark-mode')) {
-    document.body.classList.toggle('dark-mode');
-}
-
-
-//const currentTheme = localStorage.getItem('theme');
-const toggleButton = document.getElementById('toggle-mode');
-toggleButton.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-
-    let theme = 'light';
-    if (document.body.classList.contains('dark-mode')) {
-        theme = 'dark';
-    }
-    localStorage.setItem('theme', theme);
-});

@@ -18,6 +18,16 @@ var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
 
+    const currentTheme = localStorage.getItem('theme');
+
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('toggle-mode').checked = true; // Set checkbox to checked if dark mode
+    } else if (currentTheme === 'light') {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('toggle-mode').checked = false; // Set checkbox to unchecked if light mode
+    }
+
     var userWelcome = document.getElementById("userWelcome");
     if (user) {
         userWelcome.innerText = `Welcome ${user.userName}!`;
@@ -603,17 +613,6 @@ $(document).ready(function () {
         $('#myBooksBtn').hide();
         $('#adminBtn').hide();
         $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
-    }
-
-
-    const currentTheme = localStorage.getItem('theme');
-
-    if (currentTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('toggle-mode').checked = true; // Set checkbox to checked if dark mode
-    } else if (currentTheme === 'light') {
-        document.body.classList.remove('dark-mode');
-        document.getElementById('toggle-mode').checked = false; // Set checkbox to unchecked if light mode
     }
 
     // Event listener to toggle the theme and save it in localStorage

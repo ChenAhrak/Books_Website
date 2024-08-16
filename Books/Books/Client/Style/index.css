@@ -4,6 +4,7 @@
     --text-color: black;
     --td-background-color: #f9f9f9;
     --button-background-color: #3498db;
+    --modal--background-color: white;
 }
 
 /* Dark mode overrides */
@@ -12,6 +13,7 @@ body.dark-mode {
     --text-color: white;
     --td-background-color: #6f6f6f;
     --button-background-color: #37474f;
+    --modal--background-color: darkgrey;
 }
 
 body {
@@ -113,8 +115,9 @@ h1{
 }
 
 p, h3 {
+    color: var(--text-color);
     width: 250px; /* Adjust the width as needed */
-   /* white-space: nowrap;*/ /* Prevents text from wrapping to the next line */
+    /* white-space: nowrap;*/ /* Prevents text from wrapping to the next line */
     overflow: hidden; /* Hides any text that overflows the width */
     text-overflow: ellipsis; /* Adds ellipsis (...) to indicate truncated text */
     /*border: 1px solid #ccc;*/ /* Optional, for better visibility */
@@ -153,7 +156,7 @@ button {
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: var(--background-color);
 }
 input {
     padding: 10px;
@@ -209,7 +212,7 @@ footer {
 }
 
 #modal-content {
-    background-color: #fefefe;
+    background-color: var(--modal--background-color);
     margin: auto;
     margin-top: 70px;
     padding: 20px;
@@ -272,7 +275,7 @@ footer {
 
 #modal-content a {
     font-size: 0.9em;
-    color: #3498db;
+    color: var(--button-background-color);
 }
 
 
