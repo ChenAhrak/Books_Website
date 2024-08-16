@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Books.Server.BL;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -151,18 +152,28 @@ namespace Books.Server.Controllers
                 return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
             }
         }
+        [HttpGet("GetAllReadBooks")]
+        public ActionResult<List<dynamic>> GetAllReadBooks(int currentUserId)
+        {
+            try
+            {
+                // קריאה לפונקציה הקיימת GetAllReadBooks
+                List<dynamic> readBooks = book.GetAllReadBooks(currentUserId);
 
-        [HttpPost("addBookToUser/{userId}")]
-        //public IActionResult AddBookToUser(int userId, [FromBody] string bookId)
-        //{
-        //    if (book.addBookToUser(userId, bookId))
-        //    {
-        //        return Ok(new { message = "Course added to user successfully" });
-        //    }
-        //    return NotFound(new { message = "Failed to add course to user" });
-        //}
+                if (readBooks == null || !readBooks.Any())
+                {
+                    return NotFound(new { message = "No books found for the current user" });
+                }
 
-        
+                return Ok(readBooks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+
 
         // DELETE api/<BooksController>/5
         [HttpDelete("{id}")]

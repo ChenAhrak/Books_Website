@@ -961,6 +961,47 @@ namespace Books.Server.DAL
 
             return books;
         }
+        // All read books from all users
+        public List<dynamic> GetAllReadBooks(int currentUserId)
+        {
+            List<dynamic> books = new List<dynamic>();
+
+            try
+            {
+                using (SqlConnection con = connect("myProjDB"))
+                using (SqlCommand cmd = new SqlCommand("SP_GetAllReadBooksExceptCurrentUser", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@CurrentUserId", currentUserId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var book = new
+                            {
+                                Id = reader["BookID"].ToString(),
+                                Title = reader["Title"].ToString(),
+                                AuthorNames = reader["AuthorNames"].ToString(),
+                                BookOwnerID = reader["BookOwnerID"].ToString(),
+                                Status = reader["UserLibraryStatus"].ToString(),
+                                Thumbnail = reader["Thumbnail"].ToString(),
+                            };
+
+                            books.Add(book);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+
+            return books;
+        }
+
 
         public bool AddBookToLibrary(UserBooks userBook)
         {

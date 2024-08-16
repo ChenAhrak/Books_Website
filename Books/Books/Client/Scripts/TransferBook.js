@@ -1,9 +1,9 @@
-﻿// Step 1: Fetch books with 'read' status from all users
+﻿// Fetch books with 'read' status for all users except the current user
 var user = JSON.parse(sessionStorage.getItem('user'));
 
 function fetchBooks() {
-    const status = 'read'; // Corrected status
-    const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${status}`;
+    // Use the endpoint that fetches all 'read' books excluding the current user's
+    const apiEndpoint = `https://localhost:7195/api/Books/GetAllReadBooks?currentUserId=${user.id}`;
 
     // Send request to server
     ajaxCall('GET', apiEndpoint, null,
@@ -11,6 +11,7 @@ function fetchBooks() {
         getBooksDisplayDataFromDBECB  // Error callback
     );
 }
+
 
 // Success callback for fetching books
 function getBooksDisplayDataFromDBSCB(result) {

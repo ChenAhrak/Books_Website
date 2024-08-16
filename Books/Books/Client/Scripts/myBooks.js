@@ -26,6 +26,8 @@ function getBooksDisplayDataFromDBECB(err) {
 }
 
 // הצגת הספרים בטבלה
+// הצגת הספרים בטבלה
+// פונקציה להציג ספרים
 function renderAllBooksDisplay(books) {
     var booksContainer = $('#books-container');
     booksContainer.empty(); // נקה את התוכן הקיים לפני הוספת ספרים חדשים
@@ -45,19 +47,23 @@ function renderAllBooksDisplay(books) {
         bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
-        // הוסף כפתור "Add to Read List"
-        var addToReadListBtn = $('<button class="addToReadListButton" data-book-id="' + book.id + '">Add to Read List</button>');
-        bookElement.append(addToReadListBtn);
+        //  "Add to Read List" הוסף כפתור רק לספרים פיזיים
+        if (book.isEbook === 0) {  // אם הספר הוא פיזי (isEbook == 0)
+            var addToReadListBtn = $('<button class="addToReadListButton" data-book-id="' + book.id + '">Add to Read List</button>');
+            bookElement.append(addToReadListBtn);
+            addReadClick(addToReadListBtn);
+        } else {
+            console.log(`No button added for eBook with ID: ${book.id}`);
+        }
 
         tableHeader.append(bookElement);
-
-        // קרא לפונקציות המתאימות עבור הכפתור
-        addReadClick(addToReadListBtn);
     });
 
     table.append(tableHeader);
     booksContainer.append(table);
 }
+
+
 
 // פונקציה להוספת ספר לרשימת הקריאה //Update status from purchased to read 
 function addBookToRead(userID, bookId) {

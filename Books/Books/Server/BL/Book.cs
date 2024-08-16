@@ -252,19 +252,20 @@ public class Book
         }
     }
 
+    // פונקציה להחזרת כל הספרים שנקראו מלבד המשתמש הנוכחי
+    public List<dynamic> GetAllReadBooks(int currentUserId)
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            return db.GetAllReadBooks(currentUserId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return null;
+        }
+    }
 
 
-    //    public  bool addBookToUser(int userId, string bookId)
-    //    {
-    //        DBservices db = new DBservices();
-    //        try
-    //        {
-    //            db.addBookToUser(userId, bookId);
-    //            return true;
-    //        }
-    //        catch
-    //        {
-    //            return false;
-    //        }
-    //    }
 }
