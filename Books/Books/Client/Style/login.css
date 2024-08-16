@@ -140,3 +140,17 @@ footer {
     display: flex;
     justify-content: center;
 }
+
+#forgot-password{
+    color: #3498db;
+    text-align: center;
+    cursor: pointer;
+}
+#forgot-password:hover {
+    text-decoration: underline;   
+    }
+
+p{
+    text-align: center;
+
+}
