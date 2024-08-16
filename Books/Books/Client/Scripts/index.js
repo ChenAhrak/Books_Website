@@ -604,12 +604,25 @@ $(document).ready(function () {
 
 
     const currentTheme = localStorage.getItem('theme');
-    if (currentTheme == 'dark' && !document.body.classList.contains('dark-mode')) {
-        document.body.classList.toggle('dark-mode');
+
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('toggle-mode').checked = true; // Set checkbox to checked if dark mode
+    } else if (currentTheme === 'light') {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('toggle-mode').checked = false; // Set checkbox to unchecked if light mode
     }
-    else if (currentTheme == 'light' && document.body.classList.contains('dark-mode')) {
-        document.body.classList.toggle('dark-mode');
-    }
+
+    // Event listener to toggle the theme and save it in localStorage
+    document.getElementById('toggle-mode').addEventListener('change', function () {
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+        }
+    });
 
   
     //const currentTheme = localStorage.getItem('theme');
