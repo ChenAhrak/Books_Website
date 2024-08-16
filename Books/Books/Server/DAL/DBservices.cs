@@ -986,6 +986,8 @@ namespace Books.Server.DAL
                                 BookOwnerID = reader["BookOwnerID"].ToString(),
                                 Status = reader["UserLibraryStatus"].ToString(),
                                 Thumbnail = reader["Thumbnail"].ToString(),
+                                Price = reader["Price"].ToString()
+
                             };
 
                             books.Add(book);

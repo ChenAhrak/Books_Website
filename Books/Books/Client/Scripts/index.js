@@ -583,19 +583,22 @@ $(document).ready(function () {
         $('#logoutBtn').show();
         $('#loginBtn').hide();
         $('#registerBtn').hide();
+        $('#purchaseBooksBtn').show();
         $('#myBooksBtn').show();
         $('#adminBtn').hide();
         $('#wishlistBtn').show(); // Show wishlist button for regular users
     } else if (user && user.isAdmin) {
         $('#logoutBtn').show();
         $('#loginBtn').hide();
-        $('#registerBtn').hide();
+        $('#registerBtn').hide()
+        $('#purchaseBooksBtn').show();            ;
         $('#myBooksBtn').show();
         $('#adminBtn').show();
         $('#wishlistBtn').hide(); // Hide wishlist button for admins
     } else {
         $('#logoutBtn').hide();
         $('#loginBtn').show();
+        $('#purchaseBooksBtn').hide();
         $('#registerBtn').show();
         $('#myBooksBtn').hide();
         $('#adminBtn').hide();

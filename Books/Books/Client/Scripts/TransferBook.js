@@ -33,22 +33,22 @@ function renderAllBooksDisplay(books) {
         booksContainer.append('<p>No books available in the "read" status.</p>');
         return;
     }
-
-    var table = $('<table>');
-    var tableHeader = $('<tr>');
-
+    console.log(books);
+    var booksContainer = $('#books-container');
+    booksContainer.empty();
     books.forEach(book => {
-        var bookElement = $('<td>');
+        var bookElement = $('<div>');
+        bookElement.addClass('book');
         bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
         bookElement.append('<h3>' + book.title + '</h3>');
-        bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
+        bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
         // Add "Request Purchase" button
         var requestPurchaseBtn = $('<button class="requestPurchaseButton" data-book-id="' + book.id + '" data-seller-id="' + book.sellerId + '">Request Purchase</button>');
         bookElement.append(requestPurchaseBtn);
 
-        tableHeader.append(bookElement);
+        booksContainer.append(bookElement);
 
         // Attach click event handler for the button
         requestPurchaseBtn.on('click', function () {
@@ -56,8 +56,6 @@ function renderAllBooksDisplay(books) {
         });
     });
 
-    table.append(tableHeader);
-    booksContainer.append(table);
 }
 
 // Step 3: Request to purchase a book

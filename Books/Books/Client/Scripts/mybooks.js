@@ -37,18 +37,20 @@ function renderAllBooksDisplay(books) {
         return;
     }
 
-    var table = $('<table>');
-    var tableHeader = $('<tr>');
-
+    console.log(books);
+    var booksContainer = $('#books-container');
+    booksContainer.empty();
     books.forEach(book => {
-        var bookElement = $('<td>');
+        var bookElement = $('<div>');
+        bookElement.addClass('book');
         bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
         bookElement.append('<h3>' + book.title + '</h3>');
         bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
         //  "Add to Read List" הוסף כפתור רק לספרים פיזיים
-        if (book.isEbook === 0) {  // אם הספר הוא פיזי (isEbook == 0)
+        if (book.isEbook === 'False') {  // אם הספר הוא פיזי (isEbook == 0)
+            console.log(book.isEbook);
             var addToReadListBtn = $('<button class="addToReadListButton" data-book-id="' + book.id + '">Add to Read List</button>');
             bookElement.append(addToReadListBtn);
             addReadClick(addToReadListBtn);
@@ -56,11 +58,12 @@ function renderAllBooksDisplay(books) {
             console.log(`No button added for eBook with ID: ${book.id}`);
         }
 
-        tableHeader.append(bookElement);
+        booksContainer.append(bookElement);
+
+
     });
 
-    table.append(tableHeader);
-    booksContainer.append(table);
+   
 }
 
 

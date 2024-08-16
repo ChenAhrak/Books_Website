@@ -13,6 +13,8 @@ body.dark-mode {
     --button-background-color: #37474f;
 }
 
+
+
 body {
     background-color: var(--background-color);
     color: var(--text-color);
@@ -88,6 +90,15 @@ button {
     margin: 40px;
     gap: 20px;
 }
+#books-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 20px;
+    justify-content: center;
+    margin: 80px;
+    padding: 40px;
+}
+
 
 .book {
     display: flex;
@@ -99,6 +110,8 @@ button {
     padding: 10px;
     background-color: #f9f9f9;
 }
+
+
 
 input {
     padding: 10px;
