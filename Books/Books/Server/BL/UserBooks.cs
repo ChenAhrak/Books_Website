@@ -1,4 +1,5 @@
 ﻿using Books.Server.DAL;
+using System.Data;
 
 namespace Books.Server.BL
 {
@@ -79,6 +80,20 @@ namespace Books.Server.BL
             catch
             {
                 return false;
+            }
+        }
+        // שליפת בקשות רכישת ספר עבור המוכר
+        public List<dynamic> GetPurchaseRequestsForUser(int sellerId)
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.GetPurchaseRequestsForUser(sellerId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
             }
         }
         // Function to update the status of a book purchase request

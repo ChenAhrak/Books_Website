@@ -199,6 +199,7 @@ $(purchaseBooksBtn).click(function () {
 if (user && !user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
+    $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').hide();
@@ -206,6 +207,7 @@ if (user && !user.isAdmin) {
 } else if (user && user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
+    $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').show();
@@ -213,6 +215,7 @@ if (user && !user.isAdmin) {
 } else {
     $('#logoutBtn').hide();
     $('#loginBtn').show();
+    $('#purchaseBooksBtn').hide();
     $('#registerBtn').show();
     $('#myBooksBtn').hide();
     $('#adminBtn').hide();

@@ -1,9 +1,5 @@
 ﻿// Fetch books with 'read' status for all users except the current user
 var user = JSON.parse(sessionStorage.getItem('user'));
-
-
-
-
 function fetchBooks() {
     // Use the endpoint that fetches all 'read' books excluding the current user's
     const apiEndpoint = `https://localhost:7195/api/Books/GetAllReadBooks?currentUserId=${user.id}`;
@@ -14,7 +10,6 @@ function fetchBooks() {
         getBooksDisplayDataFromDBECB  // Error callback
     );
 }
-
 
 // Success callback for fetching books
 function getBooksDisplayDataFromDBSCB(result) {
@@ -84,35 +79,6 @@ function requestBookPurchase(button) {
         }
     );
 }
-
-// Update the status of a book purchase request
-function updatePurchaseRequestStatus(requestId, approvalStatus, approvalDate) {
-    ajaxCall('PUT', `https://localhost:7195/api/UserBooks/updatePurchaseRequestStatus?requestId=${requestId}&approvalStatus=${approvalStatus}&approvalDate=${approvalDate.toISOString()}`, null,
-        (response) => {
-            console.log('Purchase request status updated successfully:', response);
-            alert('Purchase request status updated successfully.');
-        },
-        (error) => {
-            console.error('Error updating purchase request status:', error);
-            alert('An error occurred while updating the purchase request status.');
-        }
-    );
-}
-
-// Manage the transfer of a book from the seller to the buyer
-function manageBookPurchase(buyerId, sellerId, bookId) {
-    ajaxCall('POST', `https://localhost:7195/api/UserBooks/Transfer-Book?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`, null,
-        (response) => {
-            console.log('Book purchase processed successfully:', response);
-            alert('Book has been transferred successfully.');
-        },
-        (error) => {
-            console.error('Error processing book purchase:', error);
-            alert('An error occurred while processing the book purchase.');
-        }
-    );
-}
-
 // Call fetchBooks when the page loads
 window.onload = () => {
     fetchBooks();

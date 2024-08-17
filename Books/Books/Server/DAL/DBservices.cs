@@ -1188,6 +1188,52 @@ namespace Books.Server.DAL
                 return false;
             }
         }
+        public List<dynamic> GetPurchaseRequestsForUser(int sellerId)
+        {
+            List<dynamic> purchaseRequests = new List<dynamic>();
+
+            try
+            {
+                using (SqlConnection con = connect("myProjDB"))
+                using (SqlCommand cmd = new SqlCommand("GetPurchaseRequestsForUser", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@SellerID", sellerId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var request = new
+                            {
+                                RequestId = reader["RequestID"].ToString(),
+                                BuyerId = reader["BuyerID"].ToString(),
+                                SellerId = reader["SellerID"].ToString(),
+                                BookId = reader["BookID"].ToString(),
+                                RequestDate = reader.IsDBNull(reader.GetOrdinal("RequestDate"))
+                                              ? (DateTime?)null
+                                              : Convert.ToDateTime(reader["RequestDate"]),
+                                Status = reader["ApprovalStatus"].ToString(),
+                                ApprovalDate = reader.IsDBNull(reader.GetOrdinal("ApprovalDate"))
+                                               ? (DateTime?)null
+                                               : Convert.ToDateTime(reader["ApprovalDate"])
+                            };
+
+                            purchaseRequests.Add(request);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw; // Throwing the exception to be handled by higher-level code if needed
+            }
+
+            return purchaseRequests;
+        }
+
+
         public bool UpdateBookPurchaseRequestStatus(int requestId, string approvalStatus, DateTime approvalDate)
         {
             try

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Books.Server.BL; 
 using System.Collections.Generic;
+using System.Data;
 
 namespace Books.Server.Controllers
 {
@@ -150,10 +151,22 @@ namespace Books.Server.Controllers
             var result = _userBooks.AddBookPurchaseRequest(buyerId, sellerId, bookId);
             if (result)
             {
-                return Ok("Book purchase request added successfully.");
+                return Ok(new { message = "Book purchase request added successfully." });
             }
             return StatusCode(500, "An error occurred while adding the book purchase request.");
         }
+        // שליפת בקשות רכישת ספר עבור המוכר
+        [HttpGet("getPurchaseRequestsForUser/{sellerId}")]
+        public IActionResult GetPurchaseRequestsForUser(int sellerId)
+        {
+            var purchaseRequests = _userBooks.GetPurchaseRequestsForUser(sellerId);
+            if (purchaseRequests != null && purchaseRequests.Count > 0)
+            {
+                return Ok(purchaseRequests);
+            }
+            return NotFound("No purchase requests found for the specified seller.");
+        }
+
         // עדכון סטטוס של בקשת רכישת ספר
         [HttpPut("updatePurchaseRequestStatus")]
         public IActionResult UpdatePurchaseRequestStatus([FromQuery] int requestId, [FromQuery] string approvalStatus, [FromQuery] DateTime approvalDate)

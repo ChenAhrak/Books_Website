@@ -57,8 +57,6 @@ function getBooksDisplayDataFromDBECB(err) {
         console.log("Status Text:", err.statusText);
     }
 }
-
-
 // הצגת הספרים בטבלה
 function renderAllBooksDisplay(books) {
     var booksContainer = $('#books-container');
@@ -69,11 +67,12 @@ function renderAllBooksDisplay(books) {
         return;
     }
 
-    var table = $('<table>');
-    var tableHeader = $('<tr>');
-
+    console.log(books);
+    var booksContainer = $('#books-container');
+    booksContainer.empty();
     books.forEach(book => {
-        var bookElement = $('<td>');
+        var bookElement = $('<div>');
+        bookElement.addClass('book');
         bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
         bookElement.append('<h3>' + book.title + '</h3>');
         bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
@@ -82,14 +81,12 @@ function renderAllBooksDisplay(books) {
         var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
         bookElement.append(addBookBtn);
 
-        tableHeader.append(bookElement);
-
         // קרא לפונקציות המתאימות עבור הכפתור
         addpurchasedClick(addBookBtn);
+        booksContainer.append(bookElement);
     });
 
-    table.append(tableHeader);
-    booksContainer.append(table);
+   
 }
 
 // פונקציה להוספת ספר לרשימת הקריאה //Update status from "want to read" to "purchased"
@@ -195,13 +192,15 @@ $(purchaseBooksBtn).click(function () {
 if (user && !user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
+    $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').hide();
-    $('#wishlistBtn').hide(); // inside wishlist page - dont need a button to enter wishlist
+    $('#wishlistBtn').show(); // Show wishlist button for regular users
 } else if (user && user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
+    $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').show();
@@ -209,10 +208,10 @@ if (user && !user.isAdmin) {
 } else {
     $('#logoutBtn').hide();
     $('#loginBtn').show();
+    $('#purchaseBooksBtn').hide();
     $('#registerBtn').show();
     $('#myBooksBtn').hide();
     $('#adminBtn').hide();
     $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
 }
-
 
