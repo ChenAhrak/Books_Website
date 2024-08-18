@@ -107,5 +107,21 @@ namespace Books.Server.Controllers
           return user.getUserByEmail(email);
             
         }
+
+        [HttpPut("UpdateUserPassword/{email}")]
+
+        public IActionResult UpdateUserPassword(string email, [FromBody] string password)
+        {
+           
+            try
+            {
+                user.updateUserPassword(email, password);
+                return Ok(new { message = "Password updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "User Not Found" });
+            }
+        }
     }
 }

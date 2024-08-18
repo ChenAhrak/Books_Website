@@ -1,4 +1,5 @@
 ﻿using Books.Server.DAL;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Books.Server.BL;
 
@@ -12,8 +13,8 @@ public class User
     private bool isActive = true;
 
     public User()
-	{
-	}
+    {
+    }
 
     public User(int id, string userName, string email, string password, bool isAdmin, bool isActive)
     {
@@ -42,7 +43,7 @@ public class User
             return true;
 
         }
-        catch 
+        catch
         {
             return false;
         }
@@ -79,15 +80,33 @@ public class User
 
     public void deleteUserById(int id)
     {
-        DBservices db = new DBservices ();
+        DBservices db = new DBservices();
         db.DeleteUserById(id);
     }
 
     public User getUserByEmail(string email)
     {
         DBservices db = new DBservices();
-        
+
         return db.getUserByEmail(email);
-       
+
     }
+
+    public IActionResult updateUserPassword(string email, string password)
+    {
+        DBservices db = new DBservices();
+        try
+        {
+            db.updateUserPassword(email, password);
+            return new OkResult();
+        }
+        catch
+        {
+            return new BadRequestResult();
+        }
+    }
+
+
+
+
 }
