@@ -1,4 +1,5 @@
 ﻿var user = JSON.parse(sessionStorage.getItem('user'));
+
 function fetchPurchaseRequests() {
     const sellerId = user.id; // מזהה המוכר הנוכחי//משתמש מחובר 
     

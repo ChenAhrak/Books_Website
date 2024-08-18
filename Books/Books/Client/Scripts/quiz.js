@@ -1,5 +1,8 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+
+
 
 const apiURL = "https://localhost:7195/GetApiKey";
 const userHighScoreApiURL = "https://localhost:7195/api/Users/UpdateHighScore";
@@ -99,10 +102,33 @@ $(document).ready(async function () {
         //API_KEY = await getApiKey();
         if (!API_KEY) { API_KEY = await getApiKey(); }
 
+
+        // testing safety feature
+        const safetySettings = [
+            {
+                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                threshold: HarmBlockThreshold.BLOCK_NONE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                threshold: HarmBlockThreshold.BLOCK_NONE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                threshold: HarmBlockThreshold.BLOCK_NONE,
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                threshold: HarmBlockThreshold.BLOCK_NONE,
+            },
+        ];
+
+
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({
             model: "gemini-1.5-flash",
             tools: [{ codeExecution: {} }],
+            safetySettings,
         });
 
         const generationConfig = {
@@ -114,9 +140,10 @@ $(document).ready(async function () {
         };
 
         async function run() {
+
             const chatSession = model.startChat({
                 generationConfig,
-                // safetySettings: Adjust safety settings
+                safetySettings,
                 // See https://ai.google.dev/gemini-api/docs/safety-settings
                 history: [
                     {
