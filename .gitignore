@@ -11,7 +11,7 @@
 *.sln.docstates
 
 # Ignore specific file
-appsetings.json
+appsettings.json
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
