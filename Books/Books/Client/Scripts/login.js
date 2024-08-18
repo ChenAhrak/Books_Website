@@ -26,7 +26,7 @@ $(document).ready(function () {
     });
 
     $('#loginForm').submit(function (event) {
-        event.preventDefault();
+        event.preventDefault(); // כדי שלא ימחק
 
         const email = $('#email').val();
         const password = $('#password').val();

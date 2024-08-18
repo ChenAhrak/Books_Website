@@ -14,6 +14,28 @@ namespace Books.Server.Controllers
         {
             user = new User();
         }
+        // GET api/<UsersController>/5
+        [HttpGet("UpdateHighScore/{id}")]
+        public int getHighScore(int id)
+        {
+            int highScore;
+            DBservices db = new DBservices();
+            highScore = db.getUserHighScore(id);
+            return highScore;
+        }
+
+        // GET api/<UsersController>/5
+        [HttpGet("GetAllUsers")]
+        public List<User> getUsers()
+        {
+            List<User> allUsers = user.getAllUsers();
+            if (allUsers != null)
+            {
+                return allUsers;
+            }
+            return null;
+        }
+
 
         // POST api/<UsersController>
         [HttpPost]
@@ -67,28 +89,7 @@ namespace Books.Server.Controllers
             db.updateUserHighScore(id, score);
         }
 
-        // GET api/<UsersController>/5
-        [HttpGet("UpdateHighScore/{id}")]
-        public int getHighScore(int id)
-        {
-            int highScore;
-            DBservices db = new DBservices();
-            highScore = db.getUserHighScore(id);
-            return highScore;
-        }
-
-        // GET api/<UsersController>/5
-        [HttpGet("GetAllUsers")]
-        public List<User> getUsers()
-        {
-            List<User> allUsers = user.getAllUsers();
-            if (allUsers != null)
-            {
-                return allUsers;
-            }
-            return null;
-        }
-
+        
         // DELETE api/<UsersController>/6
         [HttpDelete("{id}")]
         public void deleteUser(int id)

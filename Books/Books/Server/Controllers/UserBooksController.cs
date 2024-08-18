@@ -97,41 +97,7 @@ namespace Books.Server.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
-        //Add To Read
-        //[HttpPost("addBookToRead/{userId}")]
-        //public IActionResult AddBookToRead(int userId, [FromBody] string bookId)
-        //{
-        //    if (bookId == null)
-        //    {
-        //        return BadRequest("Invalid book data.");
-        //    }
-        //    var status = "read";
-
-        //    try
-        //    {
-        //        var result = _userBooks.AddBookToLibrary(new UserBooks
-        //        {
-        //            UserID = userId,
-        //            BookID = bookId,
-        //            Status = status
-        //        });
-
-        //        if (result)
-        //        {
-        //            return Ok(new { message = "Book added to Sell list successfully." });
-        //        }
-        //        else
-        //        {
-        //            return StatusCode(500, "An error occurred while adding the book to selling.");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Exception: {ex.Message}");
-        //        return StatusCode(500, "An unexpected error occurred.");
-        //    }
-        //}
-      
+       
         // עדכון סטטוס הספר בספריית המשתמש
         [HttpPut("update-status")]
         public IActionResult UpdateBookStatus([FromQuery] int userID, [FromQuery] string bookID, [FromQuery] string newStatus)

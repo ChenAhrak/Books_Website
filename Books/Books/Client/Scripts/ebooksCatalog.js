@@ -322,7 +322,10 @@ $(document).ready(function () {
     $(wishlistBtn).click(function () {
         window.location.href = "wishList.html";
     });
-
+    const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
+    $(mypurchaserequestsBtn).click(function () {
+        window.location.href = "purchaseRequests.html";
+    });
 
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {

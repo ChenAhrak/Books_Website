@@ -983,7 +983,7 @@ namespace Books.Server.DAL
                                 Id = reader["BookID"].ToString(),
                                 Title = reader["Title"].ToString(),
                                 AuthorNames = reader["AuthorNames"].ToString(),
-                                BookOwnerID = reader["BookOwnerID"].ToString(),
+                                SellerId = reader["BookOwnerID"].ToString(),
                                 Status = reader["UserLibraryStatus"].ToString(),
                                 Thumbnail = reader["Thumbnail"].ToString(),
                                 Price = reader["Price"].ToString()

@@ -30,7 +30,22 @@ namespace Books.Server.Controllers
         {
             return "value";
         }
+        // Get Books by Author
+        // GET api/<AuthorsController>/5/
+        [HttpGet("GetBooksByAuthor{authorId}")]
+        public IActionResult GetBooksByAuthor(int authorId)
+        {
+            try
+            {
 
+                var books = author.getBooksByAuthor(authorId);
+                return Ok(books);
+            }
+            catch
+            {
+                return NotFound(new { message = "Not Working well" });
+            }
+        }
         // POST api/<AuthorsController>
         [HttpPost]
         public IActionResult Post([FromBody] Author a)
@@ -51,22 +66,7 @@ namespace Books.Server.Controllers
                 return NotFound(new { message = "Authors erorr" });
             }
         }
-        // Get Books by Author
-        // GET api/<AuthorsController>/5/
-        [HttpGet("GetBooksByAuthor{authorId}")]
-        public IActionResult GetBooksByAuthor(int authorId)
-        {
-            try
-            {
-                
-                var books = author.getBooksByAuthor(authorId);
-                return Ok(books);
-            }
-            catch
-            {
-                return NotFound(new { message = "Not Working well" });
-            }
-        }
+        
         // PUT api/<AuthorsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

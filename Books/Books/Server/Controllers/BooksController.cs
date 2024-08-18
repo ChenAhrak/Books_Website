@@ -81,6 +81,44 @@ namespace Books.Server.Controllers
             }
 
         }
+        //Top 5 Most Purchased Books
+        [HttpGet("GetTop5MostPurchasedBooks")]
+        public ActionResult<List<Book>> GetTop5MostPurchasedBooks()
+        {
+            try
+            {
+                object topBooks = book.GetTop5MostPurchasedBooks();
+                //if (topBooks == null || !topBooks.Any())
+                if (topBooks == null)
+                {
+                    return NotFound(new { message = "No books found" });
+                }
+                return Ok(topBooks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        [HttpGet("GetAllReadBooks")]
+        public ActionResult<List<dynamic>> GetAllReadBooks(int currentUserId)
+        {
+            try
+            {
+                List<dynamic> readBooks = book.GetAllReadBooks(currentUserId);
+
+                if (readBooks == null || !readBooks.Any())
+                {
+                    return NotFound(new { message = "No books found for the current user" });
+                }
+
+                return Ok(readBooks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
+            }
+        }
 
         // POST api/<BooksController>
         [HttpPost("PostAllBooks")]
@@ -133,48 +171,6 @@ namespace Books.Server.Controllers
             }
 
         }
-        //Top 5 Most Purchased Books
-        [HttpGet("GetTop5MostPurchasedBooks")]
-        public ActionResult<List<Book>> GetTop5MostPurchasedBooks()
-        {
-            try
-            {
-                object topBooks = book.GetTop5MostPurchasedBooks();
-                //if (topBooks == null || !topBooks.Any())
-                if (topBooks == null)
-                {
-                    return NotFound(new { message = "No books found" });
-                }
-                return Ok(topBooks);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
-            }
-        }
-        [HttpGet("GetAllReadBooks")]
-        public ActionResult<List<dynamic>> GetAllReadBooks(int currentUserId)
-        {
-            try
-            {
-                // קריאה לפונקציה הקיימת GetAllReadBooks
-                List<dynamic> readBooks = book.GetAllReadBooks(currentUserId);
-
-                if (readBooks == null || !readBooks.Any())
-                {
-                    return NotFound(new { message = "No books found for the current user" });
-                }
-
-                return Ok(readBooks);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = $"An error occurred: {ex.Message}" });
-            }
-        }
-
-
-
         // DELETE api/<BooksController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)

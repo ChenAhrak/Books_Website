@@ -30,9 +30,9 @@ $('#homeBtn').on('click', function () {
 function fetchBooks() {
     const status = 'want to read'; // הגדרת הסטטוס
 
-    const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${encodeURIComponent(status)}`;
+    const api = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${encodeURIComponent(status)}`;
     // שלח בקשה לשרת
-    ajaxCall('GET', apiEndpoint, null,
+    ajaxCall('GET', api, null,
         getBooksDisplayDataFromDBSCB,  // פונקציית הצלחה
         getBooksDisplayDataFromDBECB  // פונקציית שגיאה
     );
@@ -93,11 +93,11 @@ function renderAllBooksDisplay(books) {
 function addBookToPurchased(userID, bookId) {
     const status = "purchased";
     const api = `https://localhost:7195/api/UserBooks/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
-
+    const data = JSON.stringify(bookId);
     ajaxCall(
         'PUT',
         api,
-        null, // No need to send data in the body since we use query parameters
+        data,
         function (response) {
             console.log("Success:", response);
             alert("Book added to purchased list.");
@@ -186,6 +186,11 @@ $(wishlistBtn).click(function () {
 const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
 $(purchaseBooksBtn).click(function () {
     window.location.href = "transferBook.html";
+});
+
+const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
+$(mypurchaserequestsBtn).click(function () {
+    window.location.href = "purchaseRequests.html";
 });
 
 // Check user status and display appropriate buttons

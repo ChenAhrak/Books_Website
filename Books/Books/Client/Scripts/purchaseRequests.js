@@ -1,9 +1,9 @@
 ﻿/*var user = JSON.parse(sessionStorage.getItem('user'));*/
 function fetchPurchaseRequests() {
     const sellerId = user.id; // מזהה המוכר הנוכחי//משתמש מחובר 
-    const apiEndpoint = `https://localhost:7195/api/UserBooks/GetPurchaseRequestsForUser?sellerId=${sellerId}`;
+    const api = `https://localhost:7195/api/UserBooks/GetPurchaseRequestsForUser?sellerId=${sellerId}`;
 
-    ajaxCall('GET', apiEndpoint, null,
+    ajaxCall('GET', api, null,
         (response) => {
             renderPurchaseRequests(response);
         },
@@ -12,7 +12,6 @@ function fetchPurchaseRequests() {
         }
     );
 }
-
 function renderPurchaseRequests(requests) {
     var requestsContainer = $('#requests-container');
     requestsContainer.empty();
@@ -50,9 +49,9 @@ function renderPurchaseRequests(requests) {
 }
 
 function updateRequestStatus(requestId, status, callback) {
-    const url = `https://localhost:7195/api/UserBooks/UpdateRequestStatus?requestId=${requestId}&status=${status}`;
+    const api = `https://localhost:7195/api/UserBooks/UpdateRequestStatus?requestId=${requestId}&status=${status}`;
 
-    ajaxCall('PUT', url, null,
+    ajaxCall('PUT', api, null,
         (response) => {
             alert('Request status updated successfully.');
             if (callback) callback(); // קריאה לפונקציה אם הסטטוס עודכן בהצלחה
@@ -79,11 +78,123 @@ function manageBookPurchase(buyerId, sellerId, bookId, requestId) {
                 alert('An error occurred while processing the book purchase.');
             }
         );
-    });
+    }); 
 }
 
 
  //Call fetchPurchaseRequests when the page loads
 window.onload = () => {
     fetchPurchaseRequests();
+    const allBooksBtn = document.getElementById("allBooksBtn");
+    $(allBooksBtn).click(function () {
+        window.location.href = "booksCatalog.html";
+    });
+
+    const allEBooksBtn = document.getElementById("allEBooksBtn");
+    $(allEBooksBtn).click(function () {
+
+        window.location.href = "ebooksCatalog.html";
+    });
+
+    const authorsBtn = document.getElementById("authorsBtn");
+    //jquery click event
+    $(authorsBtn).click(function () {
+        window.location.href = "authors.html";
+    });
+
+    const loginBtn = document.getElementById("loginBtn");
+    $(loginBtn).click(function () {
+        window.location.href = "login.html";
+    });
+
+    const logoutbtn = document.getElementById("logoutBtn");
+
+    $(logoutbtn).click(function () {
+        sessionStorage.clear();
+        window.location.reload();
+    });
+
+
+    const registerbtn = document.getElementById("registerBtn");
+
+    $(registerbtn).click(function () {
+        window.location.href = "register.html";
+    });
+
+    const adminbtn = document.getElementById("adminBtn");
+
+    $(adminBtn).click(function () {
+        window.location.href = "admin.html";
+    });
+
+    const myBooks = document.getElementById("myBooksBtn");
+    $(myBooks).click(function () {
+        window.location.href = "myBooks.html";
+
+    });
+    const wishlistBtn = document.getElementById("wishlistBtn");
+    $(wishlistBtn).click(function () {
+        window.location.href = "wishList.html";
+    });
+
+    const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
+    $(purchaseBooksBtn).click(function () {
+        window.location.href = "transferBook.html";
+    });
+
+    const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
+    $(mypurchaserequestsBtn).click(function () {
+        window.location.href = "purchaseRequests.html";
+    });
+
+    // Check user status and display appropriate buttons
+    if (user && !user.isAdmin) {
+        $('#logoutBtn').show();
+        $('#loginBtn').hide();
+        $('#registerBtn').hide();
+        $('#myBooksBtn').show();
+        $('#adminBtn').hide();
+        $('#wishlistBtn').show(); // Show wishlist button for regular users
+    } else if (user && user.isAdmin) {
+        $('#logoutBtn').show();
+        $('#loginBtn').hide();
+        $('#registerBtn').hide();
+        $('#myBooksBtn').show();
+        $('#adminBtn').show();
+        $('#wishlistBtn').hide(); // Hide wishlist button for admins
+    } else {
+        $('#logoutBtn').hide();
+        $('#loginBtn').show();
+        $('#registerBtn').show();
+        $('#myBooksBtn').hide();
+        $('#adminBtn').hide();
+        $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
+    }
+
+    const toggleModeCheckbox = document.getElementById('toggle-mode');
+    const currentTheme = localStorage.getItem('theme');
+
+    // Apply the saved theme on load
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        toggleModeCheckbox.checked = true;
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+
+    // Toggle dark mode and save the theme
+    toggleModeCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    $('#homeBtn').on('click', function () {
+        window.location.href = "../Pages/index.html";
+    });
 };
+

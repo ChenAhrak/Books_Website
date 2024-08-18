@@ -89,7 +89,7 @@ function renderAllBooksDisplay(books) {
 
     });
 
-   
+
 }
 
 
@@ -137,6 +137,7 @@ function addReadClick(readBtn) {
 
 // קריאה לפונקציה לשליפת ספרים
 fetchBooks();
+
 
 const allBooksBtn = document.getElementById("allBooksBtn");
 $(allBooksBtn).click(function () {
@@ -193,6 +194,11 @@ $(wishlistBtn).click(function () {
 const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
 $(purchaseBooksBtn).click(function () {
     window.location.href = "transferBook.html";
+});
+
+const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
+$(mypurchaserequestsBtn).click(function () {
+    window.location.href = "purchaseRequests.html";
 });
 
 // Check user status and display appropriate buttons
