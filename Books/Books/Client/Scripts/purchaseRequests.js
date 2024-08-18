@@ -1,7 +1,8 @@
-﻿/*var user = JSON.parse(sessionStorage.getItem('user'));*/
+﻿var user = JSON.parse(sessionStorage.getItem('user'));
 function fetchPurchaseRequests() {
     const sellerId = user.id; // מזהה המוכר הנוכחי//משתמש מחובר 
-    const api = `https://localhost:7195/api/UserBooks/GetPurchaseRequestsForUser?sellerId=${sellerId}`;
+    
+    const api = `https://localhost:7195/api/UserBooks/getPurchaseRequestsForUser/${sellerId}`;
 
     ajaxCall('GET', api, null,
         (response) => {
