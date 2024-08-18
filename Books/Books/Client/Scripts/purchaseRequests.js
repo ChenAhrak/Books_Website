@@ -40,11 +40,13 @@ function renderPurchaseRequests(requests) {
 
         // Attach click event handlers for the buttons
         approveBtn.on('click', function () {
-            updateRequestStatus(this, 'Approved');
+            var requestId = $(this).data('request-id');
+            updateRequestStatus(requestId, 'Approved');
         });
 
         rejectBtn.on('click', function () {
-            updateRequestStatus(this, 'Rejected');
+            var requestId = $(this).data('request-id');
+            updateRequestStatus(requestId, 'Rejected');
         });
     });
 }
