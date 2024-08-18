@@ -52,7 +52,11 @@ function renderPurchaseRequests(requests) {
 }
 
 function updateRequestStatus(requestId, status, callback) {
-    const api = `https://localhost:7195/api/UserBooks/UpdateRequestStatus?requestId=${requestId}&status=${status}`;
+    // קבלת תאריך הנוכחי בפורמט ISO
+    const approvalDate = new Date().toISOString();
+
+    // יצירת כתובת ה-API עם הפרמטרים המתאימים
+    const api = `https://localhost:7195/api/UserBooks/updatePurchaseRequestStatus?requestId=${requestId}&approvalStatus=${status}&approvalDate=${encodeURIComponent(approvalDate)}`;
 
     ajaxCall('PUT', api, null,
         (response) => {

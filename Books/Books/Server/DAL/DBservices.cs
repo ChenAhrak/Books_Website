@@ -1208,6 +1208,7 @@ namespace Books.Server.DAL
                             {
                                 RequestId = reader["RequestID"].ToString(),
                                 BuyerId = reader["BuyerID"].ToString(),
+                                //Thumbnail = reader["Thumbnail"].ToString(),
                                 SellerId = reader["SellerID"].ToString(),
                                 BookId = reader["BookID"].ToString(),
                                 RequestDate = reader.IsDBNull(reader.GetOrdinal("RequestDate"))
@@ -1217,6 +1218,7 @@ namespace Books.Server.DAL
                                 ApprovalDate = reader.IsDBNull(reader.GetOrdinal("ApprovalDate"))
                                                ? (DateTime?)null
                                                : Convert.ToDateTime(reader["ApprovalDate"])
+
                             };
 
                             purchaseRequests.Add(request);
