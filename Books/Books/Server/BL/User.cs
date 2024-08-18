@@ -82,4 +82,12 @@ public class User
         DBservices db = new DBservices ();
         db.DeleteUserById(id);
     }
+
+    public User getUserByEmail(string email)
+    {
+        DBservices db = new DBservices();
+        
+        return db.getUserByEmail(email);
+       
+    }
 }

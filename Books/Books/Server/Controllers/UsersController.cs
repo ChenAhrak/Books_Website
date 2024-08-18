@@ -20,12 +20,12 @@ namespace Books.Server.Controllers
         public IActionResult Post([FromBody] User value)
         {
             bool result = user.registration(value);
-            if (result) { 
+            if (result) {
                 return Ok(new { message = "User created successfully" });
             }
             else
             {
-                return BadRequest(new {message = "Email need to be unique"});
+                return BadRequest(new { message = "Email need to be unique" });
             }
 
         }
@@ -98,6 +98,14 @@ namespace Books.Server.Controllers
                 user.deleteUserById(id);
             }
             catch (Exception) { };
+        }
+
+        // GET api/<UsersController>
+        [HttpGet("GetUserByEmail/{email}")]
+        public User getUserByEmail(string email)
+        {
+          return user.getUserByEmail(email);
+            
         }
     }
 }
