@@ -33,7 +33,7 @@ function renderAllBooksDisplay(books) {
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
         
         // Add "Request Purchase" button
-        var requestPurchaseBtn = $('<button class="requestPurchaseButton" data-book-id="' + book.id + '" data-seller-id="' + book.SellerId + '">Request Purchase</button>');
+        var requestPurchaseBtn = $('<button class="requestPurchaseButton" data-book-id="' + book.id + '" data-seller-id="' + book.sellerId + '">Request Purchase</button>');
         bookElement.append(requestPurchaseBtn);
 
         booksContainer.append(bookElement);

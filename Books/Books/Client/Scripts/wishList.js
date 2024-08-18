@@ -77,8 +77,7 @@ function renderAllBooksDisplay(books) {
         bookElement.append('<h3>' + book.title + '</h3>');
         bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-
-        var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+        var addBookBtn = $('<button class="addBookButton" data-book-id="' + book.id + '">Add Book</button>');
         bookElement.append(addBookBtn);
 
         // קרא לפונקציות המתאימות עבור הכפתור
@@ -101,7 +100,7 @@ function addBookToPurchased(userID, bookId) {
         function (response) {
             console.log("Success:", response);
             alert("Book added to purchased list.");
-            // Update UI to reflect the book was added
+            
             $(`button[data-book-id="${bookId}"]`).addClass('added').text('Added'); // Update button state on success
         },
         function (error) {
