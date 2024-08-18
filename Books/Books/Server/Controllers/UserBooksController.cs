@@ -140,7 +140,7 @@ namespace Books.Server.Controllers
             var result = _userBooks.UpdateBookPurchaseRequestStatus(requestId, approvalStatus, approvalDate);
             if (result)
             {
-                return Ok("Book purchase request status updated successfully.");
+                return Ok(new { message = "Book purchase request status updated successfully." });
             }
             return StatusCode(500, "An error occurred while updating the book purchase request status.");
         }
