@@ -55,7 +55,7 @@ $(document).ready(function () {
         //// Need to implement this function and in SQL too and The server --------------------------------------------------
         async function submitToServer(forgotPasswordData) {
 
-            ajaxCall('POST', apiMailsUrl, JSON.stringify(forgotPasswordData), postSCBF, postECBF);
+            await ajaxCall('POST', apiMailUrl, JSON.stringify(forgotPasswordData), postSCBF, postECBF);
         }
 
         function postSCBF(response) {
