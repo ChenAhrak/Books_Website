@@ -1,6 +1,7 @@
 // JavaScript source code
-const booksApiURL = "https://localhost:7195/api/Books";
+const booksApiUrl = "https://localhost:7195/api/Books";
 const usersApiUrl = "https://localhost:7195/api/Users";
+const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 var homeBtn = document.getElementById("homeBtn");
@@ -113,23 +114,17 @@ $(document).ready(async function () {
             disableInputs();
             //mode = "edit";
             markSelected(this);
-            //$("#editDiv").show();
             $(".selected :input").prop("disabled", false); // edit mode: enable all controls in the form
-            //populateFields(this.getAttribute('data-carId')); // fill the form fields according to the selected row
         });
 
         $(document).on("click", ".saveBtn", function () {
             //mode = "view";
             markSelected(this);
-            //$("#editDiv").show();
             row.className = 'selected';
             
             //item = document.getElementsByClassName("selected");
             var child = row.childNodes[4].childNodes[0].getAttribute("value");
-            //var secondChild = row.childNodes[1];
-            //console.log(child);
-            //var id = row.childNodes[0].childNodes[0].textContent;
-            //console.log(id);
+
             console.log(row.childNodes[0].childNodes[0].textContent);
             var data = {
                 id: row.childNodes[0].childNodes[0].textContent.trim(),
@@ -163,10 +158,67 @@ $(document).ready(async function () {
                     else swal("User was not deleted!");
                 });
         });
+
+
     }
 
 
+    getUserLibrary(34); // change for row of user id
+
 });
+
+// to add functionality
+function renderUserBooks(data) {
+    var booksContainer = $('#userBooks');
+    booksContainer.empty();
+
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+
+    const headers = Object.keys(data[0]);
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.innerText = header;
+        headerRow.appendChild(th);
+    });
+    thead.append(headerRow);
+    booksContainer.append(thead);
+
+
+    console.log(data);
+    data.forEach(book => {
+        var bookElement = $('<tr>');
+        bookElement.append('<td><span>' + book.id + '</span></td>');
+        bookElement.append('<td><span>' + book.title + '</span></td>');
+        bookElement.append('<td><span>' + book.subtitle + '</span></td>');
+        bookElement.append('<td><span>' + book.language + '</span></td>');
+        bookElement.append('<td><span>' + book.publisher + '</span></td>');
+        bookElement.append('<td><span>' + book.publishedDate + '</span></td>');
+        bookElement.append('<td><span>' + book.pageCount + '</span></td>');
+        bookElement.append('<td><span>' + book.printType + '</span></td>');
+        bookElement.append('<td><span>' + book.price + ' ILS' + '</span></td>');
+        bookElement.append('<td><span>' + book.status + '</span></td>');
+        bookElement.append('<td><img src="' + book.thumbnail + '" alt="book image" /></td>');
+        bookElement.append('<td><span>' + book.authors + '</span></td>');
+        bookElement.append('<td><span>' + book.isEbook + '</span></td>');
+
+        booksContainer.append(bookElement);
+    });
+
+}
+
+function getUserLibrary(userId) {
+    ajaxCall('GET', userBooksApiUrl + `/getUserLibrary/${userId}`, "", getUserLibrarySCBF, getUserLibraryECBF);
+}
+
+function getUserLibrarySCBF(response) {
+    renderUserBooks(response);
+    console.log(response);
+}
+
+function getUserLibraryECBF(err) {
+    console.log(err);
+}
 
 function disableInputs() {
     $("input").attr("disabled", "disabled");

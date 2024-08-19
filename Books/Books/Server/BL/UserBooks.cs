@@ -39,7 +39,33 @@ namespace Books.Server.BL
                 return null;
             }
         }
-        
+
+        public List<dynamic> GetUserLibraryForAdmin(int userId)
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.GetUserLibraryForAdmin(userId);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public List<dynamic> GetBooksNumInLibrary()
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.GetBooksNumInLibrary();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
 
         // הוספת ספר לספריית המשתמש
         public bool AddBookToLibrary(UserBooks userBook)

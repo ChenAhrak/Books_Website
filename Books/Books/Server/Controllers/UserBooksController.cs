@@ -28,6 +28,28 @@ namespace Books.Server.Controllers
             return Ok(userBooksList);
         }
 
+        [HttpGet("getUserLibrary/{userId}")]
+        public IActionResult GetUserLibraryForAdmin(int userId)
+        {
+            var userBooksList = _userBooks.GetUserLibraryForAdmin(userId);
+            if (userBooksList == null)
+            {
+                return NotFound("No books found for the specified user.");
+            }
+            return Ok(userBooksList);
+        }
+
+        [HttpGet("getBooksNumInLibraries")]
+        public IActionResult GetBooksNumInLibraries()
+        {
+            List<object> userBooksList = _userBooks.GetBooksNumInLibrary();
+            if (userBooksList == null)
+            {
+                return NotFound("No books found for the specified user and status.");
+            }
+            return Ok(userBooksList);
+        }
+
 
         ///Add To Purchased
         [HttpPost("addBookToPurchased/{userId}")]
