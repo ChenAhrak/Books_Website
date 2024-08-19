@@ -401,34 +401,34 @@ namespace Books.Server.DAL
                     smallImage = (string)reader["SmallThumbnail"],
                     image = (string)reader["Thumbnail"]
 
-                }); 
+                });
             }
 
-              
-          
+
+
             return books;
         }
-        
 
 
-            public SqlCommand CreateCommandWithStoredProcedureGetAllBooksDisplay(String spName, SqlConnection con)
-            {
-                SqlCommand cmd = new SqlCommand(); // create the command object
 
-                cmd.Connection = con;              // assign the connection to the command object
+        public SqlCommand CreateCommandWithStoredProcedureGetAllBooksDisplay(String spName, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
 
-                cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+            cmd.Connection = con;              // assign the connection to the command object
 
-                cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
 
-                cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
 
-                return cmd;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-            }
+            return cmd;
 
-            public List<Object> getEBooksDisplay()
-            {
+        }
+
+        public List<Object> getEBooksDisplay()
+        {
             SqlConnection con = null;
             try
             {
@@ -554,7 +554,7 @@ namespace Books.Server.DAL
             List<Object> ebooks = new List<Object>();
             while (reader.Read())
             {
-               
+
                 ebooks.Add(new
                 {
                     id = (string)reader["Id"],
@@ -618,7 +618,7 @@ namespace Books.Server.DAL
                 {
                     Id = (int)reader["AuthorId"],
                     Name = (string)reader["Name"],
-                    BirthDate = (string)reader["BirthDate"]==""?"Unknown" : (string)reader["BirthDate"],
+                    BirthDate = (string)reader["BirthDate"] == "" ? "Unknown" : (string)reader["BirthDate"],
                     DeathDate = (string)reader["DeathDate"] == "" ? "Unknown" : (string)reader["BirthDate"],
                     TopWork = (string)reader["TopWork"],
                     Description = (string)reader["Description"],
@@ -819,7 +819,7 @@ namespace Books.Server.DAL
                 SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
                 while (reader.Read())
                 {
-                    books.Add( new 
+                    books.Add(new
                     {
                         id = reader["BookID"].ToString(),
                         image = reader["Thumbnail"].ToString(),
@@ -922,7 +922,7 @@ namespace Books.Server.DAL
                     cmd.Parameters.AddWithValue("@UserID", userId);
                     cmd.Parameters.AddWithValue("@Status", status);
 
-                    
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -1314,7 +1314,7 @@ namespace Books.Server.DAL
             return cmd;
         }
 
-        public List<Object> searchInBookText(string bookId,string query)
+        public List<Object> searchInBookText(string bookId, string query)
         {
 
             SqlConnection con = null;
@@ -1327,7 +1327,7 @@ namespace Books.Server.DAL
                 // write to log
                 throw (ex);
             }
-            SqlCommand cmd = CreateCommandWithStoredProcedureSearchInBookText("SP_SearchInBookText", con,bookId,query);             // create the command
+            SqlCommand cmd = CreateCommandWithStoredProcedureSearchInBookText("SP_SearchInBookText", con, bookId, query);             // create the command
             SqlDataReader reader = cmd.ExecuteReader(); // execute the command
             List<Object> bookText = new List<Object>();
             while (reader.Read())
@@ -1375,7 +1375,7 @@ namespace Books.Server.DAL
                         cmd.Parameters.AddWithValue("@BookID", bookId);
 
                         cmd.ExecuteNonQuery();
-                    } 
+                    }
                 } // SqlConnection סוגר אוטומטית את החיבור
                 return true;
             }
@@ -1407,7 +1407,7 @@ namespace Books.Server.DAL
             {
                 SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
                 List<User> allUsers = new List<User>();
-                while(reader.Read())
+                while (reader.Read())
                 {
                     User user = new User();
                     user.Id = Convert.ToInt32(reader["UserId"]);
@@ -1564,13 +1564,22 @@ namespace Books.Server.DAL
 
 
 
-       
+
         //Check for the reset password email
         public User getUserByEmail(string email)
         {
             SqlConnection con;
             SqlCommand cmd;
-            
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
             cmd = CreateCommandWithStoredProcedureGetUserByEmail("SP_GetUserByEmail", con, email); // create the command
 
             try
@@ -1615,7 +1624,7 @@ namespace Books.Server.DAL
             cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
-              cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@Email", email);
 
             return cmd;
         }
@@ -1717,7 +1726,7 @@ namespace Books.Server.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
 
-          
+
             return cmd;
         }
 
@@ -1774,5 +1783,6 @@ namespace Books.Server.DAL
 
     }
 }
+
 
 
