@@ -173,7 +173,7 @@ namespace Books.Server.Controllers
             var result = _userBooks.TransferBook(buyerId, sellerId, bookId);
             if (result)
             {
-                return Ok("Purchase processed successfully.");
+                return Ok(new { message = "Purchase processed successfully." });
             }
             return StatusCode(500, "An error occurred while processing the purchase.");
         }

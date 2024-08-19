@@ -41,29 +41,33 @@ function renderPurchaseRequests(requests) {
 
         // Attach click event handlers for the buttons
         approveBtn.on('click', function () {
-            updateRequestStatus(this, 'Approved');
+            var requestId = $(this).data('request-id');
+            manageBookPurchase(request.buyerId, user.id, request.bookId, requestId);
         });
 
         rejectBtn.on('click', function () {
-            updateRequestStatus(this, 'Rejected');
+            var requestId = $(this).data('request-id');
+            updateRequestStatus(requestId, 'Rejected', () => {
+                removeRequestFromList(requestId);
+            });
         });
     });
 }
 
 function updateRequestStatus(requestId, status, callback) {
-    const api = `https://localhost:7195/api/UserBooks/UpdateRequestStatus?requestId=${requestId}&status=${status}`;
+    const approvalDate = new Date().toISOString(); // קבלת התאריך הנוכחי בפורמט ISO
+    const api = `https://localhost:7195/api/UserBooks/updatePurchaseRequestStatus?requestId=${requestId}&approvalStatus=${status}&approvalDate=${encodeURIComponent(approvalDate)}`;
 
     ajaxCall('PUT', api, null,
         (response) => {
-            alert('Request status updated successfully.');
-            if (callback) callback(); // קריאה לפונקציה אם הסטטוס עודכן בהצלחה
+            if (callback) callback(); // קריאה לפונקציה שסופקה בקולבק אם הסטטוס עודכן בהצלחה
         },
         (error) => {
             console.error('Error updating request status:', error);
+            alert('An error occurred while updating the request status.'); // הצגת הודעת שגיאה
         }
     );
 }
-
 
 // Manage the transfer of a book from the seller to the buyer
 function manageBookPurchase(buyerId, sellerId, bookId, requestId) {
@@ -73,15 +77,32 @@ function manageBookPurchase(buyerId, sellerId, bookId, requestId) {
         ajaxCall('POST', `https://localhost:7195/api/UserBooks/Transfer-Book?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`, null,
             (response) => {
                 console.log('Book purchase processed successfully:', response);
-                alert('Book has been transferred successfully.');
+                alert('Book has been transferred successfully.'); // הצגת הודעת הצלחה
+
+                // הסרת הבקשה מהרשימה לאחר הצלחה
+                removeRequestFromList(requestId);
             },
             (error) => {
                 console.error('Error processing book purchase:', error);
-                alert('An error occurred while processing the book purchase.');
+                alert('An error occurred while processing the book purchase.'); // הצגת הודעת שגיאה
             }
         );
-    }); 
+    });
 }
+
+function removeRequestFromList(requestId) { // אולי צריך להוסיף store procedure
+    // הסרת הבקשה מהרשימה בדף
+    $('#requests-container .request').each(function () {
+        var requestElement = $(this);
+        var dataRequestId = requestElement.find('.approveRequestButton').data('request-id');
+        if (dataRequestId == requestId) {
+            requestElement.remove();
+            return false; // יציאה מהלולאה לאחר שמצאנו והסרנו את הבקשה
+        }
+    });
+}
+
+
 
 
  //Call fetchPurchaseRequests when the page loads
