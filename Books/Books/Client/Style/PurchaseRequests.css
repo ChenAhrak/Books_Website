@@ -151,6 +151,21 @@ button {
     transition: opacity 0.3s; /* Smooth transition for hover effect */
 }
 
+.approveRequestButton {
+    background-color: forestgreen;
+    color: white;
+    padding: 10px 20px; /* Adjust padding for better appearance */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+    transition: opacity 0.3s; /* Smooth transition for hover effect */
+}
+.rejectRequestButton {
+    background-color: red;
+
+}
+
     button:hover {
         opacity: 0.8;
     }

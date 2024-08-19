@@ -26,16 +26,34 @@
     </nav>
     <h1>Admin panel</h1>
     <form id="dataTableForm">
+        <h2>User controls</h2>
+        <input type="text" id="userSearch" placeholder="Search Users">
         <table id="usersDataTable" class="display">
-            <thead>
-            </thead>
+            <thead></thead>
             <tbody></tbody>
         </table>
     </form>
-    <div id="userLibrary">
-        <table id="userBooks"></table>
-    </div>
-    <div id="bookCount"></div>
+    <form id="userLibrary">
+        <h2>User books</h2>
+        <table id="userBooks" class="display">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </form>
+    <form id="bookCount">
+        <h2>Books in libraries</h2>
+        <table id="bookCountTable" class="display">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </form>
+    <form id="authorsCount">
+        <h2>Authors in libraries</h2>
+        <table id="authorsCountTable" class="display">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </form>
     <footer>
         <p>&copy; 2024 PLC. All rights reserved.</p>
     </footer>

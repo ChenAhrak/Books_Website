@@ -84,8 +84,13 @@ h1 {
 }
 
 #dataTableForm{
+    position: relative;
     margin: auto;
     width: 90%;
+}
+
+table > tbody > tr{
+    background-color: black;
 }
 
 button {
@@ -103,22 +108,51 @@ button {
         opacity: 0.8; /* Make button slightly transparent on hover */
     }
 
-#userLibrary {
+/*#userLibrary {
     display:flex;
     justify-content: center;
-}
+}*/
 
-#userBooks {
-    margin-top: 150px;
+#userLibrary {
+    margin: auto;
+    margin-top: 100px;
     width: 90%;
-/*    border-collapse: collapse;*/
 }
-
-    #userBooks>tr>td, #userBooks>thead>tr>th {
+    /*#userBooks > tr > td, #userBooks > thead > tr > th {
         padding: 20px;
+        border-radius: 50px;
         border: 1px solid;
         text-align: left;
     }
+
+#bookCount {
+    display: flex;
+    justify-content: center;
+}*/
+
+#bookCount {
+    margin: auto;
+    margin-top: 100px;
+    width: 90%;
+}
+
+#authorsCount {
+    margin: auto;
+    margin-top: 100px;
+    width: 90%;
+}
+
+#userSearch {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+    /*#bookCountTable > tr > td, #userBooks > thead > tr > th {
+        padding: 20px;
+        border-radius: 50px;
+        border: 1px solid;
+        text-align: left;
+    }*/
 
 td > img {
     width: 50px;

@@ -306,9 +306,9 @@ $(document).ready(function () {
 
     $(logoutbtn).click(function () {
         sessionStorage.clear();
-        window.location.reload();
-    });
+        window.location.href=("index.html");
 
+    });
 
     const registerbtn = document.getElementById("registerBtn");
 

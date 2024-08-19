@@ -37,11 +37,7 @@ $(document).ready(function () {
             }
             else {
                 sendEmailToUser(forgotPasswordData);
-                var userMail = sessionStorage.setItem('mail', JSON.stringify(email));
-
-                //$('#sendPassBtn').on('click', function () {
-                //    window.location.href = "afterSendingMail.html";
-                //    });
+ 
 
             }
 

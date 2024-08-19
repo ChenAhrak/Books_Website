@@ -165,7 +165,7 @@ const logoutbtn = document.getElementById("logoutBtn");
 
 $(logoutbtn).click(function () {
     sessionStorage.clear();
-    window.location.reload();
+    window.location.href=("index.html");
 });
 
 
