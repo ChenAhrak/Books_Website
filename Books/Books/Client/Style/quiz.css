@@ -189,6 +189,7 @@ img {
 
 label{
     margin: 15px;
+    white-space: nowrap;
 }
 
 #gameScore {

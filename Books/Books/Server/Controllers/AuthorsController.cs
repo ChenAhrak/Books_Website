@@ -46,6 +46,18 @@ namespace Books.Server.Controllers
                 return NotFound(new { message = "Not Working well" });
             }
         }
+
+        [HttpGet("getAuthorsNumberInLibraries")]
+        public IActionResult GetAuthorsNumberInLibraries()
+        {
+            List<object> authorsList = author.GetAuthorsNumInLibraries();
+            if (authorsList == null)
+            {
+                return NotFound("No books found for the specified user and status.");
+            }
+            return Ok(authorsList);
+        }
+
         // POST api/<AuthorsController>
         [HttpPost]
         public IActionResult Post([FromBody] Author a)

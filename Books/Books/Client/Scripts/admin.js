@@ -1,5 +1,6 @@
 // JavaScript source code
 const booksApiUrl = "https://localhost:7195/api/Books";
+const authorsApiUrl = "https://localhost:7195/api/Authors";
 const usersApiUrl = "https://localhost:7195/api/Users";
 const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
 
@@ -136,106 +137,6 @@ $(document).ready(async function () {
 
         buttonEvents();
     }
-
-    //function userDataTable(response) { 
-
-    //    var table = $('#usersDataTable').DataTable({
-    //        data: response,
-    //        pageLength: 10,
-    //        columns: [
-
-    //            {
-    //                data: "id",
-    //                title: "User ID",
-    //                searchable: true,
-    //                render: function (data, type, row, meta) {
-    //                    return '<p>' + data + '</p>';
-    //                }
-    //            },
-
-    //            {
-    //                data: "userName",
-    //                title: "User Name",
-    //                searchable: true,
-
-    //                render: function (data, type, row, meta) {
-    //                    return '<input type="text" class="editUserName" id="editUserName' + row.data + '" value="' + data + '" data-user-name="' + row.data + '" disabled>';
-    //                }
-    //            },
-
-    //            {
-    //                data: "email",
-    //                title: "User Email",
-    //                searchable: true,
-    //                render: function (data, type, row, meta) {
-    //                    //return '<p>' + data + '</p>';
-    //                    return '<input type="text" class="editEmail" id="editEmail' + row.data + '" value="' + data + '" data-email="' + row.data + '" disabled>';
-    //                }
-    //            },
-
-    //            {
-    //                data: "password",
-    //                title: "Password",
-    //                render: function (data, type, row, meta) {
-    //                    //return '<p>' + data + '</p>';
-    //                    return '<input type="text" class="editPassword" id="editPassword' + row.data + '" value="' + data + '" data-password="' + row.data + '" disabled>';
-    //                }
-    //            },
-
-    //            {
-    //                data: "isAdmin",
-    //                title: "Admin",
-    //                render: function (data, type, row, meta) {
-    //                    return '<input type="checkbox" class="isAdminCheckbox" id="isAdmin' + meta.row + '" data-isAdmin="' + row.data + '"' + '" value="' + data + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
-    //                }
-    //            },
-
-    //            {
-    //                data: "isActive",
-    //                title: "Active",
-    //                render: function (data, type, row, meta) {
-    //                    return '<input type="checkbox" class="isActiveCheckbox" id="isActive' + meta.row + '" data-isActive="' + row.data + '"' + '" value="' + data + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
-    //                }
-    //            },
-
-    //            {
-    //                title: "Action",
-    //                render: function (data, type, row, meta) {
-    //                    let dataUser = "data-userId='" + row.id + "'";
-    //                    //let dataUser = row.id;
-
-    //                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataUser + "> Edit </button>";
-    //                    viewBtn = "<button type='button' class = 'saveBtn btn btn-info' " + dataUser + "> Save </button>";
-    //                    return editBtn + viewBtn;
-    //                }
-    //            },
-    //        ],
-    //        initComplete: function () {
-    //            var api = this.api();
-    //            $('#userSearch').on('keyup', function () {
-    //                api.search($(this).val()).draw();
-    //            });
-    //        },
-
-    //        rowCallback: function (row, data, index) {
-    //            // Add a unique ID to each row, based on the row's ID
-    //            $(row).attr('id', 'row-' + data.id);
-                
-    //            $(row).on('click', function () {
-    //                $("#usersDataTable tr").removeClass("selected");
-    //                //console.log('Row clicked: ', data.id);
-    //                $('#userLibrary').show();
-    //                getUserLibrary(data.id);
-    //                row.classList.add('selected');
-
-    //            });
-    //        },
-    //        destroy: true // Allow reinitialization of the table
-    //    });
-    //    buttonEvents();
-    //}
-
-
     function buttonEvents() {
 
         $(document).on("click", ".editBtn", function () {
@@ -493,7 +394,8 @@ function renderUserBooks(response) {
         });
     }
     else {
-        $('#userLibrary').append("<h3>No books in user's library</h3>");
+        $('#userLibrary').empty();
+        $('#userLibrary').append("<h3>No books in selected user's library</h3>");
     }
 }
 
@@ -549,7 +451,7 @@ function markSelected(btn) {
 }
 
 function getAuthorsLibraryInfo() {
-    ajaxCall('GET', userBooksApiUrl + "/getBooksNumInLibraries", "", getAuthorsLibraryInfoSCBF, getAuthorsLibraryInfoECBF);
+    ajaxCall('GET', authorsApiUrl + "/getAuthorsNumberInLibraries", "", getAuthorsLibraryInfoSCBF, getAuthorsLibraryInfoECBF);
 }
 
 function getAuthorsLibraryInfoSCBF(response) {
@@ -572,7 +474,7 @@ function showAuthorsInLibraryInfo(response) {
         columns: [
 
             {
-                data: "timesInLibrary",
+                data: "authorsInLibrary",
                 title: "In library",
                 render: function (data, type, row, meta) {
                     return '<span>' + data + '</span>';
@@ -580,8 +482,16 @@ function showAuthorsInLibraryInfo(response) {
             },
 
             {
-                data: "title",
-                title: "Title",
+                data: "name",
+                title: "Name",
+                render: function (data, type, row, meta) {
+                    return '<span>' + data + '</span>';
+                }
+            },
+
+            {
+                data: "topWork",
+                title: "Top work",
                 render: function (data, type, row, meta) {
                     return '<span>' + data + '</span>';
                 }
@@ -597,18 +507,10 @@ function showAuthorsInLibraryInfo(response) {
             },
 
             {
-                data: "thumbNail",
-                title: "Book cover",
+                data: "image",
+                title: "Image",
                 render: function (data, type, row, meta) {
                     return '<img src="' + data + '" alt="book image" />';
-                }
-            },
-
-            {
-                data: "isEbook",
-                title: "Ebook?",
-                render: function (data, type, row, meta) {
-                    return '<span>' + data + '</span>';
                 }
             },
         ],

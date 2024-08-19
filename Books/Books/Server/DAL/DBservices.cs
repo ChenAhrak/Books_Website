@@ -1781,6 +1781,55 @@ namespace Books.Server.DAL
             return books;
         }
 
+        //GetAuthorsNumInLibraries()
+
+        public List<Object> GetAuthorsNumInLibraries()
+        {
+
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            SqlCommand cmd = CreateCommandWithStoredProcedureAdminGetAuthorsInLibraries("SP_AdminGetAuthorsInLibraries", con);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> authors = new List<Object>();
+            while (reader.Read())
+            {
+                authors.Add(new
+                {
+                    authorsInLibrary = (int)reader["Authors in library"],
+                    name = (string)reader["Name"],
+                    topWork = (string)reader["TopWork"],
+                    description = (string)reader["description"],
+                    image = (string)reader["Image"]
+                });
+            }
+            return authors;
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureAdminGetAuthorsInLibraries(String spName, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con; // assign the connection to the command object
+
+            cmd.CommandText = spName; // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+
+            return cmd;
+        }
+
     }
 }
 

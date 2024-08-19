@@ -79,6 +79,19 @@ namespace Books.Server.BL
             }
         }
 
+        public List<dynamic> GetAuthorsNumInLibraries()
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.GetAuthorsNumInLibraries();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 }
 

@@ -75,8 +75,6 @@ $(document).ready(async function () {
     function getTitlesAndAuthorsSCB(result) {
         bookAndAuthors = result;
         getRandomIndex(bookAndAuthors);
-        console.log(randomNum);
-        // After bookAndAuthors is ready, proceed with API key retrieval and other operations
         initializeGenerativeAI();
     }
 
@@ -98,10 +96,7 @@ $(document).ready(async function () {
         }
     }
     window.initializeGenerativeAI = async function() {
-    //async function initializeGenerativeAI() {
-        //API_KEY = await getApiKey();
         if (!API_KEY) { API_KEY = await getApiKey(); }
-
 
         // testing safety feature
         const safetySettings = [
@@ -144,7 +139,6 @@ $(document).ready(async function () {
             const chatSession = model.startChat({
                 generationConfig,
                 safetySettings,
-                // See https://ai.google.dev/gemini-api/docs/safety-settings
                 history: [
                     {
                         role: "user",
@@ -309,7 +303,10 @@ $(document).ready(async function () {
         }
 
         startBtn.addEventListener('click', (event) => {
-            gameScore = 0;
+            ////////////////// need to fix score
+            //gameScore = 0;
+            //console.log(gameScore);
+            //$('#gameScore').textContent = `Player Score: ${gameScore}`;
             $('#startGame').hide();
             $('#gameScore').show();
             $('#quiz').show();
@@ -368,6 +365,8 @@ function revealAnswer(answer, selectedAnswer, explanation, selection) {
     }
 
 }
+const gameScoreText = document.getElementById("gameScore");
+console.log(gameScoreText.textContent);
 
 var finishGameBtn = document.getElementById("finishGame");
 
@@ -379,11 +378,18 @@ finishGameBtn.addEventListener('click', (event) => {
     $('#finishQuiz').hide();
     updateUserHighScore();
     console.log("high score:" + highScore);
+    restartScore(gameScore);
+    
     // also add modal with results of the game!
 });
 
+function restartScore(gameScore) {
+    gameScore = 0;
+    gameScoreText.textContent = `Player Score: ${gameScore}`;
+    return gameScore;
+}
 
-// not yet implemented
+// add modal with 2 cases
 function updateUserHighScore() {
     if (highScore < gameScore) {
         sendUserHighScore();
@@ -404,7 +410,6 @@ function sendUserHighScoreECB(err) {
 
 function createQuiz(question, options) {
     const quizContainer = document.getElementById('quiz');
-    //$('#quiz').empty();
     quizContainer.innerHTML = '';
     var optionCount = 0;
     const quizQuestion = document.createElement('p');
