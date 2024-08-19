@@ -46,7 +46,8 @@ $(document).ready(function () {
         authorsContainer.empty();
         authors.forEach(function (author) {
             var authorElement = $('<div class="author" data-author-id="' + author.id + '">');
-            authorElement.append('<img src="' + author.image + '" alt="author image" />');
+            var authorImage = $('<img id="' + author.name + ' "src="' + author.image + '" alt="author image" />');
+            authorElement.append(authorImage);
             authorElement.append('<h3>' + author.name + '</h3>');
             authorElement.append('<p>' + 'Birth Date: ' + author.birthDate + '</p>');
             authorElement.append('<p>' + 'Death Date: ' + author.deathDate + '</p>');
@@ -57,6 +58,14 @@ $(document).ready(function () {
             authorsContainer.append(authorElement);
 
             addAuthorClickHandlers(authorBooks, author.id); // Add click handlers after rendering authors
+            goWikipediaLink(authorImage,author.name);
+        });
+
+    }
+
+    function goWikipediaLink(authorImage,authorName) {
+        authorImage.click(function () {
+            window.open("https://en.wikipedia.org/wiki/" + authorName, "_blank");
         });
 
     }
@@ -88,7 +97,7 @@ $(document).ready(function () {
     });
 
     async function getBooksByAuthor(authorId) {
-        ajaxCall("GET", `${authorsApiUrl}/GetBooksByAuthor${authorId}`, "", getBooksByAuthorSCB, getBooksByAuthorECB);
+       await  ajaxCall("GET", `${authorsApiUrl}/GetBooksByAuthor${authorId}`, "", getBooksByAuthorSCB, getBooksByAuthorECB);
        
     }
 
@@ -112,9 +121,7 @@ $(document).ready(function () {
             bookElement.append('<p>' + book.description + '</p>');   
 
             modalContent.append(bookElement);
-
-            //addBookClick(addBookBtn);
-            //addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+            
         });
     }
 
@@ -152,7 +159,8 @@ $(document).ready(function () {
 
     $(logoutbtn).click(function () {
         sessionStorage.clear();
-        window.location.reload();
+        window.location.href = ("index.html");
+
     });
 
     const registerbtn = document.getElementById("registerBtn");

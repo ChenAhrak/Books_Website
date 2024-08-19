@@ -507,27 +507,6 @@ $(document).ready(function () {
 
     }
 
-    //async function checkQueryInPDF(bookId, query) {
-    //    const result = await ajaxCall("GET", `${pdfsApiUrl}/SearchInBookText/${bookId}?query=${encodeURIComponent(query)}`, null, SearchInBookTextPDFSCB, SearchInBookTextPDFECB);
-    //    console.log(result);
-    //    return result;
-    //}
-
-
-    //function SearchInBookTextPDFSCB(result) {
-    //    console.log("Found");
- 
-    //}
-
-    //function SearchInBookTextPDFECB(err) {
-    //    console.log("Not found");
-    //}
-
-  
-    //הגעה לעמוד ה wish list 
-    
-
-
     getBooksDisplayDataFromDB();
     getEBooksDisplayDataFromDB();
     getAllBooksDataFromDB();
@@ -553,7 +532,6 @@ $(document).ready(function () {
     });
 
     const authorsBtn = document.getElementById("authorsBtn");
-    //jquery click event
     $(authorsBtn).click(function () {
         window.location.href = "authors.html";
     });
