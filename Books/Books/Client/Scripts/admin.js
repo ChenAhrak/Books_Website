@@ -110,7 +110,8 @@ $(document).ready(async function () {
                     $("#usersDataTable tr").removeClass("selected");
                     console.log('Row clicked: ', data.id);
                     getUserLibrary(data.id);
-                    row.className = 'selected';
+                    row.classList.add('selected');
+                    //row.className = 'selected';
                 });
             },
             destroy: true // Allow reinitialization of the table
@@ -171,7 +172,7 @@ $(document).ready(async function () {
         });
     }
 
-
+    showAllLibraryInfo();
     
 
 });
@@ -179,6 +180,24 @@ $(document).ready(async function () {
 
 const toggleModeCheckbox = document.getElementById('toggle-mode');
 const currentTheme = localStorage.getItem('theme');
+
+function showAllLibraryInfo() {
+}
+
+function getAllLibraryInfo() {
+    ajaxCall('GET', userBooksApiUrl + "/getBooksNumInLibraries", "", getAllLibraryInfoSCBF, getAllLibraryInfoECBF);
+}
+
+function getAllLibraryInfoSCBF(response) {
+    showAllLibraryInfo(response);
+    console.log(response);
+}
+
+function getAllLibraryInfoECBF(err) {
+    console.log(err);
+}
+
+getAllLibraryInfo();
 
 // Apply the saved theme on load
 if (currentTheme === 'dark') {
@@ -215,17 +234,18 @@ function renderUserBooks(data) {
         });
         thead.append(headerRow);
         booksContainer.append(thead);
-
+        
 
         console.log(data);
         data.forEach(book => {
+            const publishedYear = new Date(book.publishedDate).getFullYear();
             var bookElement = $('<tr>');
             bookElement.append('<td><span>' + book.id + '</span></td>');
             bookElement.append('<td><span>' + book.title + '</span></td>');
             bookElement.append('<td><span>' + book.subtitle + '</span></td>');
             bookElement.append('<td><span>' + book.language + '</span></td>');
             bookElement.append('<td><span>' + book.publisher + '</span></td>');
-            bookElement.append('<td><span>' + book.publishedDate + '</span></td>');
+            bookElement.append('<td><span>' + publishedYear + '</span></td>');
             bookElement.append('<td><span>' + book.pageCount + '</span></td>');
             bookElement.append('<td><span>' + book.printType + '</span></td>');
             bookElement.append('<td><span>' + book.price + ' ILS' + '</span></td>');

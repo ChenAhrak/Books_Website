@@ -88,6 +88,10 @@ h1 {
     width: 90%;
 }
 
+table > tbody > tr{
+    background-color: black;
+}
+
 button {
     background-color: var(--button-background-color);
     color: white;
