@@ -1,5 +1,5 @@
 apiUsersUrl = "https://localhost:7195/api/Users";
-var user = JSON.parse(sessionStorage.getItem('user'));
+
 
 $(document).ready(function () {
 
@@ -26,6 +26,32 @@ $(document).ready(function () {
             return;
         }
 
+        async function checkEmailExists(email) {
+
+            ajaxCall('GET', apiUsersUrl + '/GetUserByEmail/' + email, null, getCheckSCBF, getcheckECBF);
+        }
+
+        function getCheckSCBF(response) {
+            console.log(response);
+            if (response.id == 0) {
+                alert("Email does not exist in the system.");
+                return;
+            }
+            else {
+                updatePassword();               
+              
+
+            }
+
+        }
+
+        function getcheckECBF(response) {
+            console.log(response);
+        }
+
+        checkEmailExists(email);
+
+
         async function updatePassword() {
          
             ajaxCall('PUT', apiUsersUrl + '/UpdateUserPassword/'+email, JSON.stringify(password), updateSCBF, updateECBF);
@@ -34,7 +60,7 @@ $(document).ready(function () {
         function updateSCBF(response) {
             console.log(response);
             alert("Password Changed");
-        //    window.location.href = "login.html";
+            window.location.href = "login.html";
         }
         function updateECBF(response) {
             console.log(response);
@@ -42,7 +68,6 @@ $(document).ready(function () {
         }
 
 
-        updatePassword();
 
 
 

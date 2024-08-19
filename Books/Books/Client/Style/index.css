@@ -191,6 +191,7 @@ footer {
 .more-details {
    
     cursor: pointer;
+    text-align: center;
 }
 
 .more-details:hover{
