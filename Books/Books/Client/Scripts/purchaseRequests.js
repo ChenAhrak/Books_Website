@@ -13,7 +13,7 @@ function fetchPurchaseRequests() {
         }
     );
 }
-function renderPurchaseRequests(requests) {
+function renderPurchaseRequests(requests) { //if (request.approvalStatus === 'Pending')
     var requestsContainer = $('#requests-container');
     requestsContainer.empty();
 
@@ -63,7 +63,7 @@ function updateRequestStatus(requestId, status, callback) {
         },
         (error) => {
             console.error('Error updating request status:', error);
-            alert('An error occurred while updating the request status.'); // הצגת הודעת שגיאה
+            alert('An error occurred while updating the request status.'); 
         }
     );
 }
@@ -76,27 +76,24 @@ function manageBookPurchase(buyerId, sellerId, bookId, requestId) {
         ajaxCall('POST', `https://localhost:7195/api/UserBooks/Transfer-Book?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`, null,
             (response) => {
                 console.log('Book purchase processed successfully:', response);
-                alert('Book has been transferred successfully.'); // הצגת הודעת הצלחה
-
-                // הסרת הבקשה מהרשימה לאחר הצלחה
+                alert('Book has been transferred successfully.');
                 removeRequestFromList(requestId);
             },
             (error) => {
                 console.error('Error processing book purchase:', error);
-                alert('An error occurred while processing the book purchase.'); // הצגת הודעת שגיאה
+                alert('An error occurred while processing the book purchase.'); 
             }
         );
     });
 }
-
-function removeRequestFromList(requestId) { // אולי צריך להוסיף store procedure
+function removeRequestFromList(requestId) { 
     // הסרת הבקשה מהרשימה בדף
     $('#requests-container .request').each(function () {
         var requestElement = $(this);
         var dataRequestId = requestElement.find('.approveRequestButton').data('request-id');
         if (dataRequestId == requestId) {
             requestElement.remove();
-            return false; // יציאה מהלולאה לאחר שמצאנו והסרנו את הבקשה
+            return false; 
         }
     });
 }
