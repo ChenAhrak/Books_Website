@@ -42,12 +42,12 @@ namespace Books.Server.Controllers
         public IActionResult Post([FromBody] User value)
         {
             bool result = user.registration(value);
-            if (result) { 
+            if (result) {
                 return Ok(new { message = "User created successfully" });
             }
             else
             {
-                return BadRequest(new {message = "Email need to be unique"});
+                return BadRequest(new { message = "Email need to be unique" });
             }
 
         }
@@ -99,6 +99,30 @@ namespace Books.Server.Controllers
                 user.deleteUserById(id);
             }
             catch (Exception) { };
+        }
+
+        // GET api/<UsersController>
+        [HttpGet("GetUserByEmail/{email}")]
+        public User getUserByEmail(string email)
+        {
+          return user.getUserByEmail(email);
+            
+        }
+
+        [HttpPut("UpdateUserPassword/{email}")]
+
+        public IActionResult UpdateUserPassword(string email, [FromBody] string password)
+        {
+           
+            try
+            {
+                user.updateUserPassword(email, password);
+                return Ok(new { message = "Password updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "User Not Found" });
+            }
         }
     }
 }

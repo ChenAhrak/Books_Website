@@ -77,6 +77,10 @@ $('#homeBtn').on('click', function () {
     window.location.href = "../Pages/index.html";
 });
 
+$('#forgot-password').on('click', function () {
+    window.location.href = "forgotPassword.html";
+});
+
 // will become redundant - to be removed later!
 const registerPageBtn = document.getElementById("registerPageBtn");
 
