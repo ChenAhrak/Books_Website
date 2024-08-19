@@ -105,7 +105,7 @@ window.onload = () => {
 
     $(logoutbtn).click(function () {
         sessionStorage.clear();
-        window.location.reload();
+        window.location.href = ("index.html");
     });
 
 

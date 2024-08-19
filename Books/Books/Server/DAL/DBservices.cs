@@ -1579,7 +1579,6 @@ namespace Books.Server.DAL
                 // write to log
                 throw (ex);
             }
-
             cmd = CreateCommandWithStoredProcedureGetUserByEmail("SP_GetUserByEmail", con, email); // create the command
 
             try

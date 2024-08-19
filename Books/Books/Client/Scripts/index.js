@@ -468,11 +468,22 @@ $(document).ready(function () {
             bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
             //bookElement.append('<p>' + 'Description: ' + book.description + '</p>')
             bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-            var addBookBtn = $('<p><button id="' + book.id + '" class="add-book">Add Book</button><p>');
+            var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
+            bookElement.append(addToWishlistBtn);
+
+            // Add "Add Book" button
+            var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
             bookElement.append(addBookBtn);
 
+            var moreDetails = $('<p class="more-details">More Details</p>');
+            bookElement.append(moreDetails);
+
             mainContent.append(bookElement);
+
             addBookClick(addBookBtn);
+            addWishlistClick(addToWishlistBtn);
+            showMoreDetails(moreDetails, book);
+
 
         });
     }
@@ -489,7 +500,6 @@ $(document).ready(function () {
                      book.title.toLowerCase().includes(query.toLowerCase()) ||
                     book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
                      book.description.toLowerCase().includes(query.toLowerCase())) 
-                  /*    await checkQueryInPDF(book.id, query))*/
                  {
                      filterdBooks.push(book);
                  }
@@ -500,27 +510,6 @@ $(document).ready(function () {
         renderFilterdBooks(filterdBooks);
 
     }
-
-    //async function checkQueryInPDF(bookId, query) {
-    //    const result = await ajaxCall("GET", `${pdfsApiUrl}/SearchInBookText/${bookId}?query=${encodeURIComponent(query)}`, null, SearchInBookTextPDFSCB, SearchInBookTextPDFECB);
-    //    console.log(result);
-    //    return result;
-    //}
-
-
-    //function SearchInBookTextPDFSCB(result) {
-    //    console.log("Found");
- 
-    //}
-
-    //function SearchInBookTextPDFECB(err) {
-    //    console.log("Not found");
-    //}
-
-  
-    //הגעה לעמוד ה wish list 
-    
-
 
     getBooksDisplayDataFromDB();
     getEBooksDisplayDataFromDB();
@@ -547,7 +536,6 @@ $(document).ready(function () {
     });
 
     const authorsBtn = document.getElementById("authorsBtn");
-    //jquery click event
     $(authorsBtn).click(function () {
         window.location.href = "authors.html";
     });
