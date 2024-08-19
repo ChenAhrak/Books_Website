@@ -36,7 +36,9 @@ $(document).ready(function () {
                 return;
             }
             else {
-                submitToServer(forgotPasswordData);
+                sendEmailToUser(forgotPasswordData);
+                var userMail = sessionStorage.setItem('mail', JSON.stringify(email));
+
                 //$('#sendPassBtn').on('click', function () {
                 //    window.location.href = "afterSendingMail.html";
                 //    });
@@ -53,16 +55,14 @@ $(document).ready(function () {
 
 
         //// Need to implement this function and in SQL too and The server --------------------------------------------------
-        async function submitToServer(forgotPasswordData) {
+        async function sendEmailToUser(forgotPasswordData) {
 
             await ajaxCall('POST', apiMailUrl, JSON.stringify(forgotPasswordData), postSCBF, postECBF);
         }
 
         function postSCBF(response) {
             console.log(response);
-            if (response) {
-                sessionStorage.setItem('user', JSON.stringify(response));
-            }
+            window.location.href = "afterSendingMail.html";
         }
 
         function postECBF(response) {
