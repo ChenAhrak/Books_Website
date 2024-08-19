@@ -89,7 +89,7 @@ function renderAllBooksDisplay(books) {
 
     });
 
-   
+
 }
 
 
@@ -137,6 +137,7 @@ function addReadClick(readBtn) {
 
 // קריאה לפונקציה לשליפת ספרים
 fetchBooks();
+
 
 const allBooksBtn = document.getElementById("allBooksBtn");
 $(allBooksBtn).click(function () {
@@ -195,10 +196,16 @@ $(purchaseBooksBtn).click(function () {
     window.location.href = "transferBook.html";
 });
 
+const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
+$(mypurchaserequestsBtn).click(function () {
+    window.location.href = "purchaseRequests.html";
+});
+
 // Check user status and display appropriate buttons
 if (user && !user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
+    $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').hide();
@@ -206,6 +213,7 @@ if (user && !user.isAdmin) {
 } else if (user && user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
+    $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').show();
@@ -213,6 +221,7 @@ if (user && !user.isAdmin) {
 } else {
     $('#logoutBtn').hide();
     $('#loginBtn').show();
+    $('#purchaseBooksBtn').hide();
     $('#registerBtn').show();
     $('#myBooksBtn').hide();
     $('#adminBtn').hide();

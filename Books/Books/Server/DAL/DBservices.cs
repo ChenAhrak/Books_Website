@@ -909,7 +909,6 @@ namespace Books.Server.DAL
             return cmd;
         }
 
-
         public List<dynamic> GetUserLibrary(int userId, string status)
         {
             List<dynamic> books = new List<dynamic>();
@@ -930,7 +929,6 @@ namespace Books.Server.DAL
                         {
                             var book = new
                             {
-                                // missing thumbnail, author, isEbook
                                 Id = reader["BookID"].ToString(),
                                 Title = reader["Title"].ToString(),
                                 Subtitle = reader["Subtitle"].ToString(),
@@ -961,6 +959,7 @@ namespace Books.Server.DAL
 
             return books;
         }
+
         // All read books from all users
         public List<dynamic> GetAllReadBooks(int currentUserId)
         {
@@ -983,7 +982,7 @@ namespace Books.Server.DAL
                                 Id = reader["BookID"].ToString(),
                                 Title = reader["Title"].ToString(),
                                 AuthorNames = reader["AuthorNames"].ToString(),
-                                BookOwnerID = reader["BookOwnerID"].ToString(),
+                                SellerId = reader["BookOwnerID"].ToString(),
                                 Status = reader["UserLibraryStatus"].ToString(),
                                 Thumbnail = reader["Thumbnail"].ToString(),
                                 Price = reader["Price"].ToString()
@@ -1188,6 +1187,54 @@ namespace Books.Server.DAL
                 return false;
             }
         }
+        public List<dynamic> GetPurchaseRequestsForUser(int sellerId)
+        {
+            List<dynamic> purchaseRequests = new List<dynamic>();
+
+            try
+            {
+                using (SqlConnection con = connect("myProjDB"))
+                using (SqlCommand cmd = new SqlCommand("GetPurchaseRequestsForUser", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@SellerID", sellerId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var request = new
+                            {
+                                RequestId = reader["RequestID"].ToString(),
+                                BuyerId = reader["BuyerID"].ToString(),
+                                //Thumbnail = reader["Thumbnail"].ToString(),
+                                SellerId = reader["SellerID"].ToString(),
+                                BookId = reader["BookID"].ToString(),
+                                RequestDate = reader.IsDBNull(reader.GetOrdinal("RequestDate"))
+                                              ? (DateTime?)null
+                                              : Convert.ToDateTime(reader["RequestDate"]),
+                                Status = reader["ApprovalStatus"].ToString(),
+                                ApprovalDate = reader.IsDBNull(reader.GetOrdinal("ApprovalDate"))
+                                               ? (DateTime?)null
+                                               : Convert.ToDateTime(reader["ApprovalDate"])
+
+                            };
+
+                            purchaseRequests.Add(request);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw; // Throwing the exception to be handled by higher-level code if needed
+            }
+
+            return purchaseRequests;
+        }
+
+
         public bool UpdateBookPurchaseRequestStatus(int requestId, string approvalStatus, DateTime approvalDate)
         {
             try
@@ -1517,149 +1564,13 @@ namespace Books.Server.DAL
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-       
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         //Check for the reset password email
         public User getUserByEmail(string email)
         {
             SqlConnection con;
             SqlCommand cmd;
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            
             cmd = CreateCommandWithStoredProcedureGetUserByEmail("SP_GetUserByEmail", con, email); // create the command
 
             try
@@ -1704,8 +1615,7 @@ namespace Books.Server.DAL
             cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
-
-            cmd.Parameters.AddWithValue("@Email", email);
+              cmd.Parameters.AddWithValue("@Email", email);
 
             return cmd;
         }
@@ -1762,6 +1672,104 @@ namespace Books.Server.DAL
             cmd.Parameters.AddWithValue("@NewPassword", password);
 
             return cmd;
+        }
+
+        public List<Object> GetBooksNumInLibrary()
+        {
+
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            SqlCommand cmd = CreateCommandWithStoredProcedureAdminGetBooksTimesInLibrary("SP_AdminGetBooksTimesInLibrary", con);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> books = new List<Object>();
+            while (reader.Read())
+            {
+                books.Add(new
+                {
+                    timesInLibrary = (int)reader["Times in library"],
+                    title = (string)reader["Title"],
+                    description = (string)reader["Book description"],
+                    isEbook = (bool)reader["isEbook"],
+                    thumbNail = (string)reader["Thumbnail"]
+                });
+            }
+            return books;
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureAdminGetBooksTimesInLibrary(String spName, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con; // assign the connection to the command object
+
+            cmd.CommandText = spName; // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+          
+            return cmd;
+        }
+
+
+        // similar but returns for any book status in library
+        public List<dynamic> GetUserLibraryForAdmin(int userId)
+        {
+            List<dynamic> books = new List<dynamic>();
+
+            try
+            {
+                using (SqlConnection con = connect("myProjDB"))
+                using (SqlCommand cmd = new SqlCommand("SP_AdminGetUserBooks", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var book = new
+                            {
+                                Id = reader["BookID"].ToString(),
+                                Title = reader["Title"].ToString(),
+                                Subtitle = reader["Subtitle"].ToString(),
+                                Language = reader["Language"].ToString(),
+                                Publisher = reader["Publisher"].ToString(),
+                                PublishedDate = reader.IsDBNull(reader.GetOrdinal("PublishedDate"))
+                                                ? null
+                                                : reader["PublishedDate"].ToString(),
+                                PageCount = reader["PageCount"] as int? ?? 0,
+                                PrintType = reader["PrintType"].ToString(),
+                                Price = reader["Price"] as double? ?? 0.0,
+                                Status = reader["Status"].ToString(),
+                                Thumbnail = reader["Thumbnail"].ToString(),
+                                Authors = reader["Authors"].ToString(),
+                                isEbook = reader["isEbook"].ToString()
+                            };
+
+                            books.Add(book);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+
+            return books;
         }
 
     }

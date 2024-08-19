@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Books.Server.BL; 
 using System.Collections.Generic;
+using System.Data;
 
 namespace Books.Server.Controllers
 {
@@ -20,6 +21,28 @@ namespace Books.Server.Controllers
         public IActionResult GetUserLibrary([FromQuery] int userID, [FromQuery] string status)
         {
             var userBooksList = _userBooks.GetUserLibrary(userID, status);
+            if (userBooksList == null)
+            {
+                return NotFound("No books found for the specified user and status.");
+            }
+            return Ok(userBooksList);
+        }
+
+        [HttpGet("getUserLibrary/{userId}")]
+        public IActionResult GetUserLibraryForAdmin(int userId)
+        {
+            var userBooksList = _userBooks.GetUserLibraryForAdmin(userId);
+            if (userBooksList == null)
+            {
+                return NotFound("No books found for the specified user.");
+            }
+            return Ok(userBooksList);
+        }
+
+        [HttpGet("getBooksNumInLibraries")]
+        public IActionResult GetBooksNumInLibraries()
+        {
+            List<object> userBooksList = _userBooks.GetBooksNumInLibrary();
             if (userBooksList == null)
             {
                 return NotFound("No books found for the specified user and status.");
@@ -96,41 +119,7 @@ namespace Books.Server.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
-        //Add To Read
-        //[HttpPost("addBookToRead/{userId}")]
-        //public IActionResult AddBookToRead(int userId, [FromBody] string bookId)
-        //{
-        //    if (bookId == null)
-        //    {
-        //        return BadRequest("Invalid book data.");
-        //    }
-        //    var status = "read";
-
-        //    try
-        //    {
-        //        var result = _userBooks.AddBookToLibrary(new UserBooks
-        //        {
-        //            UserID = userId,
-        //            BookID = bookId,
-        //            Status = status
-        //        });
-
-        //        if (result)
-        //        {
-        //            return Ok(new { message = "Book added to Sell list successfully." });
-        //        }
-        //        else
-        //        {
-        //            return StatusCode(500, "An error occurred while adding the book to selling.");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Exception: {ex.Message}");
-        //        return StatusCode(500, "An unexpected error occurred.");
-        //    }
-        //}
-      
+       
         // עדכון סטטוס הספר בספריית המשתמש
         [HttpPut("update-status")]
         public IActionResult UpdateBookStatus([FromQuery] int userID, [FromQuery] string bookID, [FromQuery] string newStatus)
@@ -150,10 +139,22 @@ namespace Books.Server.Controllers
             var result = _userBooks.AddBookPurchaseRequest(buyerId, sellerId, bookId);
             if (result)
             {
-                return Ok("Book purchase request added successfully.");
+                return Ok(new { message = "Book purchase request added successfully." });
             }
             return StatusCode(500, "An error occurred while adding the book purchase request.");
         }
+        // שליפת בקשות רכישת ספר עבור המוכר
+        [HttpGet("getPurchaseRequestsForUser/{sellerId}")]
+        public IActionResult GetPurchaseRequestsForUser(int sellerId)
+        {
+            var purchaseRequests = _userBooks.GetPurchaseRequestsForUser(sellerId);
+            if (purchaseRequests != null && purchaseRequests.Count > 0)
+            {
+                return Ok(purchaseRequests);
+            }
+            return NotFound("No purchase requests found for the specified seller.");
+        }
+
         // עדכון סטטוס של בקשת רכישת ספר
         [HttpPut("updatePurchaseRequestStatus")]
         public IActionResult UpdatePurchaseRequestStatus([FromQuery] int requestId, [FromQuery] string approvalStatus, [FromQuery] DateTime approvalDate)
@@ -161,7 +162,7 @@ namespace Books.Server.Controllers
             var result = _userBooks.UpdateBookPurchaseRequestStatus(requestId, approvalStatus, approvalDate);
             if (result)
             {
-                return Ok("Book purchase request status updated successfully.");
+                return Ok(new { message = "Book purchase request status updated successfully." });
             }
             return StatusCode(500, "An error occurred while updating the book purchase request status.");
         }
@@ -172,7 +173,7 @@ namespace Books.Server.Controllers
             var result = _userBooks.TransferBook(buyerId, sellerId, bookId);
             if (result)
             {
-                return Ok("Purchase processed successfully.");
+                return Ok(new { message = "Purchase processed successfully." });
             }
             return StatusCode(500, "An error occurred while processing the purchase.");
         }

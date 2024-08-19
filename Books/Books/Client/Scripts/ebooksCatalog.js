@@ -59,6 +59,7 @@ $(document).ready(function () {
 
             var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
             ebookElement.append(addToWishlistBtn);
+            addWishlistClick(addToWishlistBtn); // הפעלה של הפונקציה
 
             var addBookBtn = $('<p><button id="' + ebook.id + '" class="add-book">Add Book</button></p>');
             ebookElement.append(addBookBtn);
@@ -69,11 +70,9 @@ $(document).ready(function () {
             ebooksContainer.append(ebookElement);
             addBookClick(addBookBtn);
             showMoreDetails(moreDetails, ebook);
-
-
         });
-
     }
+
 
     modal.css('display', 'none');
     span.on('click', function () {
@@ -135,6 +134,106 @@ $(document).ready(function () {
         return sessionStorage.getItem('user') !== null;
     }
 
+
+    // Function to add a book to the wishlist
+    function addBookToWishlist(userId, bookId) {
+        const api = `https://localhost:7195/api/UserBooks/addBookToWishlist/${userId}`;
+        const data = getBookById(bookId);
+        ajaxCall(
+            'POST',
+            api,
+            JSON.stringify(data),
+            function (response) {
+                console.log("Success:", response);
+                alert("Added");
+                $(`button[data-book-id="${bookId}"]`).addClass('filled').text('❤️'); // Update button state on success
+            },
+            function (error) {
+                console.error("Error:", error);
+                alert("Book was already added");
+            }
+        );
+    }
+    // Add event listener for wishlist button click
+    function addWishlistClick(wishlistBtn) {
+        wishlistBtn.on('click', function () {
+            const bookId = $(this).data('book-id');
+            const userId = user.id; // Fetch the current user ID
+            if (userId) {
+                // Add book to wishlist
+                addBookToWishlist(userId, bookId);
+
+                // Optionally toggle button appearance based on success
+                $(this).toggleClass('filled');
+            } else {
+                alert("User not logged in.");
+            }
+        });
+    }
+    //to be deleted
+    function getBookById(bookId) {
+        // This function should retrieve book details by its ID
+        // You might need to implement an API call or a local function to fetch book details
+        // For now, returning a mock book object
+        return {
+            Id: bookId,
+            Title: "Example Book Title",
+            Subtitle: "Example Subtitle",
+            Language: "English",
+            Publisher: "Example Publisher",
+            PublishedDate: "2024-01-01",
+            Description: "Example book description.",
+            PageCount: 300,
+            PrintType: "BOOK",
+            SmallThumbnail: "http://example.com/small.jpg",
+            Thumbnail: "http://example.com/large.jpg",
+            SaleCountry: "US",
+            Saleability: "FOR_SALE",
+            IsEbook: false,
+            AccessCountry: "US",
+            Viewability: "PARTIAL",
+            PublicDomain: false,
+            TextToSpeechPermission: "ALLOWED",
+            EpubIsAvailable: true,
+            EpubDownloadLink: "http://example.com/epub",
+            EpubAcsTokenLink: "http://example.com/epub-token",
+            PdfIsAvailable: true,
+            PdfDownloadLink: "http://example.com/pdf",
+            PdfAcsTokenLink: "http://example.com/pdf-token",
+            WebReaderLink: "http://example.com/reader",
+            AccessViewStatus: "SAMPLE",
+            QuoteSharingAllowed: true,
+            TextSnippet: "Sample text snippet.",
+            Price: 29.99,
+            ExtarctedText: "Sample extracted text."
+        };
+    }
+
+    // Function to add a book to the purchased list
+    function addBookToPurchased(userId, book) {
+        const api = `https://localhost:7195/api/UserBooks/addBookToPurchased/${userId}`;
+        const data = JSON.stringify(book);
+
+        // Print the API URL and data being sent to the console
+        console.log("API URL:", api);
+        console.log("Request Data:", data);
+
+        ajaxCall(
+            'POST',
+            api,
+            data,
+            function (response) {
+                console.log("Success:", response);
+                alert("The book added");
+                // Update UI on success, e.g., change button state
+            },
+            function (error) {
+                console.error("Error:", error);
+                alert("You already added this book.");
+            }
+        );
+    }
+
     // Event listener for add book button
     function addBookClick(addBookBtn) {
         addBookBtn.on('click', function (event) {
@@ -144,7 +243,9 @@ $(document).ready(function () {
 
                 if (isLoggedIn()) {
                     const user = JSON.parse(sessionStorage.getItem('user'));
-                    addBook(buttonId, user.id);
+                    // Assuming you have a way to get the book details by ID
+                    const book = getBookById(buttonId); // You need to implement this function
+                    addBookToPurchased(user.id, book);
                 } else {
                     console.log("User not logged in. Redirecting to login.");
                     alert("Please login or register to add book.");
@@ -153,24 +254,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    //// ****Function to add a book to user's list not working****
-    function addBook(buttonId, userId) {
-
-        ajaxCall("POST", `${booksApiURL}/addBookToUser/${userId}`, JSON.stringify(buttonId), postSCBF, postECBF);
-
-    }
-
-    function postSCBF(result) {
-        alert("Book added successfully!");
-        console.log(result);
-    }
-
-    function postECBF(err) {
-        alert("Book was already added.");
-        console.log(err);
-    }
-
 
     function searchEBooks() {
 
@@ -235,7 +318,14 @@ $(document).ready(function () {
         window.location.href = "myBooks.html";
 
     });
-
+    const wishlistBtn = document.getElementById("wishlistBtn");
+    $(wishlistBtn).click(function () {
+        window.location.href = "wishList.html";
+    });
+    const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
+    $(mypurchaserequestsBtn).click(function () {
+        window.location.href = "purchaseRequests.html";
+    });
 
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {
@@ -243,20 +333,21 @@ $(document).ready(function () {
         $('#loginBtn').hide();
         $('#registerBtn').hide();
         $('#myBooksBtn').show();
+        $('#wishlistBtn').show();
         $('#adminBtn').hide();
     } else if (user && user.isAdmin) {
         $('#logoutBtn').show();
         $('#loginBtn').hide();
         $('#registerBtn').hide();
         $('#myBooksBtn').show();
+        $('#wishlistBtn').show();
         $('#adminBtn').show();
     } else {
         $('#logoutBtn').hide();
         $('#loginBtn').show();
         $('#registerBtn').show();
         $('#myBooksBtn').hide();
+        $('#wishlistBtn').hide();
         $('#adminBtn').hide();
     }
-
-
 });

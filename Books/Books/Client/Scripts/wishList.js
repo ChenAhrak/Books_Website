@@ -30,9 +30,9 @@ $('#homeBtn').on('click', function () {
 function fetchBooks() {
     const status = 'want to read'; // הגדרת הסטטוס
 
-    const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${encodeURIComponent(status)}`;
+    const api = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${encodeURIComponent(status)}`;
     // שלח בקשה לשרת
-    ajaxCall('GET', apiEndpoint, null,
+    ajaxCall('GET', api, null,
         getBooksDisplayDataFromDBSCB,  // פונקציית הצלחה
         getBooksDisplayDataFromDBECB  // פונקציית שגיאה
     );
@@ -57,8 +57,6 @@ function getBooksDisplayDataFromDBECB(err) {
         console.log("Status Text:", err.statusText);
     }
 }
-
-
 // הצגת הספרים בטבלה
 function renderAllBooksDisplay(books) {
     var booksContainer = $('#books-container');
@@ -69,42 +67,40 @@ function renderAllBooksDisplay(books) {
         return;
     }
 
-    var table = $('<table>');
-    var tableHeader = $('<tr>');
-
+    console.log(books);
+    var booksContainer = $('#books-container');
+    booksContainer.empty();
     books.forEach(book => {
-        var bookElement = $('<td>');
+        var bookElement = $('<div>');
+        bookElement.addClass('book');
         bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
         bookElement.append('<h3>' + book.title + '</h3>');
         bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-
-        var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+        var addBookBtn = $('<button class="addBookButton" data-book-id="' + book.id + '">Add Book</button>');
         bookElement.append(addBookBtn);
-
-        tableHeader.append(bookElement);
 
         // קרא לפונקציות המתאימות עבור הכפתור
         addpurchasedClick(addBookBtn);
+        booksContainer.append(bookElement);
     });
 
-    table.append(tableHeader);
-    booksContainer.append(table);
+   
 }
 
 // פונקציה להוספת ספר לרשימת הקריאה //Update status from "want to read" to "purchased"
 function addBookToPurchased(userID, bookId) {
     const status = "purchased";
     const api = `https://localhost:7195/api/UserBooks/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
-
+    const data = JSON.stringify(bookId);
     ajaxCall(
         'PUT',
         api,
-        null, // No need to send data in the body since we use query parameters
+        data,
         function (response) {
             console.log("Success:", response);
             alert("Book added to purchased list.");
-            // Update UI to reflect the book was added
+            
             $(`button[data-book-id="${bookId}"]`).addClass('added').text('Added'); // Update button state on success
         },
         function (error) {
@@ -191,17 +187,24 @@ $(purchaseBooksBtn).click(function () {
     window.location.href = "transferBook.html";
 });
 
+const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
+$(mypurchaserequestsBtn).click(function () {
+    window.location.href = "purchaseRequests.html";
+});
+
 // Check user status and display appropriate buttons
 if (user && !user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
+    $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').hide();
-    $('#wishlistBtn').hide(); // inside wishlist page - dont need a button to enter wishlist
+    $('#wishlistBtn').show(); // Show wishlist button for regular users
 } else if (user && user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
+    $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').show();
@@ -209,10 +212,10 @@ if (user && !user.isAdmin) {
 } else {
     $('#logoutBtn').hide();
     $('#loginBtn').show();
+    $('#purchaseBooksBtn').hide();
     $('#registerBtn').show();
     $('#myBooksBtn').hide();
     $('#adminBtn').hide();
     $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
 }
-
 

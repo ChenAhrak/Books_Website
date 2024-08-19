@@ -26,12 +26,12 @@ $(document).ready(function () {
     });
 
     $('#loginForm').submit(function (event) {
-        event.preventDefault();
+        event.preventDefault(); // מונע מהאתר להיתאפס
 
         const email = $('#email').val();
         const password = $('#password').val();
 
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //RegEx
         if (!emailPattern.test(email)) {
             alert("Invalid email format.");
             return;
