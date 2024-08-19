@@ -30,49 +30,43 @@ $(document).ready(async function () {
     function getUsersECBF(err){
         console.log(err);
     }
-
-
-    function userDataTable(response) { 
-        $('#usersDataTable').DataTable({
+    function userDataTable(response) {
+        var table = $('#usersDataTable').DataTable({
             data: response,
             pageLength: 10,
+            searching: false,
             columns: [
-
                 {
                     data: "id",
                     title: "User ID",
+                    searchable: true,
                     render: function (data, type, row, meta) {
                         return '<p>' + data + '</p>';
                     }
                 },
-
                 {
                     data: "userName",
                     title: "User Name",
-
+                    searchable: true,
                     render: function (data, type, row, meta) {
                         return '<input type="text" class="editUserName" id="editUserName' + row.id + '" value="' + data + '" data-user-name="' + row.id + '" disabled>';
                     }
                 },
-
                 {
                     data: "email",
                     title: "User Email",
+                    searchable: true,
                     render: function (data, type, row, meta) {
-                        //return '<p>' + data + '</p>';
                         return '<input type="text" class="editEmail" id="editEmail' + row.id + '" value="' + data + '" data-email="' + row.id + '" disabled>';
                     }
                 },
-
                 {
                     data: "password",
-                    title: "password",
+                    title: "Password",
                     render: function (data, type, row, meta) {
-                        //return '<p>' + data + '</p>';
                         return '<input type="text" class="editPassword" id="editPassword' + row.id + '" value="' + data + '" data-password="' + row.id + '" disabled>';
                     }
                 },
-
                 {
                     data: "isAdmin",
                     title: "Admin",
@@ -80,7 +74,6 @@ $(document).ready(async function () {
                         return '<input type="checkbox" class="isAdminCheckbox" id="isAdmin' + meta.row + '" data-isAdmin="' + row.id + '"' + '" value="' + data + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
                     }
                 },
-
                 {
                     data: "isActive",
                     title: "Active",
@@ -88,36 +81,159 @@ $(document).ready(async function () {
                         return '<input type="checkbox" class="isActiveCheckbox" id="isActive' + meta.row + '" data-isActive="' + row.id + '"' + '" value="' + data + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
                     }
                 },
-
                 {
                     title: "Action",
                     render: function (data, type, row, meta) {
                         let dataUser = "data-userId='" + row.id + "'";
-                        //let dataUser = row.id;
-
-                        editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataUser + "> Edit </button>";
-                        viewBtn = "<button type='button' class = 'saveBtn btn btn-info' " + dataUser + "> Save </button>";
-                        deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataUser + "> Delete </button>";
-                        return editBtn + viewBtn + deleteBtn;
+                        let editBtn = "<button type='button' class='editBtn btn btn-success' " + dataUser + "> Edit </button>";
+                        let viewBtn = "<button type='button' class='saveBtn btn btn-info' " + dataUser + "> Save </button>";
+                        return editBtn + viewBtn;
                     }
                 },
             ],
+            initComplete: function () {
+                var api = this.api();
+
+                // Custom search function
+                $('#userSearch').on('keyup', function () {
+                    var searchTerm = $(this).val().toLowerCase();
+
+                    // Apply the search across all table columns
+                    api.rows().every(function () {
+                        var data = this.data();
+                        var rowNode = this.node();
+
+                        // Extract values from input fields
+                        var userName = $(rowNode).find('input.editUserName').val().toLowerCase();
+                        var email = $(rowNode).find('input.editEmail').val().toLowerCase();
+                        var id = data.id.toString().toLowerCase();
+
+                        // Check if any of these fields match the search term
+                        var match = userName.includes(searchTerm) || email.includes(searchTerm) || id.includes(searchTerm);
+
+                        if (match) {
+                            $(rowNode).show();
+                        } else {
+                            $(rowNode).hide();
+                        }
+                    });
+
+                    api.draw(); // Redraw the table after filtering
+                });
+            },
             rowCallback: function (row, data, index) {
-                // Add a unique ID to each row, based on the row's ID
                 $(row).attr('id', 'row-' + data.id);
-                
+
                 $(row).on('click', function () {
                     $("#usersDataTable tr").removeClass("selected");
-                    console.log('Row clicked: ', data.id);
+                    $('#userLibrary').show();
                     getUserLibrary(data.id);
                     row.classList.add('selected');
-                    //row.className = 'selected';
                 });
             },
             destroy: true // Allow reinitialization of the table
         });
+
         buttonEvents();
     }
+
+    //function userDataTable(response) { 
+
+    //    var table = $('#usersDataTable').DataTable({
+    //        data: response,
+    //        pageLength: 10,
+    //        columns: [
+
+    //            {
+    //                data: "id",
+    //                title: "User ID",
+    //                searchable: true,
+    //                render: function (data, type, row, meta) {
+    //                    return '<p>' + data + '</p>';
+    //                }
+    //            },
+
+    //            {
+    //                data: "userName",
+    //                title: "User Name",
+    //                searchable: true,
+
+    //                render: function (data, type, row, meta) {
+    //                    return '<input type="text" class="editUserName" id="editUserName' + row.data + '" value="' + data + '" data-user-name="' + row.data + '" disabled>';
+    //                }
+    //            },
+
+    //            {
+    //                data: "email",
+    //                title: "User Email",
+    //                searchable: true,
+    //                render: function (data, type, row, meta) {
+    //                    //return '<p>' + data + '</p>';
+    //                    return '<input type="text" class="editEmail" id="editEmail' + row.data + '" value="' + data + '" data-email="' + row.data + '" disabled>';
+    //                }
+    //            },
+
+    //            {
+    //                data: "password",
+    //                title: "Password",
+    //                render: function (data, type, row, meta) {
+    //                    //return '<p>' + data + '</p>';
+    //                    return '<input type="text" class="editPassword" id="editPassword' + row.data + '" value="' + data + '" data-password="' + row.data + '" disabled>';
+    //                }
+    //            },
+
+    //            {
+    //                data: "isAdmin",
+    //                title: "Admin",
+    //                render: function (data, type, row, meta) {
+    //                    return '<input type="checkbox" class="isAdminCheckbox" id="isAdmin' + meta.row + '" data-isAdmin="' + row.data + '"' + '" value="' + data + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
+    //                }
+    //            },
+
+    //            {
+    //                data: "isActive",
+    //                title: "Active",
+    //                render: function (data, type, row, meta) {
+    //                    return '<input type="checkbox" class="isActiveCheckbox" id="isActive' + meta.row + '" data-isActive="' + row.data + '"' + '" value="' + data + '"' + (data ? ' checked="checked"' : '') + ' disabled />';
+    //                }
+    //            },
+
+    //            {
+    //                title: "Action",
+    //                render: function (data, type, row, meta) {
+    //                    let dataUser = "data-userId='" + row.id + "'";
+    //                    //let dataUser = row.id;
+
+    //                    editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataUser + "> Edit </button>";
+    //                    viewBtn = "<button type='button' class = 'saveBtn btn btn-info' " + dataUser + "> Save </button>";
+    //                    return editBtn + viewBtn;
+    //                }
+    //            },
+    //        ],
+    //        initComplete: function () {
+    //            var api = this.api();
+    //            $('#userSearch').on('keyup', function () {
+    //                api.search($(this).val()).draw();
+    //            });
+    //        },
+
+    //        rowCallback: function (row, data, index) {
+    //            // Add a unique ID to each row, based on the row's ID
+    //            $(row).attr('id', 'row-' + data.id);
+                
+    //            $(row).on('click', function () {
+    //                $("#usersDataTable tr").removeClass("selected");
+    //                //console.log('Row clicked: ', data.id);
+    //                $('#userLibrary').show();
+    //                getUserLibrary(data.id);
+    //                row.classList.add('selected');
+
+    //            });
+    //        },
+    //        destroy: true // Allow reinitialization of the table
+    //    });
+    //    buttonEvents();
+    //}
 
 
     function buttonEvents() {
@@ -134,8 +250,7 @@ $(document).ready(async function () {
             markSelected(this);
             row.className = 'selected';
             
-            //item = document.getElementsByClassName("selected");
-            var child = row.childNodes[4].childNodes[0].getAttribute("value");
+            //var child = row.childNodes[4].childNodes[0].getAttribute("value");
 
             console.log(row.childNodes[0].childNodes[0].textContent);
             var data = {
@@ -152,28 +267,9 @@ $(document).ready(async function () {
             $("#usersDataTable tr").removeClass("selected");
             
         });
-
-        $(document).on("click", ".deleteBtn", function () {
-            mode = "delete";
-            markSelected(this);
-            console.log(this);
-            var userId = this.getAttribute('data-userId');
-            swal({ // this will open a dialouge 
-                title: "Deleting this user permenantly?",
-                text: "",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true
-            })
-                .then(function (willDelete) {
-                    if (willDelete && !user.isAdmin) deleteUser(userId);
-                    else swal("User was not deleted!");
-                });
-        });
     }
-
-    showAllLibraryInfo();
-    
+    $('#userLibrary').hide();
+    getAllLibraryInfo();
 
 });
 
@@ -181,7 +277,62 @@ $(document).ready(async function () {
 const toggleModeCheckbox = document.getElementById('toggle-mode');
 const currentTheme = localStorage.getItem('theme');
 
-function showAllLibraryInfo() {
+function showAllLibraryInfo(response) {
+    $('#bookCountTable').DataTable({
+        data: response,
+        searching: false,
+        pageLength: 10,
+        order: [[0, 'desc']],
+        columns: [
+
+            {
+                data: "timesInLibrary",
+                title: "In library",
+                render: function (data, type, row, meta) {
+                    return '<span>' + data + '</span>';
+                }
+            },
+
+            {
+                data: "title",
+                title: "Title",
+                render: function (data, type, row, meta) {
+                    return '<span>' + data + '</span>';
+                }
+            },
+
+            {
+                data: "description",
+                title: "Description",
+
+                render: function (data, type, row, meta) {
+                    return '<span>' + truncateText(data,50) + '</span>';
+                }
+            },
+
+            {
+                data: "thumbNail",
+                title: "Book cover",
+                render: function (data, type, row, meta) {
+                    return '<img src="' + data + '" alt="book image" />';       
+                }
+            },
+
+            {
+                data: "isEbook",
+                title: "Ebook?",
+                render: function (data, type, row, meta) {
+                    return '<span>' + data + '</span>';
+                }
+            },
+        ],
+        destroy: true // Allow reinitialization of the table
+    });
+
+    function truncateText(text, maxLength) {
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    }
+
 }
 
 function getAllLibraryInfo() {
@@ -218,47 +369,131 @@ toggleModeCheckbox.addEventListener('change', function () {
     }
 });
 
-// to add functionality
-function renderUserBooks(data) {
-    var booksContainer = $('#userBooks');
-    booksContainer.empty();
-    if (data != null && data.length > 0) {
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
+function renderUserBooks(response) {
+    $('#userBooks').empty();
+    if (response != null && response.length > 0) {
+        $('#userBooks').DataTable({
+            data: response,
+            searching: false,
+            pageLength: 10,
+            columns: [
+                {
+                    data: "id",
+                    title: "Id",
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
 
-        const headers = Object.keys(data[0]);
-        headers.forEach(header => {
-            const th = document.createElement('th');
-            th.innerText = header;
-            headerRow.appendChild(th);
+                {
+                    data: "title",
+                    title: "Title",
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "subtitle",
+                    title: "Subtitle",
+
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "language",
+                    title: "Language",
+
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "publisher",
+                    title: "Publisher",
+
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "publishedDate",
+                    title: "Publishing Year",
+
+                    render: function (data, type, row, meta) {
+                        return '<span>' + new Date(data).getFullYear() + '</span>';
+                    }
+                },
+
+                {
+                    data: "pageCount",
+                    title: "Page count",
+
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "printType",
+                    title: "Print type",
+
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "price",
+                    title: "Price",
+
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "status",
+                    title: "Status",
+
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "thumbnail",
+                    title: "Book cover",
+                    render: function (data, type, row, meta) {
+                        return '<img src="' + data + '" alt="book image" />';
+                    }
+                },
+
+                {
+                    data: "authors",
+                    title: "Authors",
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+
+                {
+                    data: "isEbook",
+                    title: "Ebook?",
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data + '</span>';
+                    }
+                },
+            ],
+            destroy: true // Allow reinitialization of the table
         });
-        thead.append(headerRow);
-        booksContainer.append(thead);
-        
-
-        console.log(data);
-        data.forEach(book => {
-            const publishedYear = new Date(book.publishedDate).getFullYear();
-            var bookElement = $('<tr>');
-            bookElement.append('<td><span>' + book.id + '</span></td>');
-            bookElement.append('<td><span>' + book.title + '</span></td>');
-            bookElement.append('<td><span>' + book.subtitle + '</span></td>');
-            bookElement.append('<td><span>' + book.language + '</span></td>');
-            bookElement.append('<td><span>' + book.publisher + '</span></td>');
-            bookElement.append('<td><span>' + publishedYear + '</span></td>');
-            bookElement.append('<td><span>' + book.pageCount + '</span></td>');
-            bookElement.append('<td><span>' + book.printType + '</span></td>');
-            bookElement.append('<td><span>' + book.price + ' ILS' + '</span></td>');
-            bookElement.append('<td><span>' + book.status + '</span></td>');
-            bookElement.append('<td><img src="' + book.thumbnail + '" alt="book image" /></td>');
-            bookElement.append('<td><span>' + book.authors + '</span></td>');
-            bookElement.append('<td><span>' + book.isEbook + '</span></td>');
-
-            booksContainer.append(bookElement);
-        });
-    } else {
-        booksContainer.append("<h3>No books in user's library</h3>");
-        //console.log("No books in library");
+    }
+    else {
+        $('#userLibrary').append("<h3>No books in user's library</h3>");
     }
 }
 
@@ -311,4 +546,77 @@ function markSelected(btn) {
     $("#usersDataTable tr").removeClass("selected"); // remove seleced class from rows that were selected before
     row = (btn.parentNode).parentNode; // button is in TD which is in Row
     row.className = 'selected'; // mark as selected
+}
+
+function getAuthorsLibraryInfo() {
+    ajaxCall('GET', userBooksApiUrl + "/getBooksNumInLibraries", "", getAuthorsLibraryInfoSCBF, getAuthorsLibraryInfoECBF);
+}
+
+function getAuthorsLibraryInfoSCBF(response) {
+    showAuthorsInLibraryInfo(response);
+    console.log(response);
+}
+
+function getAuthorsLibraryInfoECBF(err) {
+    console.log(err);
+}
+
+getAuthorsLibraryInfo();
+
+function showAuthorsInLibraryInfo(response) {
+    $('#authorsCountTable').DataTable({
+        data: response,
+        searching: false,
+        pageLength: 10,
+        order: [[0, 'desc']],
+        columns: [
+
+            {
+                data: "timesInLibrary",
+                title: "In library",
+                render: function (data, type, row, meta) {
+                    return '<span>' + data + '</span>';
+                }
+            },
+
+            {
+                data: "title",
+                title: "Title",
+                render: function (data, type, row, meta) {
+                    return '<span>' + data + '</span>';
+                }
+            },
+
+            {
+                data: "description",
+                title: "Description",
+
+                render: function (data, type, row, meta) {
+                    return '<span>' + truncateText(data, 50) + '</span>';
+                }
+            },
+
+            {
+                data: "thumbNail",
+                title: "Book cover",
+                render: function (data, type, row, meta) {
+                    return '<img src="' + data + '" alt="book image" />';
+                }
+            },
+
+            {
+                data: "isEbook",
+                title: "Ebook?",
+                render: function (data, type, row, meta) {
+                    return '<span>' + data + '</span>';
+                }
+            },
+        ],
+        destroy: true // Allow reinitialization of the table
+    });
+
+    function truncateText(text, maxLength) {
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    }
+
 }
