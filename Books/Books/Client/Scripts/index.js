@@ -18,6 +18,10 @@ var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
 
+    if (!user) {
+        $('#quizBtn').hide();
+    }
+
     const currentTheme = localStorage.getItem('theme');
 
     if (currentTheme === 'dark') {
