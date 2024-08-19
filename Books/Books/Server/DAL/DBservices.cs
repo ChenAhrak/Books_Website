@@ -1570,7 +1570,15 @@ namespace Books.Server.DAL
         {
             SqlConnection con;
             SqlCommand cmd;
-            
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
             cmd = CreateCommandWithStoredProcedureGetUserByEmail("SP_GetUserByEmail", con, email); // create the command
 
             try
