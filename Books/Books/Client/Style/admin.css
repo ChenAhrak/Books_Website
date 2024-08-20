@@ -5,6 +5,9 @@
     --td-background-color: #f9f9f9;
     --button-background-color: #3498db;
     --modal--background-color: white;
+    --trOdd-background-color: #E9F2FF;
+    --trEven-background-color: #E7F9FF;
+    --input-background-color: white;
 }
 
 /* Dark mode overrides */
@@ -14,6 +17,9 @@ body.dark-mode {
     --td-background-color: #6f6f6f;
     --button-background-color: #37474f;
     --modal--background-color: darkgrey;
+    --trOdd-background-color: #22272B;
+    --trEven-background-color: #282E33;
+    --input-background-color: #BCD6F00A;
 }
 
 body {
@@ -166,6 +172,74 @@ button {
 
 td > img {
     width: 50px;
+}
+
+input{
+    background-color: var(--input-background-color);
+}
+
+#usersDataTable > tbody > tr.odd > .sorting_1 {
+    background-color: var(--trOdd-background-color);
+}
+
+#usersDataTable > tbody > tr.odd {
+    background-color: var(--trOdd-background-color);
+}
+
+#usersDataTable > tbody > tr.even > .sorting_1 {
+    background-color: var(--trEven-background-color);
+}
+
+#usersDataTable > tbody > tr.even {
+    background-color: var(--trEven-background-color);
+}
+
+#userBooks > tbody > tr.odd > .sorting_1 {
+    background-color: var(--trOdd-background-color);
+}
+
+#userBooks > tbody > tr.odd {
+    background-color: var(--trOdd-background-color);
+}
+
+#userBooks > tbody > tr.even > .sorting_1 {
+    background-color: var(--trEven-background-color);
+}
+
+#userBooks > tbody > tr.even {
+    background-color: var(--trEven-background-color);
+}
+
+#bookCountTable > tbody > tr.odd > .sorting_1 {
+    background-color: var(--trOdd-background-color);
+}
+
+#bookCountTable > tbody > tr.odd {
+    background-color: var(--trOdd-background-color);
+}
+
+#bookCountTable > tbody > tr.even > .sorting_1 {
+    background-color: var(--trEven-background-color);
+}
+
+#bookCountTable > tbody > tr.even {
+    background-color: var(--trEven-background-color);
+}
+
+#authorsCountTable > tbody > tr.odd > .sorting_1 {
+    background-color: var(--trOdd-background-color);
+}
+
+#authorsCountTable > tbody > tr.odd {
+    background-color: var(--trOdd-background-color);
+}
+
+#authorsCountTable > tbody > tr.even > .sorting_1 {
+    background-color: var(--trEven-background-color);
+}
+
+#authorsCountTable > tbody > tr.even {
+    background-color: var(--trEven-background-color);
 }
 
 footer {

@@ -163,10 +163,11 @@ $(document).ready(async function () {
                 isActive: row.childNodes[5].childNodes[0].checked,
             };
             updateUser(data);
-            $(".selected :input").attr("disabled", "disabled"); // view mode: disable all controls in the form
+            $(".selected :input").attr("disabled", "disabled");
             $(".selected :button").attr("disabled", false);
+            $('#userSearch').attr("disabled", false);
             $("#usersDataTable tr").removeClass("selected");
-            
+
         });
     }
     $('#userLibrary').hide();
