@@ -77,7 +77,7 @@ $(document).ready(function () {
             bookElement.append(addToWishlistBtn);
 
             // Add "Add Book" button
-            var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+            var addBookBtn = $('<button id="' + book.id + '" class="add-book">Buy Book</button>');
             bookElement.append(addBookBtn);
 
             var moreDetails = $('<p class="more-details">More Details</p>');
@@ -123,7 +123,7 @@ $(document).ready(function () {
             ebookElement.append(addToWishlistBtn);
 
             // Add "Add Book" button
-            var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Add Book</button>');
+            var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Buy Book</button>');
             ebookElement.append(addEBookBtn);
 
             var moreDetails = $('<p class="more-details">More Details</p>');
@@ -187,7 +187,7 @@ $(document).ready(function () {
                 bookElement.append(addToWishlistBtn);
 
                 // Add "Add Book" button
-                var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+                var addBookBtn = $('<button id="' + book.id + '" class="add-book">Buy Book</button>');
                 bookElement.append(addBookBtn);
 
                 var moreDetails = $('<p class="more-details">More Details</p>');

@@ -14,7 +14,8 @@ function fetchPurchaseRequests() {
         }
     );
 }
-function renderPurchaseRequests(requests) { //if (request.approvalStatus === 'Pending')
+function renderPurchaseRequests(requests) { 
+   
     var requestsContainer = $('#requests-container');
     requestsContainer.empty();
 
@@ -24,33 +25,41 @@ function renderPurchaseRequests(requests) { //if (request.approvalStatus === 'Pe
     }
 
     requests.forEach(request => {
-        var requestElement = $('<div>');
-        requestElement.addClass('request');
-        requestElement.append('<p>Buyer ID: ' + request.buyerId + '</p>');
-        requestElement.append('<p>Book ID: ' + request.bookId + '</p>');
-        requestElement.append('<p>Request Date: ' + new Date(request.requestDate).toLocaleDateString() + '</p>');
+        console.log(request);
+        if (request.status === 'Pending') {
+            var requestElement = $('<div>');
+            requestElement.addClass('request');
+            // Display buyer's username
+            requestElement.append('<p>Buyer: ' + request.buyerUserName + '</p>');
 
-        // Add buttons for approval or rejection
-        var approveBtn = $('<button class="approveRequestButton" data-request-id="' + request.requestId + '">Approve</button>');
-        var rejectBtn = $('<button class="rejectRequestButton" data-request-id="' + request.requestId + '">Reject</button>');
+            // Display book name and image
+            requestElement.append('<p>Book: ' + request.bookName + '</p>');
+            requestElement.append('<img src="' + request.bookImage + '" alt="' + request.bookName + '" width="100" />');
+            requestElement.append('<p>Request Date: ' + new Date(request.requestDate).toLocaleDateString() + '</p>');
 
-        requestElement.append(approveBtn);
-        requestElement.append(rejectBtn);
+            // Add buttons for approval or rejection
+            var approveBtn = $('<button class="approveRequestButton" data-request-id="' + request.requestId + '">Approve</button>');
+            var rejectBtn = $('<button class="rejectRequestButton" data-request-id="' + request.requestId + '">Reject</button>');
 
-        requestsContainer.append(requestElement);
+            requestElement.append(approveBtn);
+            requestElement.append(rejectBtn);
 
-        // Attach click event handlers for the buttons
-        approveBtn.on('click', function () {
-            var requestId = $(this).data('request-id');
-            manageBookPurchase(request.buyerId, user.id, request.bookId, requestId);
-        });
+            requestsContainer.append(requestElement);
 
-        rejectBtn.on('click', function () {
-            var requestId = $(this).data('request-id');
-            updateRequestStatus(requestId, 'Rejected', () => {
-                removeRequestFromList(requestId);
+            // Attach click event handlers for the buttons
+            approveBtn.on('click', function () {
+                var requestId = $(this).data('request-id');
+                manageBookPurchase(request.buyerId, user.id, request.bookId, requestId);
             });
-        });
+
+            rejectBtn.on('click', function () {
+                var requestId = $(this).data('request-id');
+                updateRequestStatus(requestId, 'Rejected', () => {
+                    removeRequestFromList(requestId);
+                });
+
+            });
+        }
     });
 }
 
