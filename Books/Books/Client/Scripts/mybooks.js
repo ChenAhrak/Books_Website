@@ -88,6 +88,10 @@ function addBookToRead(userID, bookId) {
             alert("Book added to read list.");
             // Update UI to reflect the book was added
             $(`button[data-book-id="${bookId}"]`).addClass('added').text('Added'); // Update button state on success
+            // רענון העמוד לאחר עדכון מצב הכפתור
+            setTimeout(function () {
+                location.reload();
+            }, 500); // 
         },
         function (error) {
             console.error("Error:", error);

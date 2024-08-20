@@ -330,41 +330,53 @@ $(document).ready(function () {
 
     });
     // Function to add a book to the wishlist
+    // Function to add a book to the wishlist
     function addBookToWishlist(userId, bookId) {
         const api = `https://localhost:7195/api/UserBooks/addBookToWishlist/${userId}`;
-        const data = getBookById(bookId); 
+        const data = getBookById(bookId); // Retrieve book details by its ID
         ajaxCall(
             'POST',
             api,
             JSON.stringify(data),
             function (response) {
                 console.log("Success:", response);
-                alert("Added");
+                alert("Added to wishlist");
                 $(`button[data-book-id="${bookId}"]`).addClass('filled').text('❤️'); // Update button state on success
             },
             function (error) {
                 console.error("Error:", error);
-                alert("Book was already added");
+                alert("Book was already added or an error occurred");
             }
         );
     }
-    // Add event listener for wishlist button click
+
+    // Function to handle wishlist button click
     function addWishlistClick(wishlistBtn) {
         wishlistBtn.on('click', function () {
             const bookId = $(this).data('book-id');
-            const userId = user.id; // Fetch the current user ID
-            if (userId) {
-                // Add book to wishlist
-                addBookToWishlist(userId, bookId);
+            const user = JSON.parse(sessionStorage.getItem('user')); // Fetch the current user
 
-                // Optionally toggle button appearance based on success
-                $(this).toggleClass('filled');
+            if (user && user.id) {
+                if (isLoggedIn()) {
+                    // Optionally, add book to purchased list
+                    // const book = getBookById(bookId); // Uncomment if you need to use this
+                    // addBookToPurchased(user.id, book); // Adjust if necessary
+                } else {
+                    console.log("User not logged in. Redirecting to login.");
+                    alert("Please login or register to add book.");
+                    window.location.href = "login.html";
+                    return; // Exit the function to prevent further execution
+                }
+
+                // Add book to wishlist
+                addBookToWishlist(user.id, bookId);
             } else {
                 alert("User not logged in.");
             }
         });
     }
-    //to be deleted
+
+    // Mock function to retrieve book details by its ID
     function getBookById(bookId) {
         // This function should retrieve book details by its ID
         // You might need to implement an API call or a local function to fetch book details
@@ -437,8 +449,7 @@ $(document).ready(function () {
 
                 if (isLoggedIn()) {
                     const user = JSON.parse(sessionStorage.getItem('user'));
-                    // Assuming you have a way to get the book details by ID
-                    const book = getBookById(buttonId); // You need to implement this function
+                    const book = getBookById(buttonId); 
                     addBookToPurchased(user.id, book);
                 } else {
                     console.log("User not logged in. Redirecting to login.");
