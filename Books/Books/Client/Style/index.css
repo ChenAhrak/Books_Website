@@ -184,10 +184,11 @@ input {
     }
 
 footer {
-    margin-top: auto;
     text-align: center;
     display: flex;
     justify-content: center;
+    margin-top:200px;
+    
 }
 
 .wishlistButton {
