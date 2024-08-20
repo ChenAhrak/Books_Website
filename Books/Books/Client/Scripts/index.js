@@ -59,14 +59,63 @@ $(document).ready(function () {
     function getBooksDisplayDataFromDBECB(err) {
         console.log(err);
     }
+    //testing
+    //var carouselContainer = $('#carousel');
+
+    //function renderAllBooksDisplay(books) {
+    //    //var booksContainer = $('#books-container');
+    //    var table = $('<table>');
+    //    table.id = "carouselTable";
+    //    var tableHeader = $('<tr>');
+    //    tableHeader.id = "carouselRow";
+
+    //    books.forEach(book => {
+    //        var bookElement = $('<td>');
+    //        bookElement.append('<img src="' + book.image + '" alt="book image" />');
+    //        bookElement.append('<h3>' + book.title + '</h3>');
+    //        bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+    //        bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+
+    //        // Add "Add to Wishlist" button
+    //        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
+    //        bookElement.append(addToWishlistBtn);
+
+    //        // Add "Add Book" button
+    //        var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+    //        bookElement.append(addBookBtn);
+
+    //        var moreDetails = $('<p class="more-details">More Details</p>');
+    //        bookElement.append(moreDetails);
+
+    //        tableHeader.append(bookElement);
+
+    //        // Call the appropriate functions for the buttons
+    //        addBookClick(addBookBtn);
+    //        addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+    //        showMoreDetails(moreDetails, book);
+    //    });
+
+    //    table.append(tableHeader);
+    //    carouselContainer.append(table);
+    //}
+    var carouselContainer = $('#books-container .carousel');
 
     function renderAllBooksDisplay(books) {
-        var booksContainer = $('#books-container');
-        var table = $('<table>');
-        var tableHeader = $('<tr>');
+        // Clear any existing content in the carousel container
+        carouselContainer.empty();
+
+        // Create a row to hold the books
+        var row = $('<div id="carouselRow" class="carousel-row">');
+
+        const itemsPerPage = 5; // Number of items to display at once
+        const totalItems = books.length;
+
+        // Calculate the width of each item based on itemsPerPage
+        const itemWidthPercentage = 100 / itemsPerPage;
+        console.log(itemWidthPercentage);
 
         books.forEach(book => {
-            var bookElement = $('<td>');
+            var bookElement = $('<div class="carousel-item">').css('width', `${itemWidthPercentage}%`);
             bookElement.append('<img src="' + book.image + '" alt="book image" />');
             bookElement.append('<h3>' + book.title + '</h3>');
             bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
@@ -83,16 +132,47 @@ $(document).ready(function () {
             var moreDetails = $('<p class="more-details">More Details</p>');
             bookElement.append(moreDetails);
 
-            tableHeader.append(bookElement);
+            row.append(bookElement);
 
             // Call the appropriate functions for the buttons
             addBookClick(addBookBtn);
-            addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+            addWishlistClick(addToWishlistBtn);
             showMoreDetails(moreDetails, book);
         });
 
-        table.append(tableHeader);
-        booksContainer.append(table);
+        carouselContainer.append(row);
+
+        // Carousel functionality
+        var currentIndex = 0;
+
+        // Calculate the total width of the row based on the number of items
+        const rowWidthPercentage = totalItems * itemWidthPercentage;
+        row.css('width', `${rowWidthPercentage}%`);
+
+        // Update the carousel view
+        function updateCarousel() {
+            const offset = currentIndex * -itemWidthPercentage / (totalItems/itemsPerPage);
+            console.log(offset);
+            $('#carouselRow').css('transform', `translateX(${offset}%)`);
+        }
+
+        $('#carouselPrev').on('click', function () {
+            if (currentIndex > 0) {
+                currentIndex -= itemsPerPage;
+                if (currentIndex < 0) currentIndex = 0; // Ensure it doesn't go negative
+                updateCarousel();
+            }
+        });
+
+        $('#carouselNext').on('click', function () {
+            if (currentIndex < totalItems - itemsPerPage) {
+                currentIndex += itemsPerPage;
+                if (currentIndex > totalItems - itemsPerPage) currentIndex = totalItems - itemsPerPage; // Ensure it doesn't exceed the max
+                updateCarousel();
+            }
+        });
+
+        updateCarousel(); // Initial display
     }
 
     async function getEBooksDisplayDataFromDB() {
@@ -638,7 +718,6 @@ $(document).ready(function () {
         }
         localStorage.setItem('theme', theme);
     });
-
 
 });
 

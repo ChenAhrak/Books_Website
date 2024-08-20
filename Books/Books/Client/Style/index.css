@@ -293,5 +293,48 @@ footer {
     color: #3498db;
 }
 
+.carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
 
+.carousel {
+    overflow: hidden;
+    flex: 1;
+}
+
+.carousel-row {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-item {
+    min-width: 200px; /* Adjust based on your design */
+    margin: 0 10px;
+    text-align: center;
+}
+
+.carousel-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+#carouselPrev {
+    left: 0;
+}
+
+#carouselNext {
+    right: 0;
+}
 

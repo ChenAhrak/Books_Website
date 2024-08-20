@@ -28,7 +28,6 @@
         <button id="quizBtn">Quiz Game</button>
         <input class="toggleBox" type="checkbox" id="toggle-mode" />
         <label for="toggle-mode"></label>
-        <!--<button id="toggle-mode"></button>-->
         <span id="userWelcome"></span>
     </nav>
     <header>
@@ -46,13 +45,16 @@
     </div>
     <div id="main-content">
         <div id="best-seller-container">
-            <h2>Best Sellers</h2> 
+            <h2>Best Sellers</h2>
         </div>
         <div id="top-books-container">
             <!-- Content for the top 5 most purchased books will be added here dynamically -->
         </div>
-        <div id="books-container">
-            <h2>Books Catalog</h2>
+        <h2 id="bookCatalog">Books Catalog</h2>
+        <div class="carousel-container" id="books-container">
+            <button class="carousel-button left" id="carouselPrev">&lt;</button>
+            <div class="carousel"></div>
+            <button class="carousel-button right" id="carouselNext">&gt;</button>
         </div>
         <button id="allBooksBtn">See more books</button>
         <div id="ebooks-container">
