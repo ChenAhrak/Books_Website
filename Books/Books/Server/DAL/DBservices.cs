@@ -1049,21 +1049,38 @@ namespace Books.Server.DAL
 
         }
 
-        public void updateUserHighScore(int id, int score)
+        public bool updateUserHighScore(int id, int score)
         {
-
-            SqlConnection con = null;
+            SqlConnection con;
+            SqlCommand cmd;
             try
             {
                 con = connect("myProjDB"); // create the connection
             }
             catch (Exception ex)
             {
-                // write to log
                 throw (ex);
             }
-            SqlCommand cmd = CreateCommandWithStoredProcedureUpdateUserHighScore("SP_UpdateUserHighScore", con, id, score);             // create the command
-            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+
+            cmd = CreateCommandWithStoredProcedureUpdateUserHighScore("SP_UpdateUserHighScore", con, id, score);             // create the command
+
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection); // execute the command
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
         }
 
         private SqlCommand CreateCommandWithStoredProcedureUpdateUserHighScore(string spName, SqlConnection con, int id, int score, params SqlParameter[] parameters)
@@ -1832,6 +1849,49 @@ namespace Books.Server.DAL
 
             return cmd;
         }
+
+        public List<Object> GetTopHighScores()
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            SqlCommand cmd = CreateCommandWithStoredProcedureGetTopFiveUsersWithHighScores("SP_GetTopFiveUsersWithHighScores", con);             // create the command
+            SqlDataReader reader = cmd.ExecuteReader(); // execute the command
+            List<Object> scores = new List<Object>();
+            while (reader.Read())
+            {
+                scores.Add(new
+                {
+                    userName = (string)reader["userName"],
+                    highScore = (int)reader["highScore"],
+                });
+            }
+            return scores;
+        }
+
+        private SqlCommand CreateCommandWithStoredProcedureGetTopFiveUsersWithHighScores(String spName, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con; // assign the connection to the command object
+
+            cmd.CommandText = spName; // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10; // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be text
+
+            return cmd;
+        }
+
 
     }
 }

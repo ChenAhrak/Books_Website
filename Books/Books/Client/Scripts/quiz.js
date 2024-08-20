@@ -5,7 +5,7 @@ import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 
 
 const apiURL = "https://localhost:7195/GetApiKey";
-const userHighScoreApiURL = "https://localhost:7195/api/Users/UpdateHighScore";
+const userHighScoreApiURL = "https://localhost:7195/api/Users";
 const booksApiURL = "https://localhost:7195/api/Books";
 const correctImg = 'https://upload.wikimedia.org/wikipedia/commons/7/73/Flat_tick_icon.svg';
 const incorrectImg = 'https://upload.wikimedia.org/wikipedia/commons/6/69/X_Icon_or_Close_Icon.svg';
@@ -18,6 +18,8 @@ var highScore;
 var user = JSON.parse(sessionStorage.getItem('user'));
 var playerScore = document.getElementById("gameScore");
 var isQuizChangeListenerAttached = false;
+var modal = $('#scoresModal');
+var span = $('.close');
 
 $('#gameScore').hide();
 $('#finishQuiz').hide();
@@ -54,7 +56,7 @@ $(document).ready(async function () {
     }
 
     function getUserHighScore() {
-        ajaxCall("GET", `${userHighScoreApiURL}/${user.id}`, `${gameScore}`, getUserHighScoreSCB, getUserHighScoreECB);
+        ajaxCall("GET", `${userHighScoreApiURL}/GetUserHighScore/${user.id}`, `${gameScore}`, getUserHighScoreSCB, getUserHighScoreECB);
     }
 
     function getUserHighScoreSCB(result) {
@@ -303,10 +305,6 @@ $(document).ready(async function () {
         }
 
         startBtn.addEventListener('click', (event) => {
-            ////////////////// need to fix score
-            //gameScore = 0;
-            //console.log(gameScore);
-            //$('#gameScore').textContent = `Player Score: ${gameScore}`;
             $('#startGame').hide();
             $('#gameScore').show();
             $('#quiz').show();
@@ -394,10 +392,13 @@ function updateUserHighScore() {
     if (highScore < gameScore) {
         sendUserHighScore();
     }
+    else {
+
+    }
 }
 
 function sendUserHighScore() {
-    ajaxCall("PUT", `${userHighScoreApiURL}/${user.id}`, `${gameScore}`, sendUserHighScoreSCB, sendUserHighScoreECB);
+    ajaxCall("PUT", `${userHighScoreApiURL}/UpdateHighScore/${user.id}`, `${gameScore}`, sendUserHighScoreSCB, sendUserHighScoreECB);
 }
 
 function sendUserHighScoreSCB(result) {
@@ -462,3 +463,105 @@ function parseTextToJSON(text) {
 
     return jsonOutput;
 }
+
+function showHighScores(moreDetails, book) {
+    moreDetails.on('click', function () {
+        modal.css('display', 'block');
+        $('#modal-content').children().slice(1).remove();
+        renderScoresModal(book);
+    });
+}
+
+function renderScoresModal(book) {
+    var modalContent = $('#modal-content');
+    var bookModal = {};
+    //search for the book in allBooks
+    allBooks.forEach(function (books) {
+        books.forEach(function (b) {
+            if (b.id === book.id) {
+                bookModal = b;
+            }
+        });
+    });
+    console.log(bookModal);
+    var bookElement = $('<div>');
+    bookElement.addClass('bookModal');
+    bookElement.append('<img src="' + bookModal.image + '" alt="book image" />');
+    bookElement.append('<h3>' + bookModal.title + '</h3>');
+    bookElement.append('<h5>' + bookModal.subtitle + '</h5>');
+    bookElement.append('<p>' + 'Publisher: ' + bookModal.publisher + '</p>');
+    bookElement.append('<p>' + 'Published Date: ' + bookModal.publishedDate + '</p>');
+    bookElement.append('<p>' + 'Language: ' + bookModal.language + '</p>');
+    bookElement.append('<p>' + 'Page Count: ' + bookModal.pageCount + '</p>');
+    bookElement.append('<p>' + 'Description: ' + bookModal.description + '</p>');
+    bookElement.append('<p>' + 'By: ' + bookModal.authorNames + '</p>');
+    bookElement.append('<p>' + 'Price: ' + bookModal.price + ' ILS' + '</p>');
+
+    modalContent.append(bookElement);
+    function renderScoresModal(users) {
+        var modalContent = $('#modal-content');
+        modalContent.empty(); // Clear previous content if any
+
+        users.forEach(function (user) {
+            var userElement = $('<div>');
+            userElement.addClass('userModal');
+
+            // Display "User" and "High Score" fields for each user
+            userElement.append('<h3>User: ' + user.userName + '</h3>');
+            userElement.append('<p>High Score: ' + user.highScore + '</p>');
+
+            modalContent.append(userElement);
+        });
+    }
+
+}
+
+$('#highScores').on('click', function (event) {
+    getTopHighScores();
+});
+
+function getTopHighScores() {
+    ajaxCall("GET", `${userHighScoreApiURL}/GetTopHighScores`, `${gameScore}`, getTopHighScoresSCB, getTopHighScoresECB);
+}
+
+function getTopHighScoresSCB(result) {
+    populateHighScoreModal(result);
+    console.log(result);
+}
+
+function getTopHighScoresECB(err) {
+    console.log(err);
+}
+
+function populateHighScoreModal(users) {
+    var modalContent = $('#modal-content');
+    modalContent.empty(); // Clear previous content if any
+
+    var table = $('<table>');
+    table.addClass('highScoreTable');
+
+    // Create table header
+    var thead = $('<thead>');
+    thead.append('<tr><th>User</th><th>High Score</th></tr>');
+    table.append(thead);
+
+    // Create table body
+    var tbody = $('<tbody>');
+
+    // Loop through users and add rows to the table
+    users.slice(0, 5).forEach(function (user) { // Limit to 5 users
+        var row = $('<tr>');
+        row.append('<td>' + user.userName + '</td>');
+        row.append('<td>' + user.highScore + '</td>');
+        tbody.append(row);
+    });
+
+    table.append(tbody);
+    modalContent.append(table);
+}
+
+$(window).on('click', function (event) {
+    if (event.target === $('#booksModal')[0]) {
+        $('#booksModal').hide();
+    }
+});

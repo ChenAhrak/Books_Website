@@ -15,13 +15,27 @@ namespace Books.Server.Controllers
             user = new User();
         }
         // GET api/<UsersController>/5
-        [HttpGet("UpdateHighScore/{id}")]
+        [HttpGet("GetUserHighScore/{id}")]
         public int getHighScore(int id)
         {
-            int highScore;
-            DBservices db = new DBservices();
-            highScore = db.getUserHighScore(id);
+            
+            int highScore = user.getUserHighScore(id);
             return highScore;
+        }
+
+        // GET api/<UsersController>/5
+        [HttpGet("GetTopHighScores")]
+        public IActionResult getTopHighScores()
+        {
+            List<object> highScores = user.getTopHighScores();
+            if (highScores != null)
+            {
+                return Ok(highScores);
+            }
+            else
+            {
+                return StatusCode(500, new { message = "No scores recorded" });
+            }
         }
 
         // GET api/<UsersController>/5
@@ -83,13 +97,19 @@ namespace Books.Server.Controllers
 
         // PUT api/<UsersController>/5
         [HttpPut("UpdateHighScore/{id}")]
-        public void updateHighScore(int id, [FromBody] int score)
+        public IActionResult updateHighScore(int id, [FromBody] int score)
         {
-            DBservices db = new DBservices();
-            db.updateUserHighScore(id, score);
+            bool flag = user.updateUserHighScore(id, score);
+            try
+            {
+                return flag ? Ok(new { message = "Score updated" }) : StatusCode(500, new { message = "Highscore not updated" });
+            }
+            catch
+            {
+                return StatusCode(500, new { message = "Failed to update" });
+            }
         }
 
-        
         // DELETE api/<UsersController>/6
         [HttpDelete("{id}")]
         public void deleteUser(int id)
@@ -105,12 +125,11 @@ namespace Books.Server.Controllers
         [HttpGet("GetUserByEmail/{email}")]
         public User getUserByEmail(string email)
         {
-          return user.getUserByEmail(email);
-            
+          return user.getUserByEmail(email); 
         }
 
+        // PUT api/<UsersController>
         [HttpPut("UpdateUserPassword/{email}")]
-
         public IActionResult UpdateUserPassword(string email, [FromBody] string password)
         {
            

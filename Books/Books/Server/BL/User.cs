@@ -87,9 +87,28 @@ public class User
     public User getUserByEmail(string email)
     {
         DBservices db = new DBservices();
-
         return db.getUserByEmail(email);
 
+    }
+
+    public bool updateUserHighScore(int id,int score)
+    {
+        DBservices db = new DBservices();
+        bool flag = db.updateUserHighScore(id, score);
+        if (flag)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public int getUserHighScore(int id)
+    {
+        DBservices db = new DBservices();
+        return db.getUserHighScore(id);
     }
 
     public IActionResult updateUserPassword(string email, string password)
@@ -106,7 +125,12 @@ public class User
         }
     }
 
-
+    public List<object> getTopHighScores()
+    {
+        List<object> scores = new List<object>();
+        DBservices db = new DBservices();
+        return scores = db.GetTopHighScores();
+    }
 
 
 }

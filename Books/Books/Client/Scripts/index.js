@@ -498,8 +498,6 @@ $(document).ready(function () {
             ExtarctedText: "Sample extracted text."
         };
     }
-
-
     
     modal.css('display', 'none');
     span.on('click', function () {
