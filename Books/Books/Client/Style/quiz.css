@@ -18,12 +18,15 @@ body.dark-mode {
     position:absolute;
     top: 0;
     left: 0;
+    margin: 20px;
+    margin-right: 40px;
 }
 
 #highScores {
     position: absolute;
     top: 0;
-    left: 70px;
+    left: 100px;
+    margin: 20px;
 }
 
 body {
@@ -114,7 +117,7 @@ footer {
 }
 
 h1 {
-    margin-top: 30px;
+    margin-top: 40px;
     position: absolute;
     top: 20px; /* Distance from the top */
     left: 50%;
@@ -129,9 +132,13 @@ h1 {
     position: absolute;
     align-content: center;
     align-items: center;
-    top: 100px; /* Distance from the top */
+    top: 150px; /* Distance from the top */
     left: 50%;
     transform: translateX(-50%);
+}
+
+#quiz > p{
+    font-weight: bold;
 }
 
 #startGame {
@@ -144,7 +151,7 @@ h1 {
 #nextQuestion {
     animation: fadeIn 1s ease-in forwards;
     position: absolute;
-    top: 500px; /* Distance from the top */
+    bottom: -80px; /* Distance from the top */
     left: 50%;
     transform: translateX(-50%);
 }
@@ -162,9 +169,8 @@ h1 {
 
 
 #finishGame {
-
     position: absolute;
-    top: 700px; /* Distance from the top */
+    top: 750px; /* Distance from the top */
     left: 50%;
     transform: translateX(-50%);
 }
@@ -190,7 +196,8 @@ img {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 25px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     width: 60px;
     height: 60px;
 }
@@ -216,7 +223,7 @@ label{
 
 #gameScore {
     position: absolute;
-    top: 100px;
+    top: 130px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -229,6 +236,11 @@ label:hover{
 input {
     margin: 10px;
 }
+
+#quiz > label > input{
+    margin: 10px;
+}
+
 
 label.correctAnswer {
     background-color: #90ee90;
@@ -298,7 +310,7 @@ label.incorrectAnswer {
 
     .highScoreTable th {
         background-color: #9FADBC; /* Customize your header background color */
-        color: var(--text-color); /* #1D2125 */
+        color: var(--text-color);
     }
 
     .highScoreTable tr:hover {
