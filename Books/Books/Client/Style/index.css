@@ -211,6 +211,16 @@ footer {
     color: #3498db;
 }
 
+#allBooksBtn{
+    position: absolute;
+    right: 0;
+}
+
+#allEBooksBtn{
+    position: absolute; 
+    right: 0;
+}
+
 #booksModal {
     display: flex;
     justify-content: center; /* Center horizontally */

@@ -33,6 +33,12 @@ nav {
     nav button {
         margin: 20px;
     }
+    #homeBtn{
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 20px;
+    }
 
 #toggle-mode {
     position: absolute;

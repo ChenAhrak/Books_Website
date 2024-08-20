@@ -303,10 +303,7 @@ $(document).ready(async function () {
         }
 
         startBtn.addEventListener('click', (event) => {
-            ////////////////// need to fix score
-            //gameScore = 0;
-            //console.log(gameScore);
-            //$('#gameScore').textContent = `Player Score: ${gameScore}`;
+          
             $('#startGame').hide();
             $('#gameScore').show();
             $('#quiz').show();
