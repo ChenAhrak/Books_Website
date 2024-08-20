@@ -60,7 +60,7 @@ $(document).ready(function () {
             bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
             bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
-            var addBookBtn = $('<p><button id="' + book.id + '" class="add-book">Add Book</button><p>');
+            var addBookBtn = $('<p><button id="' + book.id + '" class="add-book">Buy Book</button><p>');
             bookElement.append(addBookBtn);
 
             var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');

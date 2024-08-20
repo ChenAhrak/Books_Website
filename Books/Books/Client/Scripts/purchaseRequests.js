@@ -29,8 +29,12 @@ function renderPurchaseRequests(requests) {
         if (request.status === 'Pending') {
             var requestElement = $('<div>');
             requestElement.addClass('request');
-            requestElement.append('<p>Buyer ID: ' + request.buyerId + '</p>');
-            requestElement.append('<p>Book ID: ' + request.bookId + '</p>');
+            // Display buyer's username
+            requestElement.append('<p>Buyer: ' + request.buyerUserName + '</p>');
+
+            // Display book name and image
+            requestElement.append('<p>Book: ' + request.bookName + '</p>');
+            requestElement.append('<img src="' + request.bookImage + '" alt="' + request.bookName + '" width="100" />');
             requestElement.append('<p>Request Date: ' + new Date(request.requestDate).toLocaleDateString() + '</p>');
 
             // Add buttons for approval or rejection

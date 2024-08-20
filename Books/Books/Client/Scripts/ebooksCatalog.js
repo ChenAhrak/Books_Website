@@ -61,7 +61,7 @@ $(document).ready(function () {
             ebookElement.append(addToWishlistBtn);
             addWishlistClick(addToWishlistBtn); // הפעלה של הפונקציה
 
-            var addBookBtn = $('<p><button id="' + ebook.id + '" class="add-book">Add Book</button></p>');
+            var addBookBtn = $('<p><button id="' + ebook.id + '" class="add-book">Buy Book</button></p>');
             ebookElement.append(addBookBtn);
 
             var moreDetails = $('<p id="' + ebook.id + '" class="more-details">More Details</button></p>');

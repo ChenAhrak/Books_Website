@@ -77,7 +77,7 @@ function renderAllBooksDisplay(books) {
         bookElement.append('<h3>' + book.title + '</h3>');
         bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-        var addBookBtn = $('<button class="addBookButton" data-book-id="' + book.id + '">Add Book</button>');
+        var addBookBtn = $('<button class="addBookButton" data-book-id="' + book.id + '">Buy Book</button>');
         bookElement.append(addBookBtn);
 
         // קרא לפונקציות המתאימות עבור הכפתור
