@@ -110,7 +110,7 @@ function handleSuccess(response) {
 
 function handleError(error) {
     console.error('Error sending purchase request:', error);
-    alert('An error occurred while sending the purchase request.');
+    
 }
 
 // Call fetchBooks when the page loads
