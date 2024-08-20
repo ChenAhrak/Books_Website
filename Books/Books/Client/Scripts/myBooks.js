@@ -1,7 +1,4 @@
-﻿// פונקציה לשליחת בקשה לשרת לצורך שליפת ספרים עם סטטוס "purchased"
-
-var user = JSON.parse(sessionStorage.getItem('user'));
-
+﻿var user = JSON.parse(sessionStorage.getItem('user'));
 
 const toggleModeCheckbox = document.getElementById('toggle-mode');
 const currentTheme = localStorage.getItem('theme');
@@ -25,78 +22,59 @@ toggleModeCheckbox.addEventListener('change', function () {
     }
 });
 
-$('#homeBtn').on('click', function () {
-    window.location.href = "../Pages/index.html";
-});
-
+// Fetch and display purchased books
 function fetchBooks() {
-    const status = 'purchased'; // הגדרת הסטטוס
+    const status = 'purchased'; // Define the status
     const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${status}`;
 
-    // שלח בקשה לשרת
+    // Send request to server
     ajaxCall('GET', apiEndpoint, null,
-        getBooksDisplayDataFromDBSCB,  // פונקציית הצלחה
-        getBooksDisplayDataFromDBECB  // פונקציית שגיאה
+        getBooksDisplayDataFromDBSCB,  // Success callback
+        getBooksDisplayDataFromDBECB  // Error callback
     );
 }
 
-// פונקציית הצלחה בבקשה לשרת
+// Success callback for fetching books
 function getBooksDisplayDataFromDBSCB(result) {
-    // הצג את הספרים
-    renderAllBooksDisplay(result);
+    // Display the books
+    renderAllBooksDisplay(result, 'books-container');
 }
 
-// פונקציית שגיאה בבקשה לשרת
+// Error callback for fetching books
 function getBooksDisplayDataFromDBECB(err) {
     console.log("Error fetching books:", err);
 }
 
-// הצגת הספרים בטבלה
-// הצגת הספרים בטבלה
-// פונקציה להציג ספרים
-function renderAllBooksDisplay(books) {
-    var booksContainer = $('#books-container');
-    booksContainer.empty(); // נקה את התוכן הקיים לפני הוספת ספרים חדשים
+// Display books in a container
+function renderAllBooksDisplay(books, containerId) {
+    var booksContainer = $('#' + containerId);
+    booksContainer.empty(); // Clear existing content
 
     if (books.length === 0) {
-        booksContainer.append('<p>No books available in the "purchased" status.</p>');
+        booksContainer.append('<p>No books available in the selected status.</p>');
         return;
     }
 
-    console.log(books);
-    var booksContainer = $('#books-container');
-    booksContainer.empty();
     books.forEach(book => {
-        var bookElement = $('<div>');
-        bookElement.addClass('book');
+        var bookElement = $('<div>').addClass('book');
         bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
         bookElement.append('<h3>' + book.title + '</h3>');
         bookElement.append('<p>' + 'By: ' + book.authors + '</p>');
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
-        //  "Add to Read List" הוסף כפתור רק לספרים פיזיים
-        if (book.isEbook === 'False') {  // אם הספר הוא פיזי (isEbook == 0)
-            console.log(book.isEbook);
+        // Add "Add to Read List" button only for physical books with "purchased" status
+        if (containerId === 'books-container' && book.isEbook === 'False') {
             var addToReadListBtn = $('<button class="addToReadListButton" data-book-id="' + book.id + '">Add to Read List</button>');
             bookElement.append(addToReadListBtn);
             addReadClick(addToReadListBtn);
-        } else {
-            console.log(`No button added for eBook with ID: ${book.id}`);
         }
 
         booksContainer.append(bookElement);
-
-
     });
-
-
 }
 
-
-
-// פונקציה להוספת ספר לרשימת הקריאה //Update status from purchased to read 
+// Function to add a book to the read list
 function addBookToRead(userID, bookId) {
-
     const status = "read";
     const api = `https://localhost:7195/api/UserBooks/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
     const data = JSON.stringify(bookId);
@@ -118,16 +96,15 @@ function addBookToRead(userID, bookId) {
     );
 }
 
-// הוסף מאזין לאירוע ללחיצה על כפתור "Add to Read List"
+// Add event listener to "Add to Read List" button
 function addReadClick(readBtn) {
     readBtn.on('click', function () {
         const bookId = this.getAttribute('data-book-id');
         if (user.id) {
-            //const book = getBookById(bookId); // Assuming you have a function to get book details
             console.log(bookId);
             addBookToRead(user.id, bookId);
 
-            // עדכן את מצב הכפתור בהתאם להצלחה
+            // Update button state on success
             $(this).toggleClass('added');
         } else {
             alert("User not logged in.");
@@ -135,69 +112,71 @@ function addReadClick(readBtn) {
     });
 }
 
-// קריאה לפונקציה לשליפת ספרים
+// Fetch and display books with status "read" in a separate container
+function fetchReadBooks() {
+    const status = 'read'; // Define the status
+    const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${status}`;
+
+    // Send request to server
+    ajaxCall('GET', apiEndpoint, null,
+        function (result) {
+            renderAllBooksDisplay(result, 'read-books-container');
+        },
+        getBooksDisplayDataFromDBECB
+    );
+}
+
+// Fetch books on load
 fetchBooks();
+fetchReadBooks();
 
+// Navigation button events
+$('#homeBtn').on('click', function () {
+    window.location.href = "../Pages/index.html";
+});
 
-const allBooksBtn = document.getElementById("allBooksBtn");
-$(allBooksBtn).click(function () {
+$('#allBooksBtn').click(function () {
     window.location.href = "booksCatalog.html";
 });
 
-const allEBooksBtn = document.getElementById("allEBooksBtn");
-$(allEBooksBtn).click(function () {
-
+$('#allEBooksBtn').click(function () {
     window.location.href = "ebooksCatalog.html";
 });
 
-const authorsBtn = document.getElementById("authorsBtn");
-//jquery click event
-$(authorsBtn).click(function () {
+$('#authorsBtn').click(function () {
     window.location.href = "authors.html";
 });
 
-const loginBtn = document.getElementById("loginBtn");
-$(loginBtn).click(function () {
+$('#loginBtn').click(function () {
     window.location.href = "login.html";
 });
 
-const logoutbtn = document.getElementById("logoutBtn");
-
-$(logoutbtn).click(function () {
+$('#logoutBtn').click(function () {
     sessionStorage.clear();
-    window.location.href=("index.html");
+    window.location.href = "index.html";
 });
 
-
-const registerbtn = document.getElementById("registerBtn");
-
-$(registerbtn).click(function () {
+$('#registerBtn').click(function () {
     window.location.href = "register.html";
 });
 
-const adminbtn = document.getElementById("adminBtn");
-
-$(adminBtn).click(function () {
+$('#adminBtn').click(function () {
     window.location.href = "admin.html";
 });
 
-const myBooks = document.getElementById("myBooksBtn");
-$(myBooks).click(function () {
+$('#myBooksBtn').click(function () {
     window.location.href = "myBooks.html";
-
 });
-const wishlistBtn = document.getElementById("wishlistBtn");
-$(wishlistBtn).click(function () {
+
+$('#wishlistBtn').click(function () {
     window.location.href = "wishList.html";
 });
 
-const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
-$(purchaseBooksBtn).click(function () {
+$('#purchaseBooksBtn').click(function () {
     window.location.href = "transferBook.html";
 });
 
-const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
-$(mypurchaserequestsBtn).click(function () {
+$('#mypurchaserequestsBtn').click(function () {
     window.location.href = "purchaseRequests.html";
 });
 
@@ -209,7 +188,7 @@ if (user && !user.isAdmin) {
     $('#registerBtn').hide();
     $('#myBooksBtn').show();
     $('#adminBtn').hide();
-    $('#wishlistBtn').show(); // Show wishlist button for regular users
+    $('#wishlistBtn').show();
 } else if (user && user.isAdmin) {
     $('#logoutBtn').show();
     $('#loginBtn').hide();
@@ -217,7 +196,7 @@ if (user && !user.isAdmin) {
     $('#registerBtn').hide();
     $('#myBooksBtn').hide();
     $('#adminBtn').show();
-    $('#wishlistBtn').hide(); // Hide wishlist button for admins
+    $('#wishlistBtn').hide();
 } else {
     $('#logoutBtn').hide();
     $('#loginBtn').show();
@@ -225,5 +204,5 @@ if (user && !user.isAdmin) {
     $('#registerBtn').show();
     $('#myBooksBtn').hide();
     $('#adminBtn').hide();
-    $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
+    $('#wishlistBtn').hide();
 }

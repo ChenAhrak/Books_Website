@@ -1,5 +1,4 @@
-﻿
-:root {
+﻿:root {
     --background-color: white;
     --text-color: black;
     --td-background-color: #f9f9f9;
@@ -140,6 +139,7 @@ button {
         opacity: 0.8;
     }
 
+/* Styles for search container */
 #search-container {
     display: flex;
     justify-content: center;
@@ -148,7 +148,8 @@ button {
     gap: 20px;
 }
 
-#books-container {
+/* Styles for books containers */
+#books-container, #read-books-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     grid-gap: 20px;
@@ -157,6 +158,12 @@ button {
     padding: 40px;
 }
 
+    /* Specific styles for books container */
+    #books-container h2, #read-books-container h2 {
+        text-align: center;
+    }
+
+/* Book styling */
 .book {
     display: flex;
     flex-direction: column;
@@ -167,7 +174,6 @@ button {
     padding: 10px;
     background-color: var(--td-background-color);
 }
-
 
 input {
     padding: 10px;
