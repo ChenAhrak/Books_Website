@@ -180,6 +180,27 @@ $(document).ready(function () {
         window.location.href = "myBooks.html";
     });
 
+    const wishlist = document.getElementById("wishlistBtn");
+    $(wishlist).click(function () {
+        window.location.href = "wishlist.html";
+    });
+
+    const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
+    $(purchaseBooksBtn).click(function () {
+        window.location.href = "transferBook.html";
+    });
+
+
+    const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
+    $(mypurchaserequestsBtn).click(function () {
+        window.location.href = "purchaseRequests.html";
+    });
+
+    const quizBtn = document.getElementById("quizBtn");
+    $(quizBtn).click(function () {
+        window.location.href = "quiz.html";
+    });
+
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {
         $('#logoutBtn').show();
@@ -187,17 +208,29 @@ $(document).ready(function () {
         $('#registerBtn').hide();
         $('#myBooksBtn').show();
         $('#adminBtn').hide();
+        $('#wishlistBtn').show();
+        $('#purchaseBooksBtn').show();
+        $('#mypurchaserequestsBtn').show();
+        $('#quizBtn').show();
     } else if (user && user.isAdmin) {
         $('#logoutBtn').show();
         $('#loginBtn').hide();
         $('#registerBtn').hide();
-        $('#myBooksBtn').show();
+        $('#myBooksBtn').hide();
         $('#adminBtn').show();
+        $('#wishlistBtn').hide();
+        $('#purchaseBooksBtn').hide();
+        $('#mypurchaserequestsBtn').hide();
+        $('#quizBtn').hide();
     } else {
         $('#logoutBtn').hide();
         $('#loginBtn').show();
         $('#registerBtn').show();
         $('#myBooksBtn').hide();
         $('#adminBtn').hide();
+        $('#wishlistBtn').hide();
+        $('#purchaseBooksBtn').hide();
+        $('#mypurchaserequestsBtn').hide();
+        $('#quizBtn').hide();
     }
 });

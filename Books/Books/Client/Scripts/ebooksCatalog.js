@@ -322,9 +322,20 @@ $(document).ready(function () {
     $(wishlistBtn).click(function () {
         window.location.href = "wishList.html";
     });
+
+    const purchaseBooksBtn = document.getElementById("purchaseBooksBtn");
+    $(purchaseBooksBtn).click(function () {
+        window.location.href = "transferBook.html";
+    });
+
     const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
     $(mypurchaserequestsBtn).click(function () {
         window.location.href = "purchaseRequests.html";
+    });
+
+    const quizBtn = document.getElementById("quizBtn");
+    $(quizBtn).click(function () {
+        window.location.href = "quiz.html";
     });
 
     // Check user status and display appropriate buttons
@@ -335,6 +346,9 @@ $(document).ready(function () {
         $('#myBooksBtn').show();
         $('#wishlistBtn').show();
         $('#adminBtn').hide();
+        $('#purchaseBooksBtn').show();
+        $('#mypurchaserequestsBtn').show();
+        $('#quizBtn').show();
     } else if (user && user.isAdmin) {
         $('#logoutBtn').show();
         $('#loginBtn').hide();
@@ -342,6 +356,9 @@ $(document).ready(function () {
         $('#myBooksBtn').show();
         $('#wishlistBtn').show();
         $('#adminBtn').show();
+        $('#purchaseBooksBtn').hide();
+        $('#mypurchaserequestsBtn').hide();
+        $('#quizBtn').hide();
     } else {
         $('#logoutBtn').hide();
         $('#loginBtn').show();
@@ -349,5 +366,8 @@ $(document).ready(function () {
         $('#myBooksBtn').hide();
         $('#wishlistBtn').hide();
         $('#adminBtn').hide();
+        $('#purchaseBooksBtn').hide();
+        $('#mypurchaserequestsBtn').hide();
+        $('#quizBtn').hide();
     }
 });

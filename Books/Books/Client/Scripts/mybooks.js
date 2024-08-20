@@ -215,7 +215,7 @@ if (user && !user.isAdmin) {
     $('#loginBtn').hide();
     $('#purchaseBooksBtn').show();
     $('#registerBtn').hide();
-    $('#myBooksBtn').show();
+    $('#myBooksBtn').hide();
     $('#adminBtn').show();
     $('#wishlistBtn').hide(); // Hide wishlist button for admins
 } else {

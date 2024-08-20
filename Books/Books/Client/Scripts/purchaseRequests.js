@@ -131,10 +131,6 @@ window.onload = () => {
         window.location.href = "authors.html";
     });
 
-    const loginBtn = document.getElementById("loginBtn");
-    $(loginBtn).click(function () {
-        window.location.href = "login.html";
-    });
 
     const logoutbtn = document.getElementById("logoutBtn");
 
@@ -144,17 +140,6 @@ window.onload = () => {
     });
 
 
-    const registerbtn = document.getElementById("registerBtn");
-
-    $(registerbtn).click(function () {
-        window.location.href = "register.html";
-    });
-
-    const adminbtn = document.getElementById("adminBtn");
-
-    $(adminBtn).click(function () {
-        window.location.href = "admin.html";
-    });
 
     const myBooks = document.getElementById("myBooksBtn");
     $(myBooks).click(function () {
@@ -171,34 +156,13 @@ window.onload = () => {
         window.location.href = "transferBook.html";
     });
 
-    const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
-    $(mypurchaserequestsBtn).click(function () {
-        window.location.href = "purchaseRequests.html";
+    const quizBtn = document.getElementById("quizBtn");
+    $(quizBtn).click(function () {
+        window.location.href = "quiz.html";
     });
 
-    // Check user status and display appropriate buttons
-    if (user && !user.isAdmin) {
-        $('#logoutBtn').show();
-        $('#loginBtn').hide();
-        $('#registerBtn').hide();
-        $('#myBooksBtn').show();
-        $('#adminBtn').hide();
-        $('#wishlistBtn').show(); // Show wishlist button for regular users
-    } else if (user && user.isAdmin) {
-        $('#logoutBtn').show();
-        $('#loginBtn').hide();
-        $('#registerBtn').hide();
-        $('#myBooksBtn').show();
-        $('#adminBtn').show();
-        $('#wishlistBtn').hide(); // Hide wishlist button for admins
-    } else {
-        $('#logoutBtn').hide();
-        $('#loginBtn').show();
-        $('#registerBtn').show();
-        $('#myBooksBtn').hide();
-        $('#adminBtn').hide();
-        $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
-    }
+  
+  
 
     const toggleModeCheckbox = document.getElementById('toggle-mode');
     const currentTheme = localStorage.getItem('theme');

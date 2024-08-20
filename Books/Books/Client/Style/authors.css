@@ -22,6 +22,16 @@ body {
     font-family: Arial, sans-serif;
     transition: background-color 0.3s, color 0.3s;
 }
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+    nav button {
+        margin: 20px;
+    }
 
 #toggle-mode {
     position: absolute;

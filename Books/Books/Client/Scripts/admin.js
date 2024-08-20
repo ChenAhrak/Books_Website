@@ -521,4 +521,15 @@ function showAuthorsInLibraryInfo(response) {
         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     }
 
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    $(logoutBtn).click(function () {
+        sessionStorage.clear();
+        window.location.href = "index.html";
+    });
+
+    const authorsBtn = document.getElementById('authorsBtn');
+    $(authorsBtn).click(function () {
+        window.location.href = "authors.html";
+    });
 }

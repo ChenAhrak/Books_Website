@@ -159,11 +159,6 @@ $(logoutbtn).click(function () {
 });
 
 
-const registerbtn = document.getElementById("registerBtn");
-
-$(registerbtn).click(function () {
-    window.location.href = "register.html";
-});
 
 const adminbtn = document.getElementById("adminBtn");
 
@@ -192,30 +187,8 @@ $(mypurchaserequestsBtn).click(function () {
     window.location.href = "purchaseRequests.html";
 });
 
-// Check user status and display appropriate buttons
-if (user && !user.isAdmin) {
-    $('#logoutBtn').show();
-    $('#loginBtn').hide();
-    $('#purchaseBooksBtn').show();
-    $('#registerBtn').hide();
-    $('#myBooksBtn').show();
-    $('#adminBtn').hide();
-    $('#wishlistBtn').show(); // Show wishlist button for regular users
-} else if (user && user.isAdmin) {
-    $('#logoutBtn').show();
-    $('#loginBtn').hide();
-    $('#purchaseBooksBtn').show();
-    $('#registerBtn').hide();
-    $('#myBooksBtn').show();
-    $('#adminBtn').show();
-    $('#wishlistBtn').hide(); // Hide wishlist button for admins
-} else {
-    $('#logoutBtn').hide();
-    $('#loginBtn').show();
-    $('#purchaseBooksBtn').hide();
-    $('#registerBtn').show();
-    $('#myBooksBtn').hide();
-    $('#adminBtn').hide();
-    $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
-}
+const quizBtn = document.getElementById("quizBtn");
+$(quizBtn).click(function () {
+    window.location.href = "quiz.html";
+});
 

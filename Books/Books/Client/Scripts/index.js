@@ -585,6 +585,11 @@ $(document).ready(function () {
     $(mypurchaserequestsBtn).click(function () {
         window.location.href = "purchaseRequests.html";
     });
+
+
+    $('#quizBtn').click(function () {
+        window.location.href = "quiz.html";
+    });
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {
         $('#logoutBtn').show();
@@ -595,15 +600,17 @@ $(document).ready(function () {
         $('#adminBtn').hide();
         $('#wishlistBtn').show(); // Show wishlist button for regular users
         $('#mypurchaserequestsBtn').show();
+        $('#quizBtn').show();
     } else if (user && user.isAdmin) {
         $('#logoutBtn').show();
         $('#loginBtn').hide();
         $('#registerBtn').hide()
-        $('#purchaseBooksBtn').show();            ;
-        $('#myBooksBtn').show();
+        $('#purchaseBooksBtn').hide();            ;
+        $('#myBooksBtn').hide();
         $('#adminBtn').show();
         $('#wishlistBtn').hide(); // Hide wishlist button for admins
-        $('#mypurchaserequestsBtn').show();
+        $('#mypurchaserequestsBtn').hide();
+        $('#quizBtn').hide();
     } else {
         $('#logoutBtn').hide();
         $('#loginBtn').show();
@@ -613,6 +620,7 @@ $(document).ready(function () {
         $('#adminBtn').hide();
         $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
         $('#mypurchaserequestsBtn').hide();
+        $('#quizBtn').hide();
     }
 
     // Event listener to toggle the theme and save it in localStorage
