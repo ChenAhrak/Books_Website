@@ -330,7 +330,6 @@ $(document).ready(function () {
 
     });
     // Function to add a book to the wishlist
-    // Function to add a book to the wishlist
     function addBookToWishlist(userId, bookId) {
         const api = `https://localhost:7195/api/UserBooks/addBookToWishlist/${userId}`;
         const data = getBookById(bookId); // Retrieve book details by its ID
@@ -356,25 +355,17 @@ $(document).ready(function () {
             const bookId = $(this).data('book-id');
             const user = JSON.parse(sessionStorage.getItem('user')); // Fetch the current user
 
-            if (user && user.id) {
-                if (isLoggedIn()) {
-                    // Optionally, add book to purchased list
-                    // const book = getBookById(bookId); // Uncomment if you need to use this
-                    // addBookToPurchased(user.id, book); // Adjust if necessary
-                } else {
-                    console.log("User not logged in. Redirecting to login.");
-                    alert("Please login or register to add book.");
-                    window.location.href = "login.html";
-                    return; // Exit the function to prevent further execution
-                }
-
+            if (user && user.id && isLoggedIn()) {
                 // Add book to wishlist
                 addBookToWishlist(user.id, bookId);
             } else {
-                alert("User not logged in.");
+                console.log("User not logged in. Redirecting to login.");
+                alert("Please login or register to add book.");
+                window.location.href = "login.html";
             }
         });
     }
+
 
     // Mock function to retrieve book details by its ID
     function getBookById(bookId) {
@@ -430,8 +421,10 @@ $(document).ready(function () {
             data,
             function (response) {
                 console.log("Success:", response);
-                alert("The book added");
+                alert("The book added  to purchased list");
                 // Update UI on success, e.g., change button state
+                $(`button[data-book-id="${bookId}"]`).addClass('added').text('Added');
+                
             },
             function (error) {
                 console.error("Error:", error);
