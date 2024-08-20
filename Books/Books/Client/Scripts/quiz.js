@@ -314,7 +314,6 @@ $(document).ready(async function () {
     }
     $('#quiz').hide();
 
-
 });
 
 $('#homeBtn').on('click', function () {
@@ -367,14 +366,13 @@ const gameScoreText = document.getElementById("gameScore");
 console.log(gameScoreText.textContent);
 
 var finishGameBtn = document.getElementById("finishGame");
-
 finishGameBtn.addEventListener('click', (event) => {
     $('#startGame').show();
     $('#gameScore').hide();
     $('#quiz').empty();
     $('#quiz').hide();
     $('#finishQuiz').hide();
-    updateUserHighScore();
+    updateUserHighScore(gameScore);
     console.log("high score:" + highScore);
     restartScore(gameScore);
     
@@ -388,12 +386,13 @@ function restartScore(gameScore) {
 }
 
 // add modal with 2 cases
-function updateUserHighScore() {
+function updateUserHighScore(gameScore) {
     if (highScore < gameScore) {
         sendUserHighScore();
+        gameEndedHighScore(user.userName,gameScore);
     }
     else {
-
+        gameEndedLowScore(user.userName, gameScore);
     }
 }
 
@@ -407,6 +406,40 @@ function sendUserHighScoreSCB(result) {
 
 function sendUserHighScoreECB(err) {
     console.log(err);
+}
+
+function gameEndedHighScore(userName, highScore) {
+    var modalContent = $('#modal-content');
+    modalContent.children().not('#closeModal').remove()
+
+    // Create and append the title
+    var title = $('<h2>').text('Game Over! New High Score!');
+    modalContent.append(title);
+
+    // Create and append the user's name
+    var userNameElement = $('<p>').text('User: ' + userName);
+    modalContent.append(userNameElement);
+
+    var highScoreElement = $('<p>').text('High Score: ' + highScore + '');
+    modalContent.append(highScoreElement);
+    $('#scoresModal').show();
+}
+
+function gameEndedLowScore(userName, gameScore) {
+    var modalContent = $('#modal-content');
+    modalContent.children().not('#closeModal').remove()
+
+    // Create and append the title
+    var title = $('<h2>').text('Game Over!');
+    modalContent.append(title);
+
+    // Create and append the user's name
+    var userNameElement = $('<p>').text('User: ' + userName);
+    modalContent.append(userNameElement);
+
+    var gameScoreElement = $('<p>').text('Score: ' + gameScore);
+    modalContent.append(gameScoreElement);
+    $('#scoresModal').show();
 }
 
 function createQuiz(question, options) {
@@ -464,60 +497,10 @@ function parseTextToJSON(text) {
     return jsonOutput;
 }
 
-function showHighScores(moreDetails, book) {
-    moreDetails.on('click', function () {
-        modal.css('display', 'block');
-        $('#modal-content').children().slice(1).remove();
-        renderScoresModal(book);
-    });
-}
-
-function renderScoresModal(book) {
-    var modalContent = $('#modal-content');
-    var bookModal = {};
-    //search for the book in allBooks
-    allBooks.forEach(function (books) {
-        books.forEach(function (b) {
-            if (b.id === book.id) {
-                bookModal = b;
-            }
-        });
-    });
-    console.log(bookModal);
-    var bookElement = $('<div>');
-    bookElement.addClass('bookModal');
-    bookElement.append('<img src="' + bookModal.image + '" alt="book image" />');
-    bookElement.append('<h3>' + bookModal.title + '</h3>');
-    bookElement.append('<h5>' + bookModal.subtitle + '</h5>');
-    bookElement.append('<p>' + 'Publisher: ' + bookModal.publisher + '</p>');
-    bookElement.append('<p>' + 'Published Date: ' + bookModal.publishedDate + '</p>');
-    bookElement.append('<p>' + 'Language: ' + bookModal.language + '</p>');
-    bookElement.append('<p>' + 'Page Count: ' + bookModal.pageCount + '</p>');
-    bookElement.append('<p>' + 'Description: ' + bookModal.description + '</p>');
-    bookElement.append('<p>' + 'By: ' + bookModal.authorNames + '</p>');
-    bookElement.append('<p>' + 'Price: ' + bookModal.price + ' ILS' + '</p>');
-
-    modalContent.append(bookElement);
-    function renderScoresModal(users) {
-        var modalContent = $('#modal-content');
-        modalContent.empty(); // Clear previous content if any
-
-        users.forEach(function (user) {
-            var userElement = $('<div>');
-            userElement.addClass('userModal');
-
-            // Display "User" and "High Score" fields for each user
-            userElement.append('<h3>User: ' + user.userName + '</h3>');
-            userElement.append('<p>High Score: ' + user.highScore + '</p>');
-
-            modalContent.append(userElement);
-        });
-    }
-
-}
 
 $('#highScores').on('click', function (event) {
     getTopHighScores();
+    $('#modal-content').css('display', 'block');
 });
 
 function getTopHighScores() {
@@ -525,7 +508,7 @@ function getTopHighScores() {
 }
 
 function getTopHighScoresSCB(result) {
-    populateHighScoreModal(result);
+    renderHighScoresModal(result);
     console.log(result);
 }
 
@@ -533,35 +516,40 @@ function getTopHighScoresECB(err) {
     console.log(err);
 }
 
-function populateHighScoreModal(users) {
+function renderHighScoresModal(highScores) {
     var modalContent = $('#modal-content');
-    modalContent.empty(); // Clear previous content if any
+    modalContent.children().not('#closeModal').remove()
 
-    var table = $('<table>');
-    table.addClass('highScoreTable');
+    // Creating the table structure
+    var table = $('<table>').addClass('highScoreTable');
+    var tableHeader = $('<tr>')
+        .append($('<th>').text('User'))
+        .append($('<th>').text('High Score'));
+    table.append(tableHeader);
 
-    // Create table header
-    var thead = $('<thead>');
-    thead.append('<tr><th>User</th><th>High Score</th></tr>');
-    table.append(thead);
-
-    // Create table body
-    var tbody = $('<tbody>');
-
-    // Loop through users and add rows to the table
-    users.slice(0, 5).forEach(function (user) { // Limit to 5 users
-        var row = $('<tr>');
-        row.append('<td>' + user.userName + '</td>');
-        row.append('<td>' + user.highScore + '</td>');
-        tbody.append(row);
+    // Populate the table with high scores
+    highScores.forEach(function (score) {
+        var tableRow = $('<tr>')
+            .append($('<td>').text(score.userName))
+            .append($('<td>').text(score.highScore));
+        table.append(tableRow);
     });
 
-    table.append(tbody);
+    // Append the table to the modal content
     modalContent.append(table);
+
+    // Show the modal
+    $('#scoresModal').show();
 }
 
+$('#closeModal').on('click', function () {
+    $('#scoresModal').hide();
+    $('#modal-content').children().not('#closeModal').remove();
+});
+
 $(window).on('click', function (event) {
-    if (event.target === $('#booksModal')[0]) {
-        $('#booksModal').hide();
+    if (event.target === $('#scoresModal')[0]) {
+        $('#scoresModal').hide();
+        $('#modal-content').children().not('#closeModal').remove();
     }
 });
