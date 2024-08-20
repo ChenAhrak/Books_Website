@@ -5,6 +5,8 @@
     --td-background-color: #f9f9f9;
     --button-background-color: #3498db;
     --modal--background-color: white;
+    --carouselBtn-background-color: lightgray;
+    --border-background-color: #161A1D;
 }
 
 /* Dark mode overrides */
@@ -14,6 +16,8 @@ body.dark-mode {
     --td-background-color: #6f6f6f;
     --button-background-color: #37474f;
     --modal--background-color: darkgrey;
+    --carouselBtn-background-color: #37474f;
+    --border-background-color: #C3DEFE33;
 }
 
 body {
@@ -317,6 +321,8 @@ footer {
 .carousel {
     overflow: hidden;
     flex: 1;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .carousel-row {
@@ -327,14 +333,19 @@ footer {
 .carousel-item {
     min-width: 200px; /* Adjust based on your design */
     margin: 0 10px;
+    border: 2px solid var(--border-background-color);
+    background-color: var(--td-background-color);
+    border-radius: 10px;
+    padding-top: 20px;
     text-align: center;
+    justify-content: center;
 }
 
 .carousel-button {
-    background-color: #007bff;
+    background-color: var(--carouselBtn-background-color);
     color: white;
     border: none;
-    padding: 10px;
+    padding: 15px;
     cursor: pointer;
     position: absolute;
     top: 50%;
