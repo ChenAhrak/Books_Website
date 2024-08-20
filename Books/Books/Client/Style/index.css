@@ -6,7 +6,7 @@
     --button-background-color: #3498db;
     --modal--background-color: white;
     --carouselBtn-background-color: lightgray;
-    --border-background-color: #161A1D;
+    --border-background-color: #ccc;
 }
 
 /* Dark mode overrides */
@@ -137,13 +137,13 @@ p, h3 {
     overflow: hidden; /* Hides any text that overflows the width */
     text-overflow: ellipsis; /* Adds ellipsis (...) to indicate truncated text */
     /*border: 1px solid #ccc;*/ /* Optional, for better visibility */
-    padding: 30px; /* Optional, for better spacing */
+    padding: 10px; /* Optional, for better spacing */
 }
 
 img{
     width: 120px;
     height: 220px;
-    border-radius: 10px;
+    border-radius: 15px;
 }
 
 button {
@@ -175,6 +175,7 @@ button {
     background-color: var(--background-color);
 
 }
+
 input {
     padding: 10px;
     border: 1px solid #ccc;
@@ -233,7 +234,6 @@ footer {
     height: 100%;
     width: 100%;
 }
-
 
 #modal-content {
     background-color: antiquewhite;
@@ -309,6 +309,28 @@ footer {
     color: #3498db;
 }
 
+#top-books-container {
+    margin: 0 auto;
+/*    align-content: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-left: 20px;
+    margin-right: 20px;*/
+}
+
+#top-books-container > table > tr{
+    margin: 0 auto;
+}
+
+    #top-books-container > table > tr > td {
+        margin: 0 auto;
+        margin-right: 15px;
+        /*border-radius: 10px 0px 0px 10px;  testing  */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        border: 1px double #ccc;
+    }
+
 .carousel-container {
     display: flex;
     align-items: center;
@@ -332,13 +354,13 @@ footer {
 
 .carousel-item {
     min-width: 200px; /* Adjust based on your design */
-    margin: 0 10px;
-    border: 2px solid var(--border-background-color);
+    position: relative;
+    margin-left: 10px;
+    border: 1px solid var(--border-background-color);
     background-color: var(--td-background-color);
     border-radius: 10px;
     padding-top: 20px;
     text-align: center;
-    justify-content: center;
 }
 
 .carousel-button {
@@ -361,3 +383,54 @@ footer {
     right: 0;
 }
 
+.ebook-carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.eBookCarousel {
+    overflow: hidden;
+    flex: 1;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.eBook-carousel-row {
+    display: flex;
+    transition: transform 0.5s ease; /* Adjust duration for smoother transition */
+}
+
+.eBookCarousel-item {
+    min-width: 200px; /* Adjust based on your design */
+    position: relative;
+    margin-left: 10px;
+    border: 1px solid var(--border-background-color);
+    background-color: var(--td-background-color);
+    border-radius: 10px;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.ebook-carousel-button {
+    background-color: var(--carouselBtn-background-color);
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+#eBookCarouselPrev {
+    left: 0;
+}
+
+#eBookCarouselNext {
+    right: 0;
+}

@@ -59,45 +59,7 @@ $(document).ready(function () {
     function getBooksDisplayDataFromDBECB(err) {
         console.log(err);
     }
-    //testing
-    //var carouselContainer = $('#carousel');
 
-    //function renderAllBooksDisplay(books) {
-    //    //var booksContainer = $('#books-container');
-    //    var table = $('<table>');
-    //    table.id = "carouselTable";
-    //    var tableHeader = $('<tr>');
-    //    tableHeader.id = "carouselRow";
-
-    //    books.forEach(book => {
-    //        var bookElement = $('<td>');
-    //        bookElement.append('<img src="' + book.image + '" alt="book image" />');
-    //        bookElement.append('<h3>' + book.title + '</h3>');
-    //        bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
-    //        bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-
-    //        // Add "Add to Wishlist" button
-    //        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
-    //        bookElement.append(addToWishlistBtn);
-
-    //        // Add "Add Book" button
-    //        var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
-    //        bookElement.append(addBookBtn);
-
-    //        var moreDetails = $('<p class="more-details">More Details</p>');
-    //        bookElement.append(moreDetails);
-
-    //        tableHeader.append(bookElement);
-
-    //        // Call the appropriate functions for the buttons
-    //        addBookClick(addBookBtn);
-    //        addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
-    //        showMoreDetails(moreDetails, book);
-    //    });
-
-    //    table.append(tableHeader);
-    //    carouselContainer.append(table);
-    //}
     var carouselContainer = $('#books-container .carousel');
 
     function renderAllBooksDisplay(books) {
@@ -186,13 +148,58 @@ $(document).ready(function () {
     function getEBooksDisplayDataFromDBECB(err) {
         console.log(err);
     }
+    //function renderAllEBooksDisplay(ebooks) {
+    //    var ebooksContainer = $('#ebooks-container');
+    //    var table = $('<table>');
+    //    var tableHeader = $('<tr>');
+
+    //    ebooks.forEach(ebook => {
+    //        var ebookElement = $('<td>');
+    //        ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
+    //        ebookElement.append('<h3>' + ebook.title + '</h3>');
+    //        ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
+    //        ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
+
+    //        // Add "Add to Wishlist" button
+    //        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
+    //        ebookElement.append(addToWishlistBtn);
+
+    //        // Add "Add Book" button
+    //        var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Buy Book</button>');
+    //        ebookElement.append(addEBookBtn);
+
+    //        var moreDetails = $('<p class="more-details">More Details</p>');
+    //        ebookElement.append(moreDetails);
+
+
+    //        tableHeader.append(ebookElement);
+
+    //        addBookClick(addEBookBtn);
+    //        addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+    //        showMoreDetails(moreDetails, ebook);
+
+    //    });
+
+    //    table.append(tableHeader);
+    //    ebooksContainer.append(table);
+    //}
+    var eBookCarouselContainer = $('#ebooks-container .eBookCarousel');
+
     function renderAllEBooksDisplay(ebooks) {
-        var ebooksContainer = $('#ebooks-container');
-        var table = $('<table>');
-        var tableHeader = $('<tr>');
+        // Clear any existing content in the carousel container
+        eBookCarouselContainer.empty();
+
+        // Create a row to hold the eBooks
+        var row = $('<div id="eBookCarouselRow" class="eBook-carousel-row">');
+
+        const itemsPerPage = 5; // Number of items to display at once
+        const totalItems = ebooks.length;
+
+        // Calculate the width of each item based on itemsPerPage
+        const itemWidthPercentage = 100 / itemsPerPage;
 
         ebooks.forEach(ebook => {
-            var ebookElement = $('<td>');
+            var ebookElement = $('<div class="eBookCarousel-item">').css('width', `${itemWidthPercentage}%`);
             ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
             ebookElement.append('<h3>' + ebook.title + '</h3>');
             ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
@@ -202,25 +209,55 @@ $(document).ready(function () {
             var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
             ebookElement.append(addToWishlistBtn);
 
-            // Add "Add Book" button
-            var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Buy Book</button>');
-            ebookElement.append(addEBookBtn);
+            // Add "Buy Book" button
+            var addBookBtn = $('<button id="' + ebook.id + '" class="add-book">Buy Book</button>');
+            ebookElement.append(addBookBtn);
 
             var moreDetails = $('<p class="more-details">More Details</p>');
             ebookElement.append(moreDetails);
-           
 
-            tableHeader.append(ebookElement);
+            row.append(ebookElement);
 
-            addBookClick(addEBookBtn);
-            addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
+            // Call the appropriate functions for the buttons
+            addBookClick(addBookBtn);
+            addWishlistClick(addToWishlistBtn);
             showMoreDetails(moreDetails, ebook);
-
         });
 
-        table.append(tableHeader);
-        ebooksContainer.append(table);
+        eBookCarouselContainer.append(row);
+
+        // Carousel functionality
+        var currentIndex = 0;
+
+        // Calculate the total width of the row based on the number of items
+        const rowWidthPercentage = totalItems * itemWidthPercentage;
+        row.css('width', `${rowWidthPercentage}%`);
+
+        // Update the carousel view
+        function updateCarousel() {
+            const offset = currentIndex * -itemWidthPercentage / (totalItems / itemsPerPage);
+            $('#eBookCarouselRow').css('transform', `translateX(${offset}%)`);
+        }
+
+        $('#eBookCarouselPrev').on('click', function () {
+            if (currentIndex > 0) {
+                currentIndex -= itemsPerPage;
+                if (currentIndex < 0) currentIndex = 0; // Ensure it doesn't go negative
+                updateCarousel();
+            }
+        });
+
+        $('#eBookCarouselNext').on('click', function () {
+            if (currentIndex < totalItems - itemsPerPage) {
+                currentIndex += itemsPerPage;
+                if (currentIndex > totalItems - itemsPerPage) currentIndex = totalItems - itemsPerPage; // Ensure it doesn't exceed the max
+                updateCarousel();
+            }
+        });
+
+        updateCarousel(); // Initial display
     }
+
     
     function isLoggedIn() {
         return sessionStorage.getItem('user') !== null;
@@ -273,7 +310,6 @@ $(document).ready(function () {
                 var moreDetails = $('<p class="more-details">More Details</p>');
                 bookElement.append(moreDetails);
 
-                console.log(book);
                 tableHeader.append(bookElement);
 
                 addBookClick(addBookBtn);
@@ -578,7 +614,7 @@ $(document).ready(function () {
                  // check if the query is in the title of the book with no case sensitivity
                  if (
                      book.title.toLowerCase().includes(query.toLowerCase()) ||
-                    book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
+                     book.authorNames.toLowerCase().includes(query.toLowerCase()) ||
                      book.description.toLowerCase().includes(query.toLowerCase())) 
                  {
                      filterdBooks.push(book);

@@ -178,7 +178,7 @@ input{
     background-color: var(--input-background-color);
 }
 
-#usersDataTable > tbody > tr.odd > .sorting_1 {
+/*#usersDataTable > tbody > tr.odd > .sorting_1 {
     background-color: var(--trOdd-background-color);
 }
 
@@ -240,7 +240,7 @@ input{
 
 #authorsCountTable > tbody > tr.even {
     background-color: var(--trEven-background-color);
-}
+}*/
 
 footer {
     position: relative;
