@@ -1,4 +1,6 @@
-﻿// Fetch books with 'read' status for all users except the current user
+﻿const apiMailUrl = "https://localhost:7195/api/Mails";
+
+// Fetch books with 'read' status for all users except the current user
 var user = JSON.parse(sessionStorage.getItem('user'));
 function fetchBooks() {
     const api = `https://localhost:7195/api/Books/GetAllReadBooks?currentUserId=${user.id}`;
@@ -33,7 +35,7 @@ function renderAllBooksDisplay(books) {
         bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
         
         // Add "Request Purchase" button
-        var requestPurchaseBtn = $('<button class="requestPurchaseButton" data-book-id="' + book.id + '" data-seller-id="' + book.sellerId + '">Request Purchase</button>');
+        var requestPurchaseBtn = $('<button class="requestPurchaseButton" data-book-id="' + book.id + '" data-book-title="' + book.title + '" data-seller-id="' + book.sellerId + '" data-seller-email="' + book.sellerEmail + '" data-seller-name="' + book.sellerName + '">Request Purchase</button>');
         bookElement.append(requestPurchaseBtn);
 
         booksContainer.append(bookElement);
@@ -41,17 +43,51 @@ function renderAllBooksDisplay(books) {
         // Attach click event handler for the button
         requestPurchaseBtn.on('click', function () {
             requestBookPurchase(this);
+            sendMailToBuyer(this);
         });
     });
 
 }
 
+function sendMailToBuyer(button) {
+    var buyerId = user.id; // user.id holds the current logged-in user's ID
+    var bookName = button.getAttribute('data-book-title');
+    var sellerId = button.getAttribute('data-seller-id');
+    var bookId = button.getAttribute('data-book-id');
+    var sellerEmail = button.getAttribute('data-seller-email');
+    var sellerName = button.getAttribute('data-seller-name');
+    const mailToSend = {
+        emailToId: sellerEmail,
+        emailToName: sellerName,
+        emailSubject: 'Purchase Request',
+        emailBody: `Hello ${sellerName},\n\nYou have received a purchase request from ${user.userName} The book ${bookName} . Please check your purchase requests to approve or reject the request.\n\nRegards,\nBookstore Team`
+
+    }
+    console
+    ajaxCall('Post', apiMailUrl, JSON.stringify(mailToSend), handleSuccessMail, handleErrorMail);
+
+
+}
+
+function handleSuccessMail(response) {
+    console.log('Mail sent successfully:', response);
+
+}
+
+function handleErrorMail(error) {
+    console.log('Error sending mail:', error);
+ 
+}
+
+
+
+
 
 // Request to purchase a book
 function requestBookPurchase(button) {
-    const buyerId = user.id; // user.id holds the current logged-in user's ID
-    const sellerId = button.getAttribute('data-seller-id');
-    const bookId = button.getAttribute('data-book-id');
+    var buyerId = user.id; // user.id holds the current logged-in user's ID
+    var sellerId = button.getAttribute('data-seller-id');
+    var bookId = button.getAttribute('data-book-id');
 
     if (!buyerId || !sellerId || !bookId) {
         alert("All fields are required.");
@@ -69,6 +105,7 @@ function sendPurchaseRequest(api) {
 function handleSuccess(response) {
     console.log('Purchase request added successfully:', response);
     alert('Your purchase request has been sent!');
+   
 }
 
 function handleError(error) {
