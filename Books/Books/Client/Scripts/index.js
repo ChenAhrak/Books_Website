@@ -9,7 +9,7 @@ const maxBooks = 50;
 const maxEbooks = 50;
 const booksApiURL = "https://localhost:7195/api/Books";
 const authorsApiUrl = "https://localhost:7195/api/Authors";
-const categoriesApiUrl = "https://localhost:7195/api/Categories";
+const categoriesApiUrl = "https://localhost:7195/api/Categories";                    
 const usersApiUrl = "https://localhost:7195/api/Users";
 const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
 var modal = $('#booksModal');
@@ -291,7 +291,7 @@ $(document).ready(function () {
 
         //Fetch recommended books by top categories for the user
         async function getRecommendedBooksByCategory(userId) {
-            await ajaxCall("GET", `${categoriesApiURL}/recommend/${userId.id}`, "", getRecommendedBooksByCategorySCB, getRecommendedBooksByCategoryECB);
+            await ajaxCall("GET", `${categoriesApiUrl}/recommend/${userId}`, "", getRecommendedBooksByCategorySCB, getRecommendedBooksByCategoryECB);
         }
 
         function getRecommendedBooksByCategorySCB(result) {
