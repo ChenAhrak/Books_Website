@@ -16,13 +16,13 @@ function getCurrentUserLibrary() {
     ajaxCall(
         "GET",
         `${userBooksApiUrl}/getUserLibrary?userId=${user.id}`,
-        "", // Explicitly passing an empty string instead of null
+        "", 
         getCurrentUserLibrarySCF,
         getCurrentUserLibraryECF
     );
 
     function getCurrentUserLibrarySCF(response) {
-        booksInLibrary.push(response); // Ensure `booksInLibrary` is defined and response format is as expected
+        booksInLibrary = response;
         console.log(response);
     }
 
@@ -60,25 +60,30 @@ function renderAllBooksDisplay(books) {
     console.log(books);
 
     books.forEach(book => {
-        var bookElement = $('<div>');
-        bookElement.addClass('book');
-        bookElement.append('<h3>' + 'Seller: ' + book.sellerName + '</h3>');
-        bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
-        bookElement.append('<h3>' + book.title + '</h3>');
-        bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
-        bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+        if (booksInLibrary.some(item => item.id == book.id)) {
+            return;
+        }
+        else {
+            var bookElement = $('<div>');
+            bookElement.addClass('book');
+            bookElement.append('<h3>' + 'Seller: ' + book.sellerName + '</h3>');
+            bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
+            bookElement.append('<h3>' + book.title + '</h3>');
+            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
-        // Add "Request Purchase" button
-        var requestPurchaseBtn = $('<button class="requestPurchaseButton" data-book-id="' + book.id + '" data-book-title="' + book.title + '" data-seller-id="' + book.sellerId + '" data-seller-email="' + book.sellerEmail + '" data-seller-name="' + book.sellerName + '">Request Purchase</button>');
-        bookElement.append(requestPurchaseBtn);
+            // Add "Request Purchase" button
+            var requestPurchaseBtn = $('<button class="requestPurchaseButton" data-book-id="' + book.id + '" data-book-title="' + book.title + '" data-seller-id="' + book.sellerId + '" data-seller-email="' + book.sellerEmail + '" data-seller-name="' + book.sellerName + '">Request Purchase</button>');
+            bookElement.append(requestPurchaseBtn);
 
-        booksContainer.append(bookElement);
+            booksContainer.append(bookElement);
 
-        // Attach click event handler for the button
-        requestPurchaseBtn.on('click', function () {
-            requestBookPurchase(this);
-            sendMailToBuyer(this);
-        });
+            // Attach click event handler for the button
+            requestPurchaseBtn.on('click', function () {
+                requestBookPurchase(this);
+                sendMailToBuyer(this);
+            });
+        }
     });
 
 }
