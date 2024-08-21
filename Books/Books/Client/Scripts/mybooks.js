@@ -1,4 +1,6 @@
-﻿var user = JSON.parse(sessionStorage.getItem('user'));
+﻿const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
+
+var user = JSON.parse(sessionStorage.getItem('user'));
 
 const toggleModeCheckbox = document.getElementById('toggle-mode');
 const currentTheme = localStorage.getItem('theme');
@@ -25,7 +27,7 @@ toggleModeCheckbox.addEventListener('change', function () {
 // Fetch and display purchased books
 function fetchBooks() {
     const status = 'purchased'; // Define the status
-    const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${status}`;
+    const apiEndpoint = `${userBooksApiUrl}/get?userID=${user.id}&status=${status}`;
 
     // Send request to server
     ajaxCall('GET', apiEndpoint, null,
@@ -76,7 +78,7 @@ function renderAllBooksDisplay(books, containerId) {
 // Function to add a book to the read list
 function addBookToRead(userID, bookId) {
     const status = "read";
-    const api = `https://localhost:7195/api/UserBooks/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
+    const api = `${userBooksApiUrl}/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
     const data = JSON.stringify(bookId);
 
     ajaxCall(
@@ -119,7 +121,7 @@ function addReadClick(readBtn) {
 // Fetch and display books with status "read" in a separate container
 function fetchReadBooks() {
     const status = 'read'; // Define the status
-    const apiEndpoint = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${status}`;
+    const apiEndpoint = `${userBooksApiUrl}/get?userID=${user.id}&status=${status}`;
 
     // Send request to server
     ajaxCall('GET', apiEndpoint, null,

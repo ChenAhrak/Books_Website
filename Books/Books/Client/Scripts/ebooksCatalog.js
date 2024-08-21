@@ -1,4 +1,6 @@
 ﻿const booksApiURL = "https://localhost:7195/api/Books";
+const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
+
 const allEBooks = [];
 var user = JSON.parse(sessionStorage.getItem('user'));
 var modal = $('#booksModal');
@@ -85,14 +87,7 @@ $(document).ready(function () {
         }
     });
 
-    function addCoursesToModal(buttonId) {
-        modal.css('display', 'block');
-
-        $('#modal-content').children().slice(1).remove(); // Clear previous modal content
-
-        let api = `https://localhost:7283/api/Courses/searchByInstructorId/${buttonId}`;
-        ajaxCall("GET", api, null, getInstructorCoursesSCBF, getInstructorCoursesECBF);
-    }
+   
     function showMoreDetails(moreDetails, book) {
         moreDetails.on('click', function () {
             modal.css('display', 'block');
@@ -137,7 +132,7 @@ $(document).ready(function () {
 
     // Function to add a book to the wishlist
     function addBookToWishlist(userId, bookId) {
-        const api = `https://localhost:7195/api/UserBooks/addBookToWishlist/${userId}`;
+        const api = `${userBooksApiUrl}/addBookToWishlist/${userId}`;
         const data = getBookById(bookId);
         ajaxCall(
             'POST',
@@ -211,7 +206,7 @@ $(document).ready(function () {
 
     // Function to add a book to the purchased list
     function addBookToPurchased(userId, book) {
-        const api = `https://localhost:7195/api/UserBooks/addBookToPurchased/${userId}`;
+        const api = `${userBooksApiUrl}/addBookToPurchased/${userId}`;
         const data = JSON.stringify(book);
 
         // Print the API URL and data being sent to the console

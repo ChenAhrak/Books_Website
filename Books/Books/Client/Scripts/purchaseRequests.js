@@ -1,11 +1,12 @@
 ﻿const apiMailUrl = "https://localhost:7195/api/Mails";
+const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 var requestList = [];
 function fetchPurchaseRequests() {
     const sellerId = user.id; // מזהה המוכר הנוכחי//משתמש מחובר 
     
-    const api = `https://localhost:7195/api/UserBooks/getPurchaseRequestsForUser/${sellerId}`;
+    const api = `${userBooksApiUrl}/getPurchaseRequestsForUser/${sellerId}`;
 
     ajaxCall('GET', api, null,
         (response) => {
@@ -62,6 +63,9 @@ function renderPurchaseRequests(requests) {
                 var requestId = $(this).data('request-id');
                 updateRequestStatus(requestId, 'Rejected', () => {
                     removeRequestFromList(requestId);
+                    sendMailToBuyer(request.buyerUserName, request.bookName, request.buyerEmail, user.userName, 'Rejected');
+
+
                 });
 
             });
@@ -103,7 +107,7 @@ function handleErrorMail(error) {
 
 function updateRequestStatus(requestId, status, callback) {
     const approvalDate = new Date().toISOString(); // קבלת התאריך הנוכחי בפורמט ISO
-    const api = `https://localhost:7195/api/UserBooks/updatePurchaseRequestStatus?requestId=${requestId}&approvalStatus=${status}&approvalDate=${encodeURIComponent(approvalDate)}`;
+    const api = `${userBooksApiUrl}/updatePurchaseRequestStatus?requestId=${requestId}&approvalStatus=${status}&approvalDate=${encodeURIComponent(approvalDate)}`;
 
     ajaxCall('PUT', api, null,
         (response) => {
@@ -121,7 +125,7 @@ function manageBookPurchase(buyerId, sellerId, bookId, requestId) {
     // עדכון הסטטוס של הבקשה ל-"Approved" לפני ביצוע העברת הספר
     updateRequestStatus(requestId, 'Approved', () => {
         // אם הבקשה אושרה, בצע את העברת הספר
-        ajaxCall('POST', `https://localhost:7195/api/UserBooks/Transfer-Book?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`, null,
+        ajaxCall('POST', `${userBooksApiUrl}/Transfer-Book?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`, null,
             (response) => {
                 console.log('Book purchase processed successfully:', response);
                 alert('Book has been transferred successfully.');

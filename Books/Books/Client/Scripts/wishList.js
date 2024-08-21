@@ -1,4 +1,6 @@
-﻿var user = JSON.parse(sessionStorage.getItem('user'));
+﻿const userBooksApiUrl = 'https://localhost:7195/api/UserBooks';
+
+var user = JSON.parse(sessionStorage.getItem('user'));
 
 
 const toggleModeCheckbox = document.getElementById('toggle-mode');
@@ -30,7 +32,7 @@ $('#homeBtn').on('click', function () {
 function fetchBooks() {
     const status = 'want to read'; // הגדרת הסטטוס
 
-    const api = `https://localhost:7195/api/UserBooks/get?userID=${user.id}&status=${encodeURIComponent(status)}`;
+    const api = `${userBooksApiUrl}/get?userID=${user.id}&status=${encodeURIComponent(status)}`;
     // שלח בקשה לשרת
     ajaxCall('GET', api, null,
         getBooksDisplayDataFromDBSCB,  // פונקציית הצלחה
@@ -91,7 +93,7 @@ function renderAllBooksDisplay(books) {
 // פונקציה להוספת ספר לרשימת הקריאה //Update status from "want to read" to "purchased"
 function addBookToPurchased(userID, bookId) {
     const status = "purchased";
-    const api = `https://localhost:7195/api/UserBooks/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
+    const api = `${userBooksApiUrl}/update-status?userID=${userID}&bookID=${bookId}&newStatus=${status}`;
     const data = JSON.stringify(bookId);
     ajaxCall(
         'PUT',

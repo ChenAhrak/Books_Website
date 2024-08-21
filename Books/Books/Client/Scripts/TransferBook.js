@@ -1,4 +1,6 @@
 ﻿const apiMailUrl = "https://localhost:7195/api/Mails";
+const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
+const booksApiUrl = "https://localhost:7195/api/Books";
 
 // Fetch books with 'read' status for all users except the current user
 var user = JSON.parse(sessionStorage.getItem('user'));
@@ -9,7 +11,7 @@ if (!user) {
 }
 
 function fetchBooks() {
-    const api = `https://localhost:7195/api/Books/GetAllReadBooks?currentUserId=${user.id}`;
+    const api = `${booksApiUrl}/GetAllReadBooks?currentUserId=${user.id}`;
     ajaxCall('GET', api, null,
         getBooksDisplayDataFromDBSCB,  // Success callback
         getBooksDisplayDataFromDBECB  // Error callback
@@ -101,7 +103,7 @@ function requestBookPurchase(button) {
         return;
     }
 
-    const api = `https://localhost:7195/api/UserBooks/addBookPurchaseRequest?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`;
+    const api = `${userBooksApiUrl}/addBookPurchaseRequest?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`;
     sendPurchaseRequest(api);
 }
 
