@@ -20,21 +20,69 @@ body {
     font-family: Arial, sans-serif;
     transition: background-color 0.3s, color 0.3s;
 }
-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+button {
+    background-color: var(--button-background-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px; /* Add rounded corners to buttons */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-bottom: 10px; /* Add space below buttons */
 }
 
-    nav button {
-        margin: 20px;
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+    nav .logo {
+        font-size: 1.5em;
+        font-weight: bold;
     }
+
+    nav .nav-links {
+        display: flex;
+        align-items: center;
+    }
+
+        nav .nav-links button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1em;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+
+        nav .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0 15px;
+            font-size: 1em;
+        }
+
+            nav .nav-links a.active,
+            nav .nav-links a:hover {
+                text-decoration: underline;
+            }
+
+
+
+
 #homeBtn {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 20px;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+button:hover {
+    opacity: 0.8; /* Make button slightly transparent on hover */
 }
 
 #toggle-mode {
@@ -44,7 +92,7 @@ nav {
     margin: 20px;
 }
 
-nav > label {
+label {
     width: 50px;
     height: 25px;
     position: absolute;
@@ -58,7 +106,7 @@ nav > label {
     transition: 0.3s;
 }
 
-    nav > label:after {
+    label:after {
         content: "";
         width: 18px;
         height: 18px;
@@ -71,23 +119,23 @@ nav > label {
         transition: 0.3s;
     }
 
-nav > .toggleBox {
+.toggleBox {
     width: 0;
     height: 0;
     visibility: hidden;
 }
 
-    nav > .toggleBox:checked + label {
+    .toggleBox:checked + label {
         background: #242424;
     }
 
-        nav > .toggleBox:checked + label:after {
+        .toggleBox:checked + label:after {
             left: 46px;
             transform: translate(-100%);
             background: linear-gradient(180deg, #777, #3a3a3a);
         }
 
-nav > label:active:after{
+label:active:after {
     width: 26px;
 }
 
