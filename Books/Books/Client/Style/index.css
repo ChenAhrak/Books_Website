@@ -423,6 +423,21 @@ footer {
         border: 1px double #ccc;
     }
 
+#recommended-books-container {
+    margin: 0 auto;
+}
+
+    #recommended-books-container > table > tr {
+        margin: 0 auto;
+    }
+
+        #recommended-books-container > table > tr > td {
+            margin: 0 auto;
+            margin-right: 15px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            border: 1px double #ccc;
+        }
+
 .carousel-container {
     display: flex;
     align-items: center;
