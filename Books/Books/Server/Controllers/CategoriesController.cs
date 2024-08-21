@@ -1,5 +1,7 @@
 ﻿using Books.Server.BL;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,6 +12,7 @@ namespace Books.Server.Controllers
     public class CategoriesController : ControllerBase
     {
         Category category = new Category();
+
         // GET: api/<CategoriesController>
         [HttpGet]
         public IEnumerable<Category> Get()
@@ -46,7 +49,26 @@ namespace Books.Server.Controllers
             }
             catch (Exception ex)
             {
-                return NotFound(new {message="Categories error"});
+                return NotFound(new { message = "Categories error" });
+            }
+        }
+
+        // פונקציה חדשה לשאיבת ספרים מומלצים למשתמש
+        [HttpGet("recommend/{userId}")]
+        public IActionResult GetRecommendedBooksByCategory(int userId)
+        {
+            try
+            {
+                var recommendedBooks = category.GetRecommendedBooksByCategory(userId);
+                if (recommendedBooks == null)
+                {
+                    return NotFound(new { message = "No recommendations found for this user." });
+                }
+                return Ok(recommendedBooks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while fetching recommended books.", error = ex.Message });
             }
         }
 

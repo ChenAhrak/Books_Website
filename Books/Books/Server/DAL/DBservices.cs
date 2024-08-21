@@ -805,7 +805,50 @@ namespace Books.Server.DAL
 
             return fiveTopPurchased;
         }
-        //
+
+        //אולי לא נשתמש
+        public List<object> GetRecommendedBooksByCategory(int userId)
+        {
+            List<object> recommendedBooks = new List<object>();
+
+            try
+            {
+                using (SqlConnection con = connect("myProjDB"))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand("SP_RecommendBooksByTopCategories", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@UserID", userId);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                recommendedBooks.Add(new
+                                {
+                                    BookId = reader["BookId"].ToString(), // תואם לפרוצדורה
+                                    Title = reader["Title"].ToString(),
+                                    AuthorName = reader["AuthorName"].ToString(), // תואם לפרוצדורה
+                                    SmallThumbnail = reader["SmallThumbnail"].ToString(),
+                                    Price = reader["Price"].ToString(),
+                                    CategoryName = reader["CategoryName"].ToString()
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+
+            return recommendedBooks;
+        }
+
+
         public List<Object> getBooksByAuthor(int authorId)
         {
             SqlConnection con = null;
