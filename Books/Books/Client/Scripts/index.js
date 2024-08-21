@@ -148,41 +148,7 @@ $(document).ready(function () {
     function getEBooksDisplayDataFromDBECB(err) {
         console.log(err);
     }
-    //function renderAllEBooksDisplay(ebooks) {
-    //    var ebooksContainer = $('#ebooks-container');
-    //    var table = $('<table>');
-    //    var tableHeader = $('<tr>');
 
-    //    ebooks.forEach(ebook => {
-    //        var ebookElement = $('<td>');
-    //        ebookElement.append('<img src="' + ebook.image + '" alt="book image" />');
-    //        ebookElement.append('<h3>' + ebook.title + '</h3>');
-    //        ebookElement.append('<p>' + 'By: ' + ebook.authorNames + '</p>');
-    //        ebookElement.append('<p>' + 'Price: ' + ebook.price + ' ILS' + '</p>');
-
-    //        // Add "Add to Wishlist" button
-    //        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + ebook.id + '">🤍</button>');
-    //        ebookElement.append(addToWishlistBtn);
-
-    //        // Add "Add Book" button
-    //        var addEBookBtn = $('<button id="' + ebook.id + '" class="add-book">Buy Book</button>');
-    //        ebookElement.append(addEBookBtn);
-
-    //        var moreDetails = $('<p class="more-details">More Details</p>');
-    //        ebookElement.append(moreDetails);
-
-
-    //        tableHeader.append(ebookElement);
-
-    //        addBookClick(addEBookBtn);
-    //        addWishlistClick(addToWishlistBtn); // Ensure you call the correct function for wishlist buttons
-    //        showMoreDetails(moreDetails, ebook);
-
-    //    });
-
-    //    table.append(tableHeader);
-    //    ebooksContainer.append(table);
-    //}
     var eBookCarouselContainer = $('#ebooks-container .eBookCarousel');
 
     function renderAllEBooksDisplay(ebooks) {

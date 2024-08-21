@@ -986,7 +986,7 @@ namespace Books.Server.DAL
                                 Status = reader["UserLibraryStatus"].ToString(),
                                 Thumbnail = reader["Thumbnail"].ToString(),
                                 Price = reader["Price"].ToString(),
-                                SellerName = reader["UserName"].ToString(),
+                                SellerName = reader["SellerName"].ToString(),
                                 SellerEmail = reader["Email"].ToString(),
 
                             };
@@ -1753,7 +1753,7 @@ namespace Books.Server.DAL
 
 
         // similar but returns for any book status in library
-        public List<dynamic> GetUserLibraryForAdmin(int userId)
+        public List<dynamic> GetUserLibrary(int userId)
         {
             List<dynamic> books = new List<dynamic>();
 

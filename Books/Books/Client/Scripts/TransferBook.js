@@ -1,4 +1,7 @@
-﻿const apiMailUrl = "https://localhost:7195/api/Mails";
+﻿var apiMailUrl = "https://localhost:7195/api/Mails";
+var apiUserBooksUrl = "https://localhost:7195/api/UserBooks";
+
+var booksInLibrary = [];
 
 // Fetch books with 'read' status for all users except the current user
 var user = JSON.parse(sessionStorage.getItem('user'));
@@ -8,9 +11,30 @@ if (!user) {
     window.location.href = "login.html";
 }
 
+// not needed
+function getCurrentUserLibrary() {
+    ajaxCall(
+        "GET",
+        `${apiUserBooksUrl}/getUserLibrary?userId=${user.id}`,
+        "", // Explicitly passing an empty string instead of null
+        getCurrentUserLibrarySCF,
+        getCurrentUserLibraryECF
+    );
+
+    function getCurrentUserLibrarySCF(response) {
+        booksInLibrary.push(response); // Ensure `booksInLibrary` is defined and response format is as expected
+        console.log(response);
+    }
+
+    function getCurrentUserLibraryECF(error) {
+        console.error("An error occurred:", error);
+    }
+}
+getCurrentUserLibrary();
+
 function fetchBooks() {
     const api = `https://localhost:7195/api/Books/GetAllReadBooks?currentUserId=${user.id}`;
-    ajaxCall('GET', api, null,
+    ajaxCall("GET", api, null,
         getBooksDisplayDataFromDBSCB,  // Success callback
         getBooksDisplayDataFromDBECB  // Error callback
     );
@@ -84,9 +108,6 @@ function handleErrorMail(error) {
     console.log('Error sending mail:', error);
  
 }
-
-
-
 
 
 // Request to purchase a book
@@ -200,4 +221,3 @@ window.onload = () => {
         window.location.href = "../Pages/index.html";
     });
 };
-

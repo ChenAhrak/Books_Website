@@ -40,12 +40,12 @@ namespace Books.Server.BL
             }
         }
 
-        public List<dynamic> GetUserLibraryForAdmin(int userId)
+        public List<dynamic> GetUserLibrary(int userId)
         {
             DBservices db = new DBservices();
             try
             {
-                return db.GetUserLibraryForAdmin(userId);
+                return db.GetUserLibrary(userId);
             }
             catch
             {

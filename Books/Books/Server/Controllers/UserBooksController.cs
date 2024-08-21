@@ -28,10 +28,10 @@ namespace Books.Server.Controllers
             return Ok(userBooksList);
         }
 
-        [HttpGet("getUserLibrary/{userId}")]
-        public IActionResult GetUserLibraryForAdmin(int userId)
+        [HttpGet("getUserLibrary")]
+        public IActionResult GetUserLibrary([FromQuery]int userId)
         {
-            var userBooksList = _userBooks.GetUserLibraryForAdmin(userId);
+            var userBooksList = _userBooks.GetUserLibrary(userId);
             if (userBooksList == null)
             {
                 return NotFound("No books found for the specified user.");
