@@ -594,32 +594,42 @@ $(document).ready(function () {
 
 
         console.log(filterdBooks);
-        filterdBooks.forEach(function (book) {
+        if (filterdBooks.length === 0) {
             var bookElement = $('<div>');
-            bookElement.addClass('book');
-            bookElement.append('<img src="' + book.image + '" alt="book image" />');
-            bookElement.append('<h3>' + book.title + '</h3>');
-            bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
-            //bookElement.append('<p>' + 'Description: ' + book.description + '</p>')
-            bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-            var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
-            bookElement.append(addToWishlistBtn);
-
-            // Add "Add Book" button
-            var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
-            bookElement.append(addBookBtn);
-
-            var moreDetails = $('<p class="more-details">More Details</p>');
-            bookElement.append(moreDetails);
-
+            bookElement.addClass('didnt-find');
+            bookElement.append('<h2>' + 'We are sorry, we could not find any books that match your search.' + '<h2/>');
+            bookElement.append('<h3>' + 'Please try again with a different search...' + '</h3>');
             mainContent.append(bookElement);
+        }
+        else {
 
-            addBookClick(addBookBtn);
-            addWishlistClick(addToWishlistBtn);
-            showMoreDetails(moreDetails, book);
+            filterdBooks.forEach(function (book) {
+                var bookElement = $('<div>');
+                bookElement.addClass('book');
+                bookElement.append('<img src="' + book.image + '" alt="book image" />');
+                bookElement.append('<h3>' + book.title + '</h3>');
+                bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
+                //bookElement.append('<p>' + 'Description: ' + book.description + '</p>')
+                bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+                var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
+                bookElement.append(addToWishlistBtn);
+
+                // Add "Add Book" button
+                var addBookBtn = $('<button id="' + book.id + '" class="add-book">Add Book</button>');
+                bookElement.append(addBookBtn);
+
+                var moreDetails = $('<p class="more-details">More Details</p>');
+                bookElement.append(moreDetails);
+
+                mainContent.append(bookElement);
+
+                addBookClick(addBookBtn);
+                addWishlistClick(addToWishlistBtn);
+                showMoreDetails(moreDetails, book);
 
 
-        });
+            });
+        }
     }
 
     function searchBooks() {

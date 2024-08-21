@@ -44,22 +44,33 @@ $(document).ready(function () {
     function renderAllAuthors(authors) {
         var authorsContainer = $("#authors-container");
         authorsContainer.empty();
-        authors.forEach(function (author) {
-            var authorElement = $('<div class="author" data-author-id="' + author.id + '">');
-            var authorImage = $('<img id="' + author.name + ' "src="' + author.image + '" alt="author image" />');
-            authorElement.append(authorImage);
-            authorElement.append('<h3>' + author.name + '</h3>');
-            authorElement.append('<p>' + 'Birth Date: ' + author.birthDate + '</p>');
-            authorElement.append('<p>' + 'Death Date: ' + author.deathDate + '</p>');
-            authorElement.append('<p>' + 'Top Work: ' + author.topWork + '</p>');
-            authorElement.append('<p>' + 'Description: ' + author.description + '</p>');
-            var authorBooks = $('<p class="author-books">' + 'Books ' + '</p>');
-            authorElement.append(authorBooks);
-            authorsContainer.append(authorElement);
 
-            addAuthorClickHandlers(authorBooks, author.id); // Add click handlers after rendering authors
-            goWikipediaLink(authorImage,author.name);
-        });
+        if (authors.length === 0) {
+            var didntfind = $('<div class="didnt-find">');
+            didntfind.append('<h2>We are sorry, we could not find any author that match your search.</h2>');
+            didntfind.append('<h3> Please try again with a different search...</h3>');
+            authorsContainer.append(didntfind);
+
+
+        }
+        else {
+            authors.forEach(function (author) {
+                var authorElement = $('<div class="author" data-author-id="' + author.id + '">');
+                var authorImage = $('<img id="' + author.name + ' "src="' + author.image + '" alt="author image" />');
+                authorElement.append(authorImage);
+                authorElement.append('<h3>' + author.name + '</h3>');
+                authorElement.append('<p>' + 'Birth Date: ' + author.birthDate + '</p>');
+                authorElement.append('<p>' + 'Death Date: ' + author.deathDate + '</p>');
+                authorElement.append('<p>' + 'Top Work: ' + author.topWork + '</p>');
+                authorElement.append('<p>' + 'Description: ' + author.description + '</p>');
+                var authorBooks = $('<p class="author-books">' + 'Books ' + '</p>');
+                authorElement.append(authorBooks);
+                authorsContainer.append(authorElement);
+
+                addAuthorClickHandlers(authorBooks, author.id); // Add click handlers after rendering authors
+                goWikipediaLink(authorImage, author.name);
+            });
+        }
 
     }
 

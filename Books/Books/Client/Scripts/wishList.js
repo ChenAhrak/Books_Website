@@ -65,7 +65,7 @@ function renderAllBooksDisplay(books) {
     booksContainer.empty(); // נקה את התוכן הקיים לפני הוספת ספרים חדשים
 
     if (books.length === 0) {
-        booksContainer.append('<p>No books available in the "want to read" status.</p>');
+        booksContainer.append('<h2>No books available in the "want to read" status.</h2>');
         return;
     }
 

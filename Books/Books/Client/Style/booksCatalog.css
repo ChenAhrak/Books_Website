@@ -100,6 +100,13 @@ h1 {
     margin: 40px;
 }
 
+h2{
+    display: flex;
+    justify-content: center;
+    margin: 40px;
+
+}
+
 #books-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
