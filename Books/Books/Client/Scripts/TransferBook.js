@@ -53,7 +53,7 @@ function renderAllBooksDisplay(books) {
     booksContainer.empty(); // Clear existing content before adding new books
 
     if (books.length === 0) {
-        booksContainer.append('<p>No books available in the "read" status.</p>');
+        booksContainer.append('<h3>No books available in the "read" status.</h3>');
         return;
     }
 

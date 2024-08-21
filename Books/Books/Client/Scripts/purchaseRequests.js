@@ -23,7 +23,7 @@ function renderPurchaseRequests(requests) {
     requestsContainer.empty();
 
     if (requests.length === 0) {
-        requestsContainer.append('<h2>No purchase requests available.</h2>');
+        requestsContainer.append('<h3>No purchase requests available.</h3>');
         return;
     }
 
