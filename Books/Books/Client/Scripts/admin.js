@@ -274,10 +274,6 @@ toggleModeCheckbox.addEventListener('change', function () {
 function renderUserBooks(response) {
     $('#userBooks').empty();
     if (response != null && response.length > 0) {
-        //const tableHead = document.createElement('thead');
-        //const tableBody = document.createElement('tbody');
-        //$('#userBooks').append(tableHead);
-        //$('#userBooks').append(tableBody);
         $('#userBooks').DataTable({
             data: response,
             searching: false,
@@ -399,8 +395,8 @@ function renderUserBooks(response) {
         });
     }
     else {
-        //$('#userLibrary').empty();
-        $('#userLibrary').append("<h3>No books in selected user's library</h3>");
+        $('#userBooks').empty().not('thead', 'tbody');
+        $('#userBooks').append("<h3>No books in selected user's library</h3>");
     }
 }
 
