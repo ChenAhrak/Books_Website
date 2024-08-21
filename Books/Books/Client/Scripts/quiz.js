@@ -5,7 +5,7 @@ import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 
 
 const apiURL = "https://localhost:7195/GetApiKey";
-const userHighScoreApiURL = "https://localhost:7195/api/Users/UpdateHighScore";
+const userHighScoreApiURL = "https://localhost:7195/api/Users";
 const booksApiURL = "https://localhost:7195/api/Books";
 const correctImg = 'https://upload.wikimedia.org/wikipedia/commons/7/73/Flat_tick_icon.svg';
 const incorrectImg = 'https://upload.wikimedia.org/wikipedia/commons/6/69/X_Icon_or_Close_Icon.svg';
@@ -18,6 +18,8 @@ var highScore;
 var user = JSON.parse(sessionStorage.getItem('user'));
 var playerScore = document.getElementById("gameScore");
 var isQuizChangeListenerAttached = false;
+var modal = $('#scoresModal');
+var span = $('.close');
 
 $('#gameScore').hide();
 $('#finishQuiz').hide();
@@ -54,7 +56,7 @@ $(document).ready(async function () {
     }
 
     function getUserHighScore() {
-        ajaxCall("GET", `${userHighScoreApiURL}/${user.id}`, `${gameScore}`, getUserHighScoreSCB, getUserHighScoreECB);
+        ajaxCall("GET", `${userHighScoreApiURL}/GetUserHighScore/${user.id}`, `${gameScore}`, getUserHighScoreSCB, getUserHighScoreECB);
     }
 
     function getUserHighScoreSCB(result) {
@@ -303,7 +305,6 @@ $(document).ready(async function () {
         }
 
         startBtn.addEventListener('click', (event) => {
-          
             $('#startGame').hide();
             $('#gameScore').show();
             $('#quiz').show();
@@ -312,7 +313,6 @@ $(document).ready(async function () {
         });
     }
     $('#quiz').hide();
-
 
 });
 
@@ -366,14 +366,13 @@ const gameScoreText = document.getElementById("gameScore");
 console.log(gameScoreText.textContent);
 
 var finishGameBtn = document.getElementById("finishGame");
-
 finishGameBtn.addEventListener('click', (event) => {
     $('#startGame').show();
     $('#gameScore').hide();
     $('#quiz').empty();
     $('#quiz').hide();
     $('#finishQuiz').hide();
-    updateUserHighScore();
+    updateUserHighScore(gameScore);
     console.log("high score:" + highScore);
     restartScore(gameScore);
     
@@ -387,14 +386,18 @@ function restartScore(gameScore) {
 }
 
 // add modal with 2 cases
-function updateUserHighScore() {
+function updateUserHighScore(gameScore) {
     if (highScore < gameScore) {
         sendUserHighScore();
+        gameEndedHighScore(user.userName,gameScore);
+    }
+    else {
+        gameEndedLowScore(user.userName, gameScore);
     }
 }
 
 function sendUserHighScore() {
-    ajaxCall("PUT", `${userHighScoreApiURL}/${user.id}`, `${gameScore}`, sendUserHighScoreSCB, sendUserHighScoreECB);
+    ajaxCall("PUT", `${userHighScoreApiURL}/UpdateHighScore/${user.id}`, `${gameScore}`, sendUserHighScoreSCB, sendUserHighScoreECB);
 }
 
 function sendUserHighScoreSCB(result) {
@@ -403,6 +406,40 @@ function sendUserHighScoreSCB(result) {
 
 function sendUserHighScoreECB(err) {
     console.log(err);
+}
+
+function gameEndedHighScore(userName, highScore) {
+    var modalContent = $('#modal-content');
+    modalContent.children().not('#closeModal').remove()
+
+    // Create and append the title
+    var title = $('<h2>').text('Game Over! New High Score!');
+    modalContent.append(title);
+
+    // Create and append the user's name
+    var userNameElement = $('<p>').text('User: ' + userName);
+    modalContent.append(userNameElement);
+
+    var highScoreElement = $('<p>').text('High Score: ' + highScore + '');
+    modalContent.append(highScoreElement);
+    $('#scoresModal').show();
+}
+
+function gameEndedLowScore(userName, gameScore) {
+    var modalContent = $('#modal-content');
+    modalContent.children().not('#closeModal').remove()
+
+    // Create and append the title
+    var title = $('<h2>').text('Game Over!');
+    modalContent.append(title);
+
+    // Create and append the user's name
+    var userNameElement = $('<p>').text('User: ' + userName);
+    modalContent.append(userNameElement);
+
+    var gameScoreElement = $('<p>').text('Score: ' + gameScore);
+    modalContent.append(gameScoreElement);
+    $('#scoresModal').show();
 }
 
 function createQuiz(question, options) {
@@ -459,3 +496,60 @@ function parseTextToJSON(text) {
 
     return jsonOutput;
 }
+
+
+$('#highScores').on('click', function (event) {
+    getTopHighScores();
+    $('#modal-content').css('display', 'block');
+});
+
+function getTopHighScores() {
+    ajaxCall("GET", `${userHighScoreApiURL}/GetTopHighScores`, `${gameScore}`, getTopHighScoresSCB, getTopHighScoresECB);
+}
+
+function getTopHighScoresSCB(result) {
+    renderHighScoresModal(result);
+    console.log(result);
+}
+
+function getTopHighScoresECB(err) {
+    console.log(err);
+}
+
+function renderHighScoresModal(highScores) {
+    var modalContent = $('#modal-content');
+    modalContent.children().not('#closeModal').remove()
+
+    // Creating the table structure
+    var table = $('<table>').addClass('highScoreTable');
+    var tableHeader = $('<tr>')
+        .append($('<th>').text('User'))
+        .append($('<th>').text('High Score'));
+    table.append(tableHeader);
+
+    // Populate the table with high scores
+    highScores.forEach(function (score) {
+        var tableRow = $('<tr>')
+            .append($('<td>').text(score.userName))
+            .append($('<td>').text(score.highScore));
+        table.append(tableRow);
+    });
+
+    // Append the table to the modal content
+    modalContent.append(table);
+
+    // Show the modal
+    $('#scoresModal').show();
+}
+
+$('#closeModal').on('click', function () {
+    $('#scoresModal').hide();
+    $('#modal-content').children().not('#closeModal').remove();
+});
+
+$(window).on('click', function (event) {
+    if (event.target === $('#scoresModal')[0]) {
+        $('#scoresModal').hide();
+        $('#modal-content').children().not('#closeModal').remove();
+    }
+});

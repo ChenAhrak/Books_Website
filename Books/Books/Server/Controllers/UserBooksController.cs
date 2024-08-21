@@ -119,7 +119,6 @@ namespace Books.Server.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
-       
         // עדכון סטטוס הספר בספריית המשתמש
         [HttpPut("update-status")]
         public IActionResult UpdateBookStatus([FromQuery] int userID, [FromQuery] string bookID, [FromQuery] string newStatus)
@@ -175,7 +174,7 @@ namespace Books.Server.Controllers
             {
                 return Ok(new { message = "Purchase processed successfully." });
             }
-            return StatusCode(500, "An error occurred while processing the purchase.");
+            return StatusCode(500, "Already have this book.");
         }
     }
 }

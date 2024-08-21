@@ -102,6 +102,9 @@ function addBookToPurchased(userID, bookId) {
             alert("Book added to purchased list.");
             
             $(`button[data-book-id="${bookId}"]`).addClass('added').text('Added'); // Update button state on success
+            setTimeout(function () {
+                location.reload();
+            }, 500);
         },
         function (error) {
             console.error("Error:", error);

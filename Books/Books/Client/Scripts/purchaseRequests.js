@@ -91,7 +91,7 @@ function manageBookPurchase(buyerId, sellerId, bookId, requestId) {
             },
             (error) => {
                 console.error('Error processing book purchase:', error);
-                alert('You already Have this book'); 
+                alert('Already ave this book'); 
             }
         );
     });
