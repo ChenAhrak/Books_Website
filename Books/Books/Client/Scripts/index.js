@@ -83,7 +83,7 @@ $(document).ready(function () {
             bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
             bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
-            // Add "Add to Wishlist" button
+            // "Add to Wishlist" button
             var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
             bookElement.append(addToWishlistBtn);
 
@@ -344,7 +344,7 @@ $(document).ready(function () {
             },
             function (error) {
                 console.error("Error:", error);
-                alert("Book was already added or an error occurred");
+                alert("Book was already added!");
             }
         );
     }

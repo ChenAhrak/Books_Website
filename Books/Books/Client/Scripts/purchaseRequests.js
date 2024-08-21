@@ -90,8 +90,8 @@ function manageBookPurchase(buyerId, sellerId, bookId, requestId) {
                 removeRequestFromList(requestId);
             },
             (error) => {
-                console.error('Error processing book purchase:', error);
-                alert('Already ave this book'); 
+                console.error(error);
+                
             }
         );
     });

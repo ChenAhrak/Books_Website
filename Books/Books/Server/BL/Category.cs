@@ -31,7 +31,19 @@ namespace Books.Server.BL
                 return false;
             }
         }
-
+        public List<object> GetRecommendedBooksByCategory(int userId)
+        {
+            DBservices db = new DBservices();
+            try
+            {
+                return db.GetRecommendedBooksByCategory(userId);
+                
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public List<Category> ReadAllCategories()
         {
 
