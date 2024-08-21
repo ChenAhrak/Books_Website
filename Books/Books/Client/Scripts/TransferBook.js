@@ -57,7 +57,61 @@ function renderAllBooksDisplay(books) {
     });
 
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////need to fix
+// Request to purchase a book
+function requestBookPurchase(button) {
+    var buyerId = user.id; // user.id holds the current logged-in user's ID
+    var sellerId = button.getAttribute('data-seller-id');
+    var bookId = button.getAttribute('data-book-id');
 
+    if (!buyerId || !sellerId || !bookId) {
+        alert("All fields are required.");
+        return;
+    }
+
+    // Check if the user already has the book in their library
+    hasBookInLibrary(buyerId, bookId, function (hasBook) {
+        if (hasBook) {
+            alert("You already own this book and cannot request to purchase it.");
+        } else {
+            // Proceed with sending the purchase request
+            const api = `https://localhost:7195/api/UserBooks/addBookPurchaseRequest?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`;
+            sendPurchaseRequest(api);
+        }
+    });
+}
+
+// בודק אם למשתמש שמבקש לרכוש ספר ממשתמש אחר כבר יש את הספר הזה
+function hasBookInLibrary(userId, bookId, callback) {
+    const checkApi = `https://localhost:7195/api/UserBooks/checkBookInLibrary?userId=${userId}&bookId=${bookId}`;
+
+    fetch(checkApi)
+        .then(response => response.json())
+        .then(data => {
+            // data.hasBook will be true if the book is in the user's library, otherwise false
+            callback(data.hasBook);
+        })
+        .catch(error => {
+            console.error("Error checking book in library:", error);
+            callback(false); // Assume the book is not in the library if there's an error
+        });
+}
+
+function sendPurchaseRequest(api) {
+    ajaxCall('POST', api, null, handleSuccess, handleError);
+}
+
+function handleSuccess(response) {
+    console.log('Purchase request added successfully:', response);
+    alert('Your purchase request has been sent!');
+
+}
+
+function handleError(error) {
+    console.error('Error sending purchase request:', error);
+    alert('An error occurred while sending the purchase request.');
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function sendMailToBuyer(button) {
     var buyerId = user.id; // user.id holds the current logged-in user's ID
     var bookName = button.getAttribute('data-book-title');
@@ -84,10 +138,6 @@ function handleErrorMail(error) {
     console.log('Error sending mail:', error);
  
 }
-
-
-
-
 
 // Request to purchase a book
 function requestBookPurchase(button) {

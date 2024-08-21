@@ -83,7 +83,7 @@ $(document).ready(function () {
             bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');
             bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
 
-            // Add "Add to Wishlist" button
+            // "Add to Wishlist" button
             var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
             bookElement.append(addToWishlistBtn);
 
@@ -328,6 +328,61 @@ $(document).ready(function () {
         // Existing functions and code...
 
     });
+    // Fetch recommended books by top categories for the user
+    //async function getRecommendedBooksByCategory(userId) {
+    //    await ajaxCall("GET", `${categoriesApiURL}/recommend/${userId.id}`, "", getRecommendedBooksByCategorySCB, getRecommendedBooksByCategoryECB);
+    //}
+
+    //function getRecommendedBooksByCategorySCB(result) {
+    //    console.log("Recommended Books:", result);
+    //    renderRecommendedBooks(result);
+    //}
+
+    //function getRecommendedBooksByCategoryECB(err) {
+    //    console.error("Error fetching recommended books:", err);
+    //    alert("An error occurred while fetching recommended books.");
+    //}
+
+    //function renderRecommendedBooks(books) {
+    //    var recommendedBooksContainer = $('#recommended-books-container');
+    //    recommendedBooksContainer.empty(); // Clear existing content
+
+    //    if (books.length === 0) {
+    //        recommendedBooksContainer.append('<p>No recommended books available at the moment.</p>');
+    //        return;
+    //    }
+
+    //    var table = $('<table>');
+    //    var tableHeader = $('<tr>');
+
+    //    books.forEach(book => {
+    //        var bookElement = $('<td>');
+    //        bookElement.append(`<img src="${book.smallThumbnail}" alt="book image" />`);
+    //        bookElement.append('<h3>' + book.title + '</h3>');
+    //        bookElement.append('<p>' + 'By: ' + book.authorName + '</p>');
+    //        bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+    //        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
+    //        bookElement.append(addToWishlistBtn);
+
+    //        // Add "Add Book" button
+    //        var addBookBtn = $('<button id="' + book.id + '" class="add-book">Buy Book</button>');
+    //        bookElement.append(addBookBtn);
+
+    //        var moreDetails = $('<p class="more-details">More Details</p>');
+    //        bookElement.append(moreDetails);
+
+    //        tableHeader.append(bookElement);
+
+    //        addBookClick(addBookBtn);
+    //        addWishlistClick(addToWishlistBtn);
+    //        showMoreDetails(moreDetails, book);
+
+    //    });
+
+    //    table.append(tableHeader);
+    //    recommendedBooksContainer.append(table);
+    //}
+    //getRecommendedBooksByCategory(user.id);
     // Function to add a book to the wishlist
     function addBookToWishlist(userId, bookId) {
         const api = `https://localhost:7195/api/UserBooks/addBookToWishlist/${userId}`;
@@ -343,7 +398,7 @@ $(document).ready(function () {
             },
             function (error) {
                 console.error("Error:", error);
-                alert("Book was already added");
+                alert("Book was already added!");
             }
         );
     }
@@ -422,7 +477,6 @@ $(document).ready(function () {
                 console.log("Success:", response);
                 alert("The book added  to purchased list");
                 // Update UI on success, e.g., change button state
-                //$(`button[id="${bookId}"]`).addClass('added').text('Added');
                 
             },
             function (error) {
@@ -709,9 +763,9 @@ $(document).ready(function () {
     });
 
 
-    $('#quizBtn').click(function () {
-        window.location.href = "quiz.html";
-    });
+    //$('#quizBtn').click(function () {
+    //    window.location.href = "quiz.html";
+    //});
     // Check user status and display appropriate buttons
     if (user && !user.isAdmin) {
         $('#logoutBtn').show();
