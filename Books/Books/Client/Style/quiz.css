@@ -18,6 +18,79 @@ body.dark-mode {
     --border-background-color: #42B2D7;
 }
 
+@media (max-width: 425px) {
+    body {
+        font-size: 12px;
+    }
+
+    button {
+        padding: 0.1em;
+    }
+
+    #quiz {
+        width: 80%;
+        font-size: 0.9em;
+        margin: 0.5em auto;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    #modal-content {
+        width: 90%;
+    }
+}
+
+@media (min-width: 426px) and (max-width: 768px) {
+    body {
+        font-size: 10px;
+    }
+
+    button {
+        padding: 0.2em;
+    }
+
+    #quiz {
+        width: 30%;
+        font-size: 1em;
+        padding: 0.4em;
+        margin: 0.6em;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    #modal-content {
+        width: 80%;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    body {
+        font-size: 16px;
+    }
+
+    button {
+        padding: 0.3em;
+    }
+
+    #quiz {
+        width: 60%;
+        font-size: 1.1em;
+        margin: 0.7em auto;
+    }
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+    #modal-content {
+        width: 60%;
+    }
+}
+
 @media (min-width: 768px) {
     body {
         font-size: 10px;
@@ -31,13 +104,15 @@ body.dark-mode {
         width: 40%;
         font-size: 1em;
         padding: 0.5em;
-        margin: 0.7em;
+        margin: 0.8em;
     }
 
     h1 {
         font-size: 2.5em;
     }
 }
+
+
 @media (max-width: 425px) {
     body {
         font-size: 12px;
@@ -197,9 +272,9 @@ h1 {
     transform: translateX(-50%);
 }
 
-#quiz > p{
+/*#quiz > p{
     font-weight: bold;
-}
+}*/
 
 #startGame {
     position: absolute;
