@@ -1,4 +1,25 @@
-﻿
+﻿:root {
+    --background-color: white;
+    --text-color: black;
+    --td-background-color: #f9f9f9;
+    --button-background-color: #3498db;
+    --modal--background-color: white;
+}
+
+/* Dark mode overrides */
+body.dark-mode {
+    --background-color: black;
+    --text-color: white;
+    --td-background-color: #6f6f6f;
+    --button-background-color: #37474f;
+    --modal--background-color: darkgrey;
+}
+
+body{
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
 nav {
     display: flex;
     justify-content: center;
@@ -11,8 +32,8 @@ nav {
     }
 
 button {
-    background-color: var(--button-background-color);
-    color: black;
+    background-color: var(--background-color);
+    color: var(--text-color);
     padding: 10px;
     border: none;
     border-radius: 4px; /* Add rounded corners to buttons */
@@ -40,7 +61,7 @@ label {
     right: 0;
     margin: 20px;
     display: block;
-    background: lightgray;
+    /*background: lightgray;*/
     border-radius: 20px;
     box-shadow: inset 0px 2px 8px rgba(0,0,0,0.4), inset 0px -2px 8px rgba(255,255,255,0.4);
     transition: 0.3s;
