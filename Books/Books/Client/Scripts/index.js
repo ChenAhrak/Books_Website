@@ -279,7 +279,6 @@ $(document).ready(function () {
 
         function getTop5MostPurchasedBooksECB(err) {
             console.error("Error fetching top 5 most purchased books:", err);
-            alert("An error occurred while fetching the top 5 most purchased books.");
         }
 
         function renderTop5MostPurchasedBooks(books) {
@@ -344,7 +343,7 @@ $(document).ready(function () {
             },
             function (error) {
                 console.error("Error:", error);
-                alert("Book was already added or an error occurred");
+                alert("Book was already added");
             }
         );
     }
@@ -702,6 +701,11 @@ $(document).ready(function () {
     const mypurchaserequestsBtn = document.getElementById("mypurchaserequestsBtn");
     $(mypurchaserequestsBtn).click(function () {
         window.location.href = "purchaseRequests.html";
+    });
+
+    const additionsBtn = document.getElementById("additionsBtn");
+    $(additionsBtn).click(function () {
+        window.location.href = "additions.html";
     });
 
 
