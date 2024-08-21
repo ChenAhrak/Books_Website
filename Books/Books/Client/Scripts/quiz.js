@@ -4,9 +4,9 @@ import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 
 
 
-const apiURL = "https://localhost:7195/GetApiKey";
-const userHighScoreApiURL = "https://localhost:7195/api/Users";
-const booksApiURL = "https://localhost:7195/api/Books";
+const apiURL = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/GetApiKey";
+const userHighScoreApiURL = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Users";
+const booksApiURL = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Books";
 const correctImg = 'https://upload.wikimedia.org/wikipedia/commons/7/73/Flat_tick_icon.svg';
 const incorrectImg = 'https://upload.wikimedia.org/wikipedia/commons/6/69/X_Icon_or_Close_Icon.svg';
 var API_KEY;

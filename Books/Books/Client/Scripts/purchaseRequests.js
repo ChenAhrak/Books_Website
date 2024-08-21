@@ -1,5 +1,5 @@
-﻿const apiMailUrl = "https://localhost:7195/api/Mails";
-const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
+﻿const apiMailUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Mails";
+const userBooksApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/UserBooks";
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 var requestList = [];

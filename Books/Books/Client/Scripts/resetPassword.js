@@ -1,4 +1,4 @@
-apiUsersUrl = "https://localhost:7195/api/Users";
+apiUsersUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Users";
 
 
 $(document).ready(function () {

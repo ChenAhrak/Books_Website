@@ -1,6 +1,6 @@
-const apiMailUrl = "https://localhost:7195/api/Mails";
-const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
-const booksApiUrl = "https://localhost:7195/api/Books";
+const apiMailUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Mails";
+const userBooksApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/UserBooks";
+const booksApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Books";
 var booksInLibrary = [];
 
 // Fetch books with 'read' status for all users except the current user
@@ -105,7 +105,7 @@ function requestBookPurchase(button) {
             alert("You already own this book and cannot request to purchase it.");
         } else {
             // Proceed with sending the purchase request
-            const api = `https://localhost:7195/api/UserBooks/addBookPurchaseRequest?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`;
+            const api = `https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/UserBooks/addBookPurchaseRequest?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`;
             sendPurchaseRequest(api);
         }
     });
@@ -113,7 +113,7 @@ function requestBookPurchase(button) {
 
 // בודק אם למשתמש שמבקש לרכוש ספר ממשתמש אחר כבר יש את הספר הזה
 function hasBookInLibrary(userId, bookId, callback) {
-    const checkApi = `https://localhost:7195/api/UserBooks/checkBookInLibrary?userId=${userId}&bookId=${bookId}`;
+    const checkApi = `https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/UserBooks/checkBookInLibrary?userId=${userId}&bookId=${bookId}`;
 
     fetch(checkApi)
         .then(response => response.json())

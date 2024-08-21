@@ -1,4 +1,4 @@
-﻿const authorsApiUrl = "https://localhost:7195/api/Authors";
+﻿const authorsApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Authors";
 const allAuthors = [];
 var user = JSON.parse(sessionStorage.getItem('user'));
 var modal = $('#authorsModal');

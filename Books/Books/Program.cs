@@ -44,20 +44,21 @@ builder.Services.AddScoped<IMailService, MailService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (true)
 {
-    app.UseDeveloperExceptionPage(); // Add this line
     app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    });
+    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI(options =>
+    //{
+    //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    //});
 }
 
 app.UseHttpsRedirection();
 
 // Use CORS policy
-app.UseCors("AllowAllOrigins");
+app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseAuthorization();
 

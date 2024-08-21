@@ -1,5 +1,5 @@
-const apiUsersUrl = "https://localhost:7195/api/Users";
-const apiMailUrl = "https://localhost:7195/api/Mails";
+const apiUsersUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Users";
+const apiMailUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Mails";
 var user = JSON.parse(sessionStorage.getItem('user'));
 
 $(document).ready(function () {
@@ -20,7 +20,7 @@ $(document).ready(function () {
             EmailToId: email,
             EmailToName: '',
             EmailSubject: 'PLC Reset Password',
-            EmailBody: 'Click on the link to reset your password: http://localhost:61543/Client/Pages/resetPassword.html'
+            EmailBody: 'Click on the link to reset your password: https://proj.ruppin.ac.il/cgroup85/test2/tar1/Client/Pages/resetPassword.html'
 
         };
 

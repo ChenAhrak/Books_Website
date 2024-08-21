@@ -1,4 +1,4 @@
-﻿const userBooksApiUrl = 'https://localhost:7195/api/UserBooks';
+﻿const userBooksApiUrl = 'https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/UserBooks';
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 

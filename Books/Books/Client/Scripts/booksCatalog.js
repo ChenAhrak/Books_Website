@@ -1,5 +1,5 @@
-﻿const booksApiURL = "https://localhost:7195/api/Books";
-const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
+﻿const booksApiURL = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Books";
+const userBooksApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/UserBooks";
 const allBooks = [];
 var user = JSON.parse(sessionStorage.getItem('user'));
 var modal = $('#booksModal');

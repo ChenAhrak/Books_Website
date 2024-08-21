@@ -1,8 +1,8 @@
 // JavaScript source code
-const booksApiUrl = "https://localhost:7195/api/Books";
-const authorsApiUrl = "https://localhost:7195/api/Authors";
-const usersApiUrl = "https://localhost:7195/api/Users";
-const userBooksApiUrl = "https://localhost:7195/api/UserBooks";
+const booksApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Books";
+const authorsApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Authors";
+const usersApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/Users";
+const userBooksApiUrl = "https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/UserBooks";
 
 var user = JSON.parse(sessionStorage.getItem('user'));
 var homeBtn = document.getElementById("homeBtn");
