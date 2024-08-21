@@ -32,7 +32,6 @@ nav {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--background-color);
     color: var(--text-color);
     padding: 10px 20px;
 }
@@ -69,9 +68,6 @@ nav {
                 text-decoration: underline;
             }
 
-
-
-
 #homeBtn {
     font-weight: bold;
     font-size: 2em;
@@ -92,6 +88,10 @@ button:hover {
         padding: 0.1em;
     }
 
+    nav {
+        font-size: 12px;
+    }
+
     #quiz {
         width: 80%;
         font-size: 0.9em;
@@ -99,7 +99,7 @@ button:hover {
     }
 
     h1 {
-        font-size: 1.5em;
+        font-size: 1em;
     }
 
     #modal-content {
@@ -134,7 +134,7 @@ button:hover {
 
 @media (min-width: 769px) and (max-width: 1024px) {
     body {
-        font-size: 16px;
+        font-size: 0.9em;
     }
 
     button {
@@ -143,7 +143,7 @@ button:hover {
 
     #quiz {
         width: 60%;
-        font-size: 1.1em;
+        font-size: 1em;
         margin: 0.7em auto;
     }
 
@@ -197,22 +197,6 @@ button:hover {
     }
 }
 
-
-/*#homeBtn {
-    position:absolute;
-    top: 0;
-    left: 0;
-    margin: 20px;
-    margin-right: 40px;
-}
-
-#highScores {
-    position: absolute;
-    top: 0;
-    left: 100px;
-    margin: 20px;
-}*/
-
 body {
     background-color: var(--background-color);
     color: var(--text-color);
@@ -224,7 +208,7 @@ body {
     background-image: url('../Pics/questionmarks_design-removebg-preview.png'); /* Replace with your image path */
     background-repeat: repeat;
     height: 100%; /* Full height of the viewport */
-    width: 100%; /* Full width of the page */
+    width: 97%; /* Full width of the page */
     background-position: center;
 }
 nav {
@@ -252,7 +236,7 @@ nav {
     margin: 20px;
 }
 
-nav > label {
+nav > .nav-links > label {
     width: 50px;
     height: 25px;
     position: absolute;
@@ -266,36 +250,36 @@ nav > label {
     transition: 0.3s;
 }
 
-    nav > label:after {
-        content: "";
-        width: 18px;
-        height: 18px;
-        position: absolute;
-        top: 4px;
-        left: 4px;
-        background: linear-gradient(180deg, #ffcc89, #d8860b);
-        border-radius: 18px;
-        box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
-        transition: 0.3s;
-    }
+nav > .nav-links > label:after {
+    content: "";
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: linear-gradient(180deg, #ffcc89, #d8860b);
+    border-radius: 18px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
 
-nav > .toggleBox {
+nav > .nav-links > .toggleBox {
     width: 0;
     height: 0;
     visibility: hidden;
 }
 
-    nav > .toggleBox:checked + label {
-        background: #242424;
-    }
+nav > .nav-links > .toggleBox:checked + label {
+    background: #242424;
+}
 
-        nav > .toggleBox:checked + label:after {
-            left: 46px;
-            transform: translate(-100%);
-            background: linear-gradient(180deg, #777, #3a3a3a);
-        }
+nav > .nav-links > .toggleBox:checked + label:after {
+    left: 46px;
+    transform: translate(-100%);
+    background: linear-gradient(180deg, #777, #3a3a3a);
+}
 
-nav > label:active:after {
+nav > .nav-links > label:active:after {
     width: 26px;
 }
 
