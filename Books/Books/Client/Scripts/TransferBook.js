@@ -69,13 +69,10 @@ function sendMailToBuyer(button) {
         emailToId: sellerEmail,
         emailToName: sellerName,
         emailSubject: 'Purchase Request',
-        emailBody: `Hello ${sellerName},\n\nYou have received a purchase request from ${user.userName} The book ${bookName} . Please check your purchase requests to approve or reject the request.\n\nRegards,\nBookstore Team`
+        emailBody: `Hello ${sellerName},\n\nYou have received a purchase request from ${user.userName} to buy the book ${bookName}. Please check your purchase requests to approve or reject the request.\n\nRegards,\nBookstore Team`
 
     }
-    console
     ajaxCall('Post', apiMailUrl, JSON.stringify(mailToSend), handleSuccessMail, handleErrorMail);
-
-
 }
 
 function handleSuccessMail(response) {
