@@ -315,28 +315,22 @@ $(document).ready(function () {
 
             var table = $('<table>');
             var tableHeader = $('<tr>');
-
+            console.log(books);
             books.forEach(book => {
                 var bookElement = $('<td>');
                 bookElement.append(`<img src="${book.smallThumbnail}" alt="book image" />`);
                 bookElement.append('<h3>' + book.title + '</h3>');
                 bookElement.append('<p>' + 'By: ' + book.authorName + '</p>');
                 bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-                var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
+                var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.bookId + '">🤍</button>');
                 bookElement.append(addToWishlistBtn);
 
                 // Add "Add Book" button
-                var addBookBtn = $('<button id="' + book.id + '" class="add-book">Buy Book</button>');
+                var addBookBtn = $('<button id="' + book.bookId + '" class="add-book">Buy Book</button>');
                 bookElement.append(addBookBtn);
-
-                var moreDetails = $('<p class="more-details">More Details</p>');
-                bookElement.append(moreDetails);
-
                 tableHeader.append(bookElement);
-
                 addBookClick(addBookBtn);
                 addWishlistClick(addToWishlistBtn);
-                showMoreDetails(moreDetails, book);
 
             });
 
@@ -750,6 +744,8 @@ $(document).ready(function () {
         $('#wishlistBtn').show(); // Show wishlist button for regular users
         $('#mypurchaserequestsBtn').show();
         $('#quizBtn').show();
+        $('#recommendedBooksHeader')
+        
     } else if (user && user.isAdmin) {
         $('#logoutBtn').show();
         $('#loginBtn').hide();
@@ -760,6 +756,9 @@ $(document).ready(function () {
         $('#wishlistBtn').hide(); // Hide wishlist button for admins
         $('#mypurchaserequestsBtn').hide();
         $('#quizBtn').hide();
+        $('#recommendedBooksHeader').hide();
+
+
     } else {
         $('#logoutBtn').hide();
         $('#loginBtn').show();
@@ -770,6 +769,8 @@ $(document).ready(function () {
         $('#wishlistBtn').hide(); // Hide wishlist button for not logged-in users
         $('#mypurchaserequestsBtn').hide();
         $('#quizBtn').hide();
+        $('#recommendedBooksHeader').hide();
+
     }
 
     // Event listener to toggle the theme and save it in localStorage
