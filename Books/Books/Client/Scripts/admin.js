@@ -401,7 +401,7 @@ function renderUserBooks(response) {
 }
 
 function getUserLibrary(userId) {
-    ajaxCall('GET', userBooksApiUrl + `/getUserLibrary/${userId}`, "", getUserLibrarySCBF, getUserLibraryECBF);
+    ajaxCall('GET', userBooksApiUrl + `/getUserLibrary?userId=${userId}`, "", getUserLibrarySCBF, getUserLibraryECBF);
 }
 
 function getUserLibrarySCBF(response) {
