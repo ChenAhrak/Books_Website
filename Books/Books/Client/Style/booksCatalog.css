@@ -33,6 +33,13 @@ nav {
         margin: 20px;
     }
 
+#homeBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 20px;
+}
+
 #toggle-mode {
     position: absolute;
     top: 0;
@@ -192,14 +199,20 @@ footer {
     z-index: 1;
 }
 
+.bookModal {
+    height: 100%;
+    width: 100%;
+}
+
+
 #modal-content {
-    background-color: var(--td-background-color);
+    background-color: antiquewhite;
     margin: auto;
     margin-top: 70px;
     padding: 20px;
     border: 1px solid #888;
-    max-width: 80%;
-    max-height: 80%;
+    height: 80%;
+    width: 40%;
     overflow-y: auto;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     animation-name: modalopen;
@@ -229,29 +242,35 @@ footer {
 
 @keyframes modalopen {
     from {
-        opacity: 0;
+        top: 300px;
+        opacity: 0
     }
 
     to {
-        opacity: 1;
+        top: 0;
+        opacity: 1
     }
 }
 
 /* Adjust item sizes in modal */
 #modal-content img {
-    width: 40%;
-    height: auto;
-    margin-bottom: 10px;
+    width: 120px;
+    height: 220px;
+    border-radius: 10px;
+    cursor: default;
+    display: block;
+    margin: auto;
 }
 
-#modal-content h2 {
-    font-size: 1.2em;
+#modal-content h3, h5 {
     margin-bottom: 10px;
+    text-align: center;
 }
 
 #modal-content p {
     font-size: 0.9em;
     margin-bottom: 10px;
+    text-align: left;
 }
 
 #modal-content a {

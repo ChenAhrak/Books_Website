@@ -189,10 +189,11 @@ input {
     }
 
 footer {
-    margin-top: auto;
     text-align: center;
     display: flex;
     justify-content: center;
+    margin-top:200px;
+    
 }
 
 .wishlistButton {
@@ -214,6 +215,16 @@ footer {
 
 .more-details:hover{
     color: #3498db;
+}
+
+#allBooksBtn{
+    position: absolute;
+    right: 0;
+}
+
+#allEBooksBtn{
+    position: absolute; 
+    right: 0;
 }
 
 #booksModal {
