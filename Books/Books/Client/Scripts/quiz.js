@@ -344,7 +344,8 @@ function revealAnswer(answer, selectedAnswer, explanation, selection) {
         selection.classList.add('incorrectAnswer');
         console.log("Incorrect, 0 points awarded");
     }
-    next.textContent = "Next question";
+    //next.textContent = "&lt;";
+    next.textContent = ">";
     next.id = "nextQuestion";
     resultImg.src = image;
     quizExplanation.id = "quizExp";
