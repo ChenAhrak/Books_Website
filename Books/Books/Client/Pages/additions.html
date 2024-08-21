@@ -13,25 +13,28 @@
     <script src="../Scripts/ajaxCalls.js"></script>
     <link rel="stylesheet" type="text/css" href="../Style/additions.css">
 </head>
-<body dir="rtl">
+<body>
     <nav>
-        <button id="homeBtn">Home</button>
-        <button id="loginBtn">Log in</button>
-        <button id="logoutBtn">Log out</button>
-        <button id="registerBtn">Sign up</button>
-        <button id="authorsBtn">Authors</button>
-        <button id="myBooksBtn">My Books</button>
-        <button id="wishlistBtn">🤍</button>
-        <button id="purchaseBooksBtn">Purchase Books from Users</button>
-        <button id="mypurchaserequestsBtn">My Purchase Requests</button>
-        <button id="quizBtn">Quiz Game</button>
-        <button id="adminBtn">Admin</button>
-        <input class="toggleBox" type="checkbox" id="toggle-mode" />
-        <label for="toggle-mode"></label>
+        <div class="nav-links">
+
+            <button id="homeBtn">PLC Book</button>
+            <button id="loginBtn">Log in</button>
+            <button id="logoutBtn">Log out</button>
+            <button id="registerBtn">Sign up</button>
+            <button id="authorsBtn">Authors</button>
+            <button id="myBooksBtn">My Books</button>
+            <button id="wishlistBtn">🤍</button>
+            <button id="purchaseBooksBtn">Purchase Books from Users</button>
+            <button id="mypurchaserequestsBtn">My Purchase Requests</button>
+            <button id="quizBtn">Quiz Game</button>
+            <button id="adminBtn">Admin</button>
+            <input class="toggleBox" type="checkbox" id="toggle-mode" />
+            <label for="toggle-mode"></label>
+            </div>
     </nav>
     <h1>Our Additions</h1>
 
-    <ul>
+    <ul dir="rtl">
         <h3>שכחתי סיסמא: </h3>
         <li>
             כאשר משתמש רשום שכח את הסיסמא האישית שלו, יצרנו את האפשרות לחדש את הסיסמא בעזרת המייל של המשתמש הקיים במסד נתונים שלנו.
@@ -60,7 +63,16 @@
         </li>
         <h3>הוספת ניקוד במשחק:</h3>
         <li>
+            לכל משתמש נשמר ניקוד במהלך המשחק, בכל שלב ניתן ללחוץ על כפתור "HIGHSCORE" ולראות את 5 השחקנים עם הניקוד הגבוהה ביותר
+            הניקוד מופיע על "MODAL" ובו טבלת ניקוד עם שמות השחקנים וניקוד הגבוהה ביותר שלהם.
+            <br />
+            בלחיצה על כפתור סיום משחק, מופיע שם משתמש והניקוד של השחקן, אם השחקן שיפר את הניקוד הכי גובה - תופיע הודעה מתאימה במודל.
 
+        </li>
+        <h3>אפשרות ניהול משתמשים בממשק מנהל:</h3>
+        <li>
+            בממשק המנהל ניתן לשנות פרטי משתמשים כמו: שם משתמש, כתובת מייל, סיסמא, סטטוס פעילות, סטטוס מנהל.
+            <br />חיפוש בטבלת משתמשים
         </li>
         <br />
         <h3>עוד משהו אולי?</h3>

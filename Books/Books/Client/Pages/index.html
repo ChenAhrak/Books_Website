@@ -17,6 +17,15 @@
     <nav>
         <div class="logo">PLC Books</div>
         <div class="nav-links">
+            <button id="authorsBtn">Authors</button>
+            <button id="myBooksBtn">My Books</button>
+            <button id="wishlistBtn">🤍</button>
+            <button id="purchaseBooksBtn">Purchase Books from Users</button>
+            <button id="mypurchaserequestsBtn">My Purchase Requests</button>
+            <button id="quizBtn">Quiz Game</button>
+            <button id="adminBtn">Admin</button>
+            <button id="additionsBtn">Additions</button>
+
         </div>
         <div class="nav-actions">
             <button id="loginBtn">Log in</button>
@@ -24,24 +33,17 @@
             <input class="toggleBox" type="checkbox" id="toggle-mode" />
             <label for="toggle-mode"></label>
             <button id="registerBtn">Sign up</button>
-            <button id="myBooksBtn">My Books</button>
-            <button id="wishlistBtn">🤍</button>
-            <button id="purchaseBooksBtn">Purchase Books from Users</button>
-            <button id="mypurchaserequestsBtn">My Purchase Requests</button>
-            <button id="quizBtn">Quiz Game</button>
-            <button id="adminBtn">Admin</button>
-            <button id="authorsBtn">Authors</button>
+
             <span id="userWelcome"></span>
         </div>
     </nav>
-    <br />
+   <div id="search-container">
+    <input type="text" id="search-input" name="search" placeholder="Enter Book Name / Author Name / Words In Book ">
+    <button id="searchBtn">Search</button>
+</div>
     <header>
-        <div id="search-container">
-            <input type="text" id="search-input" name="search" placeholder="Enter Book Name / Author Name / Words In Book ">
-            <button id="searchBtn">Search</button>
-        </div>
     </header>
-
+    
 
     <div id="booksModal" class="modal">
         <div id="modal-content">
@@ -55,8 +57,8 @@
         <div id="top-books-container">
             <!-- Content for the top 5 most purchased books will be added here dynamically -->
         </div>
+        <h2 id="recommendedBooksHeader">Recommended Books</h2>
         <div id="recommended-books-container">
-            <h2>Recommended Books</h2>
             <!-- Content for the recommended books by category will be added here dynamically -->
         </div>
         <h2 id="bookCatalog">Books Catalog</h2>
