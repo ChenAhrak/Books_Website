@@ -1,4 +1,6 @@
-﻿var user = JSON.parse(sessionStorage.getItem('user'));
+﻿const apiMailUrl = "https://localhost:7195/api/Mails";
+
+var user = JSON.parse(sessionStorage.getItem('user'));
 var requestList = [];
 function fetchPurchaseRequests() {
     const sellerId = user.id; // מזהה המוכר הנוכחי//משתמש מחובר 
@@ -52,6 +54,7 @@ function renderPurchaseRequests(requests) {
             approveBtn.on('click', function () {
                 var requestId = $(this).data('request-id');
                 manageBookPurchase(request.buyerId, user.id, request.bookId, requestId);
+                sendMailToBuyer(request.buyerUserName, request.bookName, request.buyerEmail, user.userName, 'Approved');
                 rejectOtherRequests(requestList, requestId, request.bookId);
             });
 
@@ -72,9 +75,30 @@ function rejectOtherRequests(requestList, requestId, bookId) {
         if (request.bookId == bookId && request.requestId != requestId) {
             updateRequestStatus(request.requestId, 'Rejected');
             removeRequestFromList(request.requestId);
+            sendMailToBuyer(request.buyerUserName, request.bookName, request.buyerEmail, user.userName,'Rejected');
         }
         
     });
+}
+
+function sendMailToBuyer(name, bookName, buyerMail, seller, status) {
+    const mailToSend = {
+        emailToId: buyerMail,
+        emailToName: name,
+        emailSubject: 'Purchase Request Status Update',
+        emailBody: `Hello ${name},\n\nYour request to purchase ${bookName} from ${seller} is ${status}.\n\nRegards,\nBookstore Team`
+    }
+    ajaxCall('Post', apiMailUrl, JSON.stringify(mailToSend), handleSuccessMail, handleErrorMail);
+}
+
+function handleSuccessMail(response) {
+    console.log('Mail sent successfully:', response);
+
+}
+
+function handleErrorMail(error) {
+    console.log('Error sending mail:', error);
+
 }
 
 function updateRequestStatus(requestId, status, callback) {
@@ -105,7 +129,7 @@ function manageBookPurchase(buyerId, sellerId, bookId, requestId) {
             },
             (error) => {
                 console.error('Error processing book purchase:', error);
-                alert('Already ave this book'); 
+                alert('Already have this book'); 
             }
         );
     });
@@ -150,7 +174,7 @@ window.onload = () => {
 
     $(logoutbtn).click(function () {
         sessionStorage.clear();
-        window.location.href("index.html");
+        window.location.href = "index.html";
     });
 
 

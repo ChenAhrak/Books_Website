@@ -422,7 +422,7 @@ $(document).ready(function () {
                 console.log("Success:", response);
                 alert("The book added  to purchased list");
                 // Update UI on success, e.g., change button state
-                $(`button[data-book-id="${bookId}"]`).addClass('added').text('Added');
+                //$(`button[id="${bookId}"]`).addClass('added').text('Added');
                 
             },
             function (error) {

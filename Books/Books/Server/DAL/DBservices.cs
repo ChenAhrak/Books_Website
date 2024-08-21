@@ -1237,7 +1237,8 @@ namespace Books.Server.DAL
                                 Status = reader["ApprovalStatus"].ToString(),
                                 ApprovalDate = reader.IsDBNull(reader.GetOrdinal("ApprovalDate"))
                                                ? (DateTime?)null
-                                               : Convert.ToDateTime(reader["ApprovalDate"])
+                                               : Convert.ToDateTime(reader["ApprovalDate"]),
+                                buyerEmail = reader["BuyerEmail"].ToString()
                             };
 
                             purchaseRequests.Add(request);
