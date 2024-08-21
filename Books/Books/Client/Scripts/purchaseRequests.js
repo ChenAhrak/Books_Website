@@ -1,5 +1,5 @@
 ﻿var user = JSON.parse(sessionStorage.getItem('user'));
-
+var requestList = [];
 function fetchPurchaseRequests() {
     const sellerId = user.id; // מזהה המוכר הנוכחי//משתמש מחובר 
     
@@ -25,8 +25,10 @@ function renderPurchaseRequests(requests) {
     }
 
     requests.forEach(request => {
-        console.log(request);
+        //console.log(request);
         if (request.status === 'Pending') {
+            requestList.push(request);
+            console.log(requestList);
             var requestElement = $('<div>');
             requestElement.addClass('request');
             // Display buyer's username
@@ -50,6 +52,7 @@ function renderPurchaseRequests(requests) {
             approveBtn.on('click', function () {
                 var requestId = $(this).data('request-id');
                 manageBookPurchase(request.buyerId, user.id, request.bookId, requestId);
+                rejectOtherRequests(requestList, requestId, request.bookId);
             });
 
             rejectBtn.on('click', function () {
@@ -60,6 +63,17 @@ function renderPurchaseRequests(requests) {
 
             });
         }
+    });
+}
+
+function rejectOtherRequests(requestList, requestId, bookId) {
+    console.log(requestList);
+    requestList.forEach(request => {
+        if (request.bookId == bookId && request.requestId != requestId) {
+            updateRequestStatus(request.requestId, 'Rejected');
+            removeRequestFromList(request.requestId);
+        }
+        
     });
 }
 

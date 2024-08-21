@@ -2,6 +2,12 @@
 
 // Fetch books with 'read' status for all users except the current user
 var user = JSON.parse(sessionStorage.getItem('user'));
+
+if (!user) {
+    alert("Must be logged in to transfer books!");
+    window.location.href = "login.html";
+}
+
 function fetchBooks() {
     const api = `https://localhost:7195/api/Books/GetAllReadBooks?currentUserId=${user.id}`;
     ajaxCall('GET', api, null,
@@ -10,11 +16,14 @@ function fetchBooks() {
     );
 }
 function getBooksDisplayDataFromDBSCB(result) {
+    console.log(result);
     renderAllBooksDisplay(result);
 }
 function getBooksDisplayDataFromDBECB(err) {
     console.log("Error fetching books:", err);
 }
+
+
 function renderAllBooksDisplay(books) {
     var booksContainer = $('#books-container');
     booksContainer.empty(); // Clear existing content before adding new books

@@ -37,6 +37,11 @@ body {
     font-size: 20px;
     align-items: center;
     transition: background-color 0.3s, color 0.3s;
+    background-image: url('../Pics/question_marks_background.png'); /* Replace with your image path */
+    background-repeat: repeat;
+    height: 100%; /* Full height of the viewport */
+    width: 100%; /* Full width of the page */
+    background-position: center;
 }
 nav {
     display: flex;

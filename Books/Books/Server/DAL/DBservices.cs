@@ -1213,7 +1213,7 @@ namespace Books.Server.DAL
             try
             {
                 using (SqlConnection con = connect("myProjDB"))
-                using (SqlCommand cmd = new SqlCommand("GetPurchaseRequestsForUser", con))
+                using (SqlCommand cmd = new SqlCommand("SP_GetPurchaseRequestsForUser", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@SellerID", sellerId);
