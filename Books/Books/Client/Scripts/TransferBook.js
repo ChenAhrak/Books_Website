@@ -38,6 +38,7 @@ function renderAllBooksDisplay(books) {
     books.forEach(book => {
         var bookElement = $('<div>');
         bookElement.addClass('book');
+        bookElement.append('<h3>'+'Seller: ' + book.sellerName + '</h3>');
         bookElement.append('<img src="' + book.thumbnail + '" alt="book image" />');
         bookElement.append('<h3>' + book.title + '</h3>');
         bookElement.append('<p>' + 'By: ' + book.authorNames + '</p>');

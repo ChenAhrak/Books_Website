@@ -986,7 +986,7 @@ namespace Books.Server.DAL
                                 Status = reader["UserLibraryStatus"].ToString(),
                                 Thumbnail = reader["Thumbnail"].ToString(),
                                 Price = reader["Price"].ToString(),
-                                SellerName = reader["UserName"].ToString(),
+                                SellerName = reader["SellerName"].ToString(),
                                 SellerEmail = reader["Email"].ToString(),
 
                             };
