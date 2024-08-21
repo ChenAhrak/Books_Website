@@ -92,7 +92,7 @@ button:hover {
     margin: 20px;
 }
 
-label {
+#toggle {
     width: 50px;
     height: 25px;
     position: absolute;
@@ -106,7 +106,7 @@ label {
     transition: 0.3s;
 }
 
-    label:after {
+    #toggle :after {
         content: "";
         width: 18px;
         height: 18px;
@@ -119,23 +119,23 @@ label {
         transition: 0.3s;
     }
 
-.toggleBox {
+#toggle-mode {
     width: 0;
     height: 0;
     visibility: hidden;
 }
 
-    .toggleBox:checked + label {
-        background: #242424;
+toggle-mode:checked + #toggle {
+    background: #242424;
+}
+
+    toggle-mode:checked + #toggle:after {
+        left: 46px;
+        transform: translate(-100%);
+        background: linear-gradient(180deg, #777, #3a3a3a);
     }
 
-        .toggleBox:checked + label:after {
-            left: 46px;
-            transform: translate(-100%);
-            background: linear-gradient(180deg, #777, #3a3a3a);
-        }
-
-label:active:after {
+#toggle:active:after {
     width: 26px;
 }
 
@@ -155,7 +155,7 @@ form {
 
 label {
     margin-bottom: 5px; /* Add space below labels */
-    display: block; /* Make labels display on their own line */
+    /*display: block;*/ /* Make labels display on their own line */
 }
 
 footer{
