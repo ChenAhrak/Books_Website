@@ -324,66 +324,64 @@ $(document).ready(function () {
         // Call function to load top 5 most purchased books when document is ready
         getTop5MostPurchasedBooks();
 
+        //Fetch recommended books by top categories for the user
+        async function getRecommendedBooksByCategory(userId) {
+            await ajaxCall("GET", `${categoriesApiURL}/recommend/${userId.id}`, "", getRecommendedBooksByCategorySCB, getRecommendedBooksByCategoryECB);
+        }
 
-        // Existing functions and code...
+        function getRecommendedBooksByCategorySCB(result) {
+            console.log("Recommended Books:", result);
+            renderRecommendedBooks(result);
+        }
 
+        function getRecommendedBooksByCategoryECB(err) {
+            console.error("Error fetching recommended books:", err);
+            alert("An error occurred while fetching recommended books.");
+        }
+
+        function renderRecommendedBooks(books) {
+            var recommendedBooksContainer = $('#recommended-books-container');
+            recommendedBooksContainer.empty(); // Clear existing content
+
+            if (books.length === 0) {
+                recommendedBooksContainer.append('<p>No recommended books available at the moment.</p>');
+                return;
+            }
+
+            var table = $('<table>');
+            var tableHeader = $('<tr>');
+
+            books.forEach(book => {
+                var bookElement = $('<td>');
+                bookElement.append(`<img src="${book.smallThumbnail}" alt="book image" />`);
+                bookElement.append('<h3>' + book.title + '</h3>');
+                bookElement.append('<p>' + 'By: ' + book.authorName + '</p>');
+                bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
+                var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
+                bookElement.append(addToWishlistBtn);
+
+                // Add "Add Book" button
+                var addBookBtn = $('<button id="' + book.id + '" class="add-book">Buy Book</button>');
+                bookElement.append(addBookBtn);
+
+                var moreDetails = $('<p class="more-details">More Details</p>');
+                bookElement.append(moreDetails);
+
+                tableHeader.append(bookElement);
+
+                addBookClick(addBookBtn);
+                addWishlistClick(addToWishlistBtn);
+                showMoreDetails(moreDetails, book);
+
+            });
+
+            table.append(tableHeader);
+            recommendedBooksContainer.append(table);
+        }
+        getRecommendedBooksByCategory(user.id);
     });
-    // Fetch recommended books by top categories for the user
-    //async function getRecommendedBooksByCategory(userId) {
-    //    await ajaxCall("GET", `${categoriesApiURL}/recommend/${userId.id}`, "", getRecommendedBooksByCategorySCB, getRecommendedBooksByCategoryECB);
-    //}
-
-    //function getRecommendedBooksByCategorySCB(result) {
-    //    console.log("Recommended Books:", result);
-    //    renderRecommendedBooks(result);
-    //}
-
-    //function getRecommendedBooksByCategoryECB(err) {
-    //    console.error("Error fetching recommended books:", err);
-    //    alert("An error occurred while fetching recommended books.");
-    //}
-
-    //function renderRecommendedBooks(books) {
-    //    var recommendedBooksContainer = $('#recommended-books-container');
-    //    recommendedBooksContainer.empty(); // Clear existing content
-
-    //    if (books.length === 0) {
-    //        recommendedBooksContainer.append('<p>No recommended books available at the moment.</p>');
-    //        return;
-    //    }
-
-    //    var table = $('<table>');
-    //    var tableHeader = $('<tr>');
-
-    //    books.forEach(book => {
-    //        var bookElement = $('<td>');
-    //        bookElement.append(`<img src="${book.smallThumbnail}" alt="book image" />`);
-    //        bookElement.append('<h3>' + book.title + '</h3>');
-    //        bookElement.append('<p>' + 'By: ' + book.authorName + '</p>');
-    //        bookElement.append('<p>' + 'Price: ' + book.price + ' ILS' + '</p>');
-    //        var addToWishlistBtn = $('<button class="wishlistButton" data-book-id="' + book.id + '">🤍</button>');
-    //        bookElement.append(addToWishlistBtn);
-
-    //        // Add "Add Book" button
-    //        var addBookBtn = $('<button id="' + book.id + '" class="add-book">Buy Book</button>');
-    //        bookElement.append(addBookBtn);
-
-    //        var moreDetails = $('<p class="more-details">More Details</p>');
-    //        bookElement.append(moreDetails);
-
-    //        tableHeader.append(bookElement);
-
-    //        addBookClick(addBookBtn);
-    //        addWishlistClick(addToWishlistBtn);
-    //        showMoreDetails(moreDetails, book);
-
-    //    });
-
-    //    table.append(tableHeader);
-    //    recommendedBooksContainer.append(table);
-    //}
-    //getRecommendedBooksByCategory(user.id);
-    // Function to add a book to the wishlist
+   
+     //Function to add a book to the wishlist
     function addBookToWishlist(userId, bookId) {
         const api = `https://localhost:7195/api/UserBooks/addBookToWishlist/${userId}`;
         const data = getBookById(bookId); // Retrieve book details by its ID
