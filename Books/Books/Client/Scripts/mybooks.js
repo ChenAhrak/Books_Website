@@ -186,6 +186,11 @@ $('#mypurchaserequestsBtn').click(function () {
     window.location.href = "purchaseRequests.html";
 });
 
+var quizBtn = document.getElementById("quizBtn");
+quizBtn.addEventListener('click', event => {
+    window.location.href = "quiz.html";
+});
+
 // Check user status and display appropriate buttons
 if (user && !user.isAdmin) {
     $('#logoutBtn').show();
