@@ -151,16 +151,65 @@ button {
 
 nav {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-background-color);
 }
 
-    nav button {
-        margin: 20px;
-        background-color: none;
-        border: none;
-        color: black;
+    nav .logo {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    nav .nav-links {
+        flex: 1;
+    }
+
+        nav .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0 15px;
+            font-size: 1em;
+        }
+
+            nav .nav-links a.active,
+            nav .nav-links a:hover {
+                text-decoration: underline;
+            }
+
+    nav .nav-actions {
+        display: flex;
+        align-items: center;
+    }
+
+        nav .nav-actions button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1em;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        nav .nav-actions input[type="text"] {
+            padding: 5px;
+            font-size: 1em;
+        }
+
+/* Header styles */
+header {
+    background-color: var(--background-color);
+    text-align: center;
+    padding: 20px;
+    border-bottom: 2px solid var(--border-background-color);
+}
+
+    header h1 {
+        margin-bottom: 10px;
     }
 
 #search-container{
