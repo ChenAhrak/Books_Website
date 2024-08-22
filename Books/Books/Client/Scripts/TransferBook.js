@@ -87,29 +87,6 @@ function renderAllBooksDisplay(books) {
     });
 
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////need to fix
-// Request to purchase a book
-function requestBookPurchase(button) {
-    var buyerId = user.id; // user.id holds the current logged-in user's ID
-    var sellerId = button.getAttribute('data-seller-id');
-    var bookId = button.getAttribute('data-book-id');
-
-    if (!buyerId || !sellerId || !bookId) {
-        alert("All fields are required.");
-        return;
-    }
-
-    // Check if the user already has the book in their library
-    hasBookInLibrary(buyerId, bookId, function (hasBook) {
-        if (hasBook) {
-            alert("You already own this book and cannot request to purchase it.");
-        } else {
-            // Proceed with sending the purchase request
-            const api = `https://proj.ruppin.ac.il/cgroup85/test2/tar1/api/UserBooks/addBookPurchaseRequest?buyerId=${buyerId}&sellerId=${sellerId}&bookId=${bookId}`;
-            sendPurchaseRequest(api);
-        }
-    });
-}
 
 // בודק אם למשתמש שמבקש לרכוש ספר ממשתמש אחר כבר יש את הספר הזה
 function hasBookInLibrary(userId, bookId, callback) {
@@ -141,7 +118,8 @@ function handleError(error) {
     console.error('Error sending purchase request:', error);
     alert('An error occurred while sending the purchase request.');
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 function sendMailToBuyer(button) {
     var buyerId = user.id; // user.id holds the current logged-in user's ID
     var bookName = button.getAttribute('data-book-title');
